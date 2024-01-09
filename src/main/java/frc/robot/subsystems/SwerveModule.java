@@ -102,6 +102,11 @@ public class SwerveModule {
         m_driveEncoder.getDistance(), new Rotation2d(m_turningEncoder.getDistance()));
   }
 
+  //Returns period for the module
+  public double getEncoderPeriod() {
+    return m_driveEncoder.getRate();
+  }
+
   /**
    * Sets the desired state for the module.
    *
@@ -134,4 +139,5 @@ public class SwerveModule {
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
   }
+
 }

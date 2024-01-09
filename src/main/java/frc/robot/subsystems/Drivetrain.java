@@ -83,4 +83,10 @@ public class Drivetrain {
           m_backRight.getPosition()
         });
   }
+
+  //Gets period from module
+  public double getPeriod() {
+    return m_frontLeft.getEncoderPeriod();
+  }
 }
+ 
