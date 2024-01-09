@@ -10,8 +10,12 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -21,8 +25,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  //Electronics
   private final PowerDistribution m_powerDistribution = new PowerDistribution();
   private final PneumaticsControlModule m_pcm = new PneumaticsControlModule();
+  
+  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
+  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
@@ -31,13 +41,27 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandXboxController m_operatorController = new CommandXboxController(OperatorConstants.kOperatorControllerPort);
+  private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
+  private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
+
+  //Buttons and axes
+  private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
+  private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
+  private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
+  private final JoystickButton m_shootButton = new JoystickButton(m_operatorController, 2);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+  }
+
+  public void teleopInit() {
+    m_intake.setDefaultCommand(
+      new RunCommand(() -> {
+        m_intake.setSpeed(-(m_operatorController.getRawAxis(m_intakeAxis)));
+      },
+      m_intake));
   }
 
   /**
@@ -50,13 +74,30 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    
-  }
+    m_climbUpButton.whileTrue(new StartEndCommand(
+    () -> {
+      m_climber.setSpeed(0.5);
+    },
+    () -> {
+      m_climber.setSpeed(0);
+    }));
 
-  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+    m_climbDownButton.whileTrue(new StartEndCommand(
+    () -> {
+      m_climber.setSpeed(-0.5);
+    },
+    () -> {
+      m_climber.setSpeed(0);
+    }));
+
+    m_shootButton.whileTrue(new StartEndCommand(
+    () -> {
+      m_shooter.setSpeed(1.0);
+    },
+    () -> {
+      m_shooter.setSpeed(0);
+    }));
+  }
 
   public void autonomousPeriodic() {
     driveWithJoystick(false);

@@ -8,8 +8,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class XCaliper extends TimedRobot {
+  private RobotContainer m_robotContainer;
+
   public void robotInit() {
-    RobotContainer m_robotContainer = new RobotContainer();
+    m_robotContainer = new RobotContainer();
   }
 
   public void robotPeriodic() {
@@ -17,7 +19,7 @@ public class XCaliper extends TimedRobot {
   }
 
   public void autonomousInit() {
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // // schedule the autonomous command (example)
     // if (m_autonomousCommand != null) {
@@ -29,6 +31,7 @@ public class XCaliper extends TimedRobot {
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.cancel();
     // }
+    m_robotContainer.teleopInit();
   }
   
 }

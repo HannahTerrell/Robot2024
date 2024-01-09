@@ -2,6 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+/*
+  TO-DO: 
+  Change motors and encoders as necessary (Krakens drive, NEOs turn)
+  Tune PID loops for drive and turn
+  Tune feed forwards for drive and turn
+*/
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -19,8 +25,7 @@ public class SwerveModule {
   private static final int kEncoderResolution = 4096;
 
   private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
-  private static final double kModuleMaxAngularAcceleration =
-      2 * Math.PI; // radians per second squared
+  private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final PWMSparkMax m_driveMotor;
   private final PWMSparkMax m_turningMotor;
