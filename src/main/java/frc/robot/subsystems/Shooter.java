@@ -16,9 +16,9 @@ public class Shooter extends SubsystemBase {
       m_shootMotor.setIdleMode(IdleMode.kBrake);
     }
 
-    public void setSpeed(double speed) {
-      m_speed = speed;
-    }
+  public void setSpeed(double speed) {
+    m_speed = speed;
+  }
 
   @Override
   public void periodic() {

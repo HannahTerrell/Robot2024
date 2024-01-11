@@ -8,8 +8,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.PneumaticsControlModule;
-import edu.wpi.first.wpilibj.PowerDistribution;
+// import edu.wpi.first.wpilibj.PneumaticsControlModule;
+// import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -25,9 +25,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  //Electronics
-  private final PowerDistribution m_powerDistribution = new PowerDistribution();
-  private final PneumaticsControlModule m_pcm = new PneumaticsControlModule();
+  //Electronics (unused so far) 
+  // private final PowerDistribution m_powerDistribution = new PowerDistribution();
+  // private final PneumaticsControlModule m_pcm = new PneumaticsControlModule();
   
   // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -48,12 +48,15 @@ public class RobotContainer {
   private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
   private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
-  private final JoystickButton m_shootButton = new JoystickButton(m_operatorController, 2);
+  private final JoystickButton m_shootButton = new JoystickButton(m_operatorController, 3);
+
+  private XCaliper m_robot;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  public RobotContainer(XCaliper robot) {
     // Configure the trigger bindings
     configureBindings();
+    m_robot = robot;
   }
 
   public void teleopInit() {
@@ -112,25 +115,22 @@ public class RobotContainer {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     final var xSpeed =
-        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.02))
-            * Drivetrain.kMaxSpeed;
+      -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.02)) * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     final var ySpeed =
-        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.02))
-            * Drivetrain.kMaxSpeed;
+      -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.02)) * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
     final var rot =
-        -m_rotLimiter.calculate(MathUtil.applyDeadband(m_driverController.getRightX(), 0.02))
-            * Drivetrain.kMaxAngularSpeed;
+      -m_rotLimiter.calculate(MathUtil.applyDeadband(m_driverController.getRightX(), 0.02)) * Drivetrain.kMaxAngularSpeed;
 
-    m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_swerve.getPeriod());
+    m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());
   }
 
   /**
@@ -139,7 +139,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
     return null;
   }
 }

@@ -4,14 +4,21 @@
 
 package frc.robot;
 
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class XCaliper extends TimedRobot {
   private RobotContainer m_robotContainer;
+  private Command m_autonomousCommand;
 
   public void robotInit() {
-    m_robotContainer = new RobotContainer();
+    m_robotContainer = new RobotContainer(this);
+
+    for (int port = 5800; port <= 5807; port++) {
+      PortForwarder.add(port, "limelight.local", port);
+    }
   }
 
   public void robotPeriodic() {
@@ -19,18 +26,18 @@ public class XCaliper extends TimedRobot {
   }
 
   public void autonomousInit() {
-    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
+    if (m_autonomousCommand != null) {
+    m_autonomousCommand.schedule();
+   }
   }
 
   @Override
   public void teleopInit() {
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.cancel();
-    // }
+     if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
     m_robotContainer.teleopInit();
   }
   

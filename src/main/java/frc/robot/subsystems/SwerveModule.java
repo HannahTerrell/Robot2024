@@ -4,7 +4,7 @@
 
 /*
   TO-DO: 
-  Change motors and encoders as necessary (Krakens drive, NEOs turn)
+  Change motors and encoders as necessary (NEOs drive and turn)
   Tune PID loops for drive and turn
   Tune feed forwards for drive and turn
 */
@@ -105,11 +105,6 @@ public class SwerveModule {
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         m_driveEncoder.getDistance(), new Rotation2d(m_turningEncoder.getDistance()));
-  }
-
-  //Returns period for the module
-  public double getEncoderPeriod() {
-    return m_driveEncoder.getRate();
   }
 
   /**

@@ -11,10 +11,10 @@ public class Intake extends SubsystemBase {
   private CANSparkMax m_intakeMotor = new CANSparkMax(9, MotorType.kBrushless);
   private double m_speed;
 
-  public Intake() {
-      super();
-      m_intakeMotor.setIdleMode(IdleMode.kBrake);
-  }
+    public Intake() {
+        super();
+        m_intakeMotor.setIdleMode(IdleMode.kBrake);
+    }
 
   public void setSpeed(double speed) {
         m_speed = speed;
