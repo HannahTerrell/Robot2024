@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
@@ -36,8 +37,7 @@ public class Drivetrain {
   private final AHRS m_gyro = new AHRS(Port.kMXP);
 
   private final SwerveDriveKinematics m_kinematics =
-      new SwerveDriveKinematics(
-          m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+      new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   private final SwerveDriveOdometry m_odometry =
       new SwerveDriveOdometry(
@@ -62,8 +62,7 @@ public class Drivetrain {
    * @param rot Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
-  public void drive(
-      double xSpeed, double ySpeed, double rot, boolean fieldRelative, double periodSeconds) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, double periodSeconds) {
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             ChassisSpeeds.discretize(
@@ -90,5 +89,26 @@ public class Drivetrain {
           m_backRight.getPosition()
         });
   }
+
+  public double getLeftDistanceMeters() {
+    return m_frontLeft.getEncoderDistance();
+  }
+
+  public double getRightDistanceMeters() {
+    return m_frontRight.getEncoderDistance();
+  } 
+
+  public void setOutputVolts(double left, double right) {
+        var rightSetpoint = right / 12;
+        var leftSetpoint = left / 12;
+
+        SmartDashboard.putNumber("Left Side Setpoint (in)", leftSetpoint);
+        SmartDashboard.putNumber("Right Side Setpoint (in)", rightSetpoint);
+
+        m_frontLeft.getModuleMotor().set(leftSetpoint);
+        m_backLeft.getModuleMotor().set(leftSetpoint);
+        m_frontRight.getModuleMotor().set(rightSetpoint);
+        m_backRight.getModuleMotor().set(rightSetpoint);
+    }
 }
  

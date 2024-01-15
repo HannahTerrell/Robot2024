@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
@@ -25,6 +24,6 @@ public class Climber extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+    
   }
 }

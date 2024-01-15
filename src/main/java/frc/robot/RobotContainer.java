@@ -12,6 +12,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 // import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -39,6 +40,7 @@ public class RobotContainer {
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
   private final Climber m_climber = new Climber();
+  private final Limelight m_limelight = new Limelight();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
@@ -51,7 +53,6 @@ public class RobotContainer {
   private final JoystickButton m_shootButton = new JoystickButton(m_operatorController, 3);
 
   private XCaliper m_robot;
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(XCaliper robot) {
     // Configure the trigger bindings
@@ -115,13 +116,13 @@ public class RobotContainer {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     final var xSpeed =
-      -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.02)) * Drivetrain.kMaxSpeed;
+      -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.02)) * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     final var ySpeed =
-      -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.02)) * Drivetrain.kMaxSpeed;
+      -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.02)) * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
@@ -140,5 +141,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     return null;
+  }
+
+  public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
+    m_limelight.periodic();
   }
 }

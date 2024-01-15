@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class XCaliper extends TimedRobot {
   private RobotContainer m_robotContainer;
@@ -22,7 +21,7 @@ public class XCaliper extends TimedRobot {
   }
 
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run();
+    m_robotContainer.robotPeriodic();
   }
 
   public void autonomousInit() {

@@ -18,7 +18,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class SwerveModule {
   private static final double kWheelRadius = 0.0508;
@@ -27,8 +28,8 @@ public class SwerveModule {
   private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
-  private final PWMSparkMax m_driveMotor;
-  private final PWMSparkMax m_turningMotor;
+  private final CANSparkMax m_driveMotor;
+  private final CANSparkMax m_turningMotor;
 
   private final Encoder m_driveEncoder;
   private final Encoder m_turningEncoder;
@@ -38,12 +39,8 @@ public class SwerveModule {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
-      new ProfiledPIDController(
-          1,
-          0,
-          0,
-          new TrapezoidProfile.Constraints(
-              kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
+      new ProfiledPIDController(1, 0, 0, 
+        new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
@@ -51,7 +48,6 @@ public class SwerveModule {
 
   /**
    * Constructs a SwerveModule with a drive motor, turning motor, drive encoder and turning encoder.
-   *
    * @param driveMotorChannel PWM output for the drive motor.
    * @param turningMotorChannel PWM output for the turning motor.
    * @param driveEncoderChannelA DIO input for the drive encoder channel A
@@ -66,8 +62,8 @@ public class SwerveModule {
       int driveEncoderChannelB,
       int turningEncoderChannelA,
       int turningEncoderChannelB) {
-    m_driveMotor = new PWMSparkMax(driveMotorChannel);
-    m_turningMotor = new PWMSparkMax(turningMotorChannel);
+    m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
+    m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
     m_driveEncoder = new Encoder(driveEncoderChannelA, driveEncoderChannelB);
     m_turningEncoder = new Encoder(turningEncoderChannelA, turningEncoderChannelB);
@@ -138,6 +134,14 @@ public class SwerveModule {
 
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+  }
+
+  public double getEncoderDistance() {
+    return m_driveEncoder.getDistance();
+  }
+
+  public CANSparkMax getModuleMotor() {
+    return m_driveMotor;
   }
 
 }
