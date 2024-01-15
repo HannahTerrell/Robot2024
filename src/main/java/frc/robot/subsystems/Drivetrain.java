@@ -99,16 +99,20 @@ public class Drivetrain {
   } 
 
   public void setOutputVolts(double left, double right) {
-        var rightSetpoint = right / 12;
-        var leftSetpoint = left / 12;
+    var rightSetpoint = right / 12;
+    var leftSetpoint = left / 12;
 
-        SmartDashboard.putNumber("Left Side Setpoint (in)", leftSetpoint);
-        SmartDashboard.putNumber("Right Side Setpoint (in)", rightSetpoint);
+    SmartDashboard.putNumber("Left Side Setpoint (in)", leftSetpoint);
+    SmartDashboard.putNumber("Right Side Setpoint (in)", rightSetpoint);
 
-        m_frontLeft.getModuleMotor().set(leftSetpoint);
-        m_backLeft.getModuleMotor().set(leftSetpoint);
-        m_frontRight.getModuleMotor().set(rightSetpoint);
-        m_backRight.getModuleMotor().set(rightSetpoint);
-    }
+    m_frontLeft.getModuleMotor().set(leftSetpoint);
+    m_backLeft.getModuleMotor().set(leftSetpoint);
+    m_frontRight.getModuleMotor().set(rightSetpoint);
+    m_backRight.getModuleMotor().set(rightSetpoint);
+  }
+
+  public AHRS getGyro() {
+    return m_gyro;
+  }
 }
  

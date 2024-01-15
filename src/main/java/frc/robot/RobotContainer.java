@@ -5,12 +5,18 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Autonomous.DriveAuton;
 import frc.robot.subsystems.*;
+
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 // import edu.wpi.first.wpilibj.PneumaticsControlModule;
 // import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -26,14 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  //Electronics (unused so far) 
-  // private final PowerDistribution m_powerDistribution = new PowerDistribution();
-  // private final PneumaticsControlModule m_pcm = new PneumaticsControlModule();
-  
-  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
+  private XCaliper m_robot;
 
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
@@ -41,6 +40,16 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter();
   private final Climber m_climber = new Climber();
   private final Limelight m_limelight = new Limelight();
+
+  //Electronics
+  private AHRS m_gyro = m_swerve.getGyro();
+  // private final PowerDistribution m_powerDistribution = new PowerDistribution();
+  // private final PneumaticsControlModule m_pcm = new PneumaticsControlModule();
+  
+  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
+  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
+  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
@@ -52,12 +61,19 @@ public class RobotContainer {
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
   private final JoystickButton m_shootButton = new JoystickButton(m_operatorController, 3);
 
-  private XCaliper m_robot;
+  //Auton things
+  private final DriveAuton m_driveAuton = new DriveAuton(m_swerve, m_gyro, m_robot);
+  SendableChooser<Command> m_autonChooser = new SendableChooser<>();
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(XCaliper robot) {
     // Configure the trigger bindings
     configureBindings();
     m_robot = robot;
+
+    //Adding auton routines
+    m_autonChooser.addOption("Drive Auton", m_driveAuton);
+    SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 
   public void teleopInit() {
