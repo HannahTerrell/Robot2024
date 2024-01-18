@@ -4,12 +4,10 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autonomous.DriveAuton;
 import frc.robot.subsystems.*;
-
+import frc.robot.commands.Autonomous.*;
 import com.kauailabs.navx.frc.AHRS;
-
+import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 // import edu.wpi.first.wpilibj.PneumaticsControlModule;
@@ -46,12 +44,12 @@ public class RobotContainer {
   // private final PowerDistribution m_powerDistribution = new PowerDistribution();
   // private final PneumaticsControlModule m_pcm = new PneumaticsControlModule();
   
-  // Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
+  //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
+  //Controllers
   private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
   private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
 
