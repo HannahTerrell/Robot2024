@@ -21,7 +21,9 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -58,6 +60,11 @@ public class RobotContainer {
   private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
   private final JoystickButton m_shootButton = new JoystickButton(m_operatorController, 3);
+  //SysId Buttons
+  private final POVButton m_dynamicForward = new POVButton(m_driverController, 0);
+  private final POVButton m_dynamicBackward = new POVButton(m_driverController, 180);
+  private final POVButton m_quasistaticForward = new POVButton(m_driverController, 90);
+  private final POVButton m_quasistaticBackward = new POVButton(m_driverController, 270);
 
   //Auton things
   private final DriveAuton m_driveAuton = new DriveAuton(m_swerve, m_gyro, m_robot);
@@ -115,6 +122,11 @@ public class RobotContainer {
     () -> {
       m_shooter.setSpeed(0);
     }));
+
+    m_dynamicForward.whileTrue(m_swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    m_dynamicBackward.whileTrue(m_swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    m_quasistaticForward.whileTrue(m_swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    m_quasistaticBackward.whileTrue(m_swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
   }
 
   public void autonomousPeriodic() {
