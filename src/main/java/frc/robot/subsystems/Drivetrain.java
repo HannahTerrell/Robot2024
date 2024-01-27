@@ -25,7 +25,7 @@ public class Drivetrain extends SubsystemBase {
   public static final double kMaxSpeed = 3.0; // 3 meters per second
   public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
-  private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
+  private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381); //TODO: Adjust these?
   private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
@@ -91,12 +91,20 @@ public class Drivetrain extends SubsystemBase {
         });
   }
 
-  public double getLeftDistanceMeters() {
+  public double getFrontLeftDistanceMeters() {
     return m_frontLeft.getEncoderDistance();
   }
 
-  public double getRightDistanceMeters() {
+  public double getFrontRightDistanceMeters() {
     return m_frontRight.getEncoderDistance();
+  } 
+
+  public double getBackLeftDistanceMeters() {
+    return m_backLeft.getEncoderDistance();
+  }
+
+  public double getBackRightDistanceMeters() {
+    return m_backRight.getEncoderDistance();
   } 
 
   public void setOutputVolts(double left, double right) {
