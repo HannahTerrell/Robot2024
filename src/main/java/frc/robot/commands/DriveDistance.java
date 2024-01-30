@@ -35,7 +35,7 @@ public class DriveDistance extends Command {
     }
 
     private double getAverageDistance() {
-        return (((this.drivetrain.getFrontLeftDistanceMeters() + this.drivetrain.getBackLeftDistanceMeters()) / 2) + ((this.drivetrain.getFrontRightDistanceMeters() + this.drivetrain.getBackRightDistanceMeters()) / 2)) / 2;
+        return (this.drivetrain.getLeftDistanceMeters() + this.drivetrain.getRightDistanceMeters()) / 2;
     }
 
     @Override
