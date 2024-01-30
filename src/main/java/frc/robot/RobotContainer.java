@@ -21,9 +21,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+//import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -60,11 +59,6 @@ public class RobotContainer {
   private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
   private final JoystickButton m_shootButton = new JoystickButton(m_operatorController, 3);
-  //SysId Buttons
-  private final POVButton m_dynamicForward = new POVButton(m_driverController, 0);
-  private final POVButton m_dynamicBackward = new POVButton(m_driverController, 180);
-  private final POVButton m_quasistaticForward = new POVButton(m_driverController, 90);
-  private final POVButton m_quasistaticBackward = new POVButton(m_driverController, 270);
 
   //Auton things
   private final DriveAuton m_driveAuton = new DriveAuton(m_swerve, m_gyro, m_robot);
@@ -122,11 +116,6 @@ public class RobotContainer {
     () -> {
       m_shooter.setSpeed(0);
     }));
-
-    m_dynamicForward.whileTrue(m_swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    m_dynamicBackward.whileTrue(m_swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    m_quasistaticForward.whileTrue(m_swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    m_quasistaticBackward.whileTrue(m_swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
   }
 
   public void autonomousPeriodic() {
@@ -142,20 +131,20 @@ public class RobotContainer {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     final var xSpeed =
-      -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.02)) * Drivetrain.kMaxSpeed;
+        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.02)) * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     final var ySpeed =
-      -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.02)) * Drivetrain.kMaxSpeed;
+        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.02)) * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
     final var rot =
-      -m_rotLimiter.calculate(MathUtil.applyDeadband(m_driverController.getRightX(), 0.02)) * Drivetrain.kMaxAngularSpeed;
+        -m_rotLimiter.calculate(MathUtil.applyDeadband(m_driverController.getRightX(), 0.02)) * Drivetrain.kMaxAngularSpeed;
 
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());
   }
