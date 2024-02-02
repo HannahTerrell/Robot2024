@@ -124,7 +124,7 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    driveWithJoystick(false);
+    driveWithJoystick(true);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
@@ -146,7 +146,7 @@ public class RobotContainer {
     final var rot =
        -m_rotLimiter.calculate(MathUtil.applyDeadband(m_driverController.getRightX(), 0.2)) * Drivetrain.kMaxAngularSpeed;
 
-    System.out.println("XSpeed: " + xSpeed + " Y Speed: " + ySpeed + " Rotation: " + rot);
+    // System.out.println("XSpeed: " + xSpeed + " Y Speed: " + ySpeed + " Rotation: " + rot);
     
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());
   }
