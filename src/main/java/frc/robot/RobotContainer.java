@@ -5,23 +5,23 @@
 package frc.robot;
 
 import frc.robot.subsystems.*;
+import frc.robot.commands.*;
 import frc.robot.commands.Autonomous.*;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-// import edu.wpi.first.wpilibj.PneumaticsControlModule;
 // import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-// import edu.wpi.first.wpilibj2.command.RunCommand;
-// import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-// import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+//import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -35,10 +35,14 @@ public class RobotContainer {
 
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
-  // private final Intake m_intake = new Intake();
-  // private final Shooter m_shooter = new Shooter();
-  // private final Climber m_climber = new Climber();
-  // private final Limelight m_limelight = new Limelight();
+  private final Intake m_intake = new Intake();
+  private final Shooter m_shooter = new Shooter();
+  private final Climber m_climber = new Climber();
+  private final Arm m_arm = new Arm();
+  private final Limelight m_limelight = new Limelight();
+
+  //Commands
+  private final AmpScore m_ampScoreCommand = new AmpScore(m_shooter, m_arm);
 
   //Electronics
   private AHRS m_gyro = m_swerve.getGyro();
@@ -51,13 +55,14 @@ public class RobotContainer {
 
   //Controllers
   private final XboxController m_driverController = new XboxController(OperatorConstants.kDriverControllerPort);
-  // private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
+  private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
 
   //Buttons and axes
-  //private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
-  // private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
-  // private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
-  // private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
+  private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
+  private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
+  private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
+  private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
+  private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
 
   //Auton things
   private final DriveAuton m_driveAuton = new DriveAuton(m_swerve, m_gyro, m_robot);
@@ -75,11 +80,12 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    // m_intake.setDefaultCommand(
-    //   new RunCommand(() -> {
-    //     m_intake.setSpeed(-(m_operatorController.getRawAxis(m_intakeAxis)));
-    //   },
-    //   m_intake));
+    m_intake.setDefaultCommand(
+      new RunCommand(() -> {
+        m_intake.setSpeed(-(m_operatorController.getRawAxis(m_intakeAxis)));
+        m_intake.feed();
+      },
+      m_intake));
   }
 
   /**
@@ -92,29 +98,19 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // m_climbUpButton.whileTrue(new StartEndCommand(
-    // () -> {
-    //   m_climber.setSpeed(0.5);
-    // },
-    // () -> {
-    //   m_climber.setSpeed(0);
-    // }));
+    m_climbUpButton.onTrue(new RunCommand(() -> {
+      m_climber.climbUp();
+    }, m_climber));
 
-    // m_climbDownButton.whileTrue(new StartEndCommand(
-    // () -> {
-    //   m_climber.setSpeed(-0.5);
-    // },
-    // () -> {
-    //   m_climber.setSpeed(0);
-    // }));
+    m_climbDownButton.onTrue(new RunCommand(() -> {
+      m_climber.climbDown();
+    }, m_climber));
 
-    // m_shootSpeakerButton.whileTrue(new StartEndCommand(
-    // () -> {
-    //   m_shooter.setSpeed(1.0);
-    // },
-    // () -> {
-    //   m_shooter.setSpeed(0);
-    // }));
+    m_shootSpeakerButton.onTrue(new RunCommand(() -> {
+      m_shooter.shootSpeaker();
+    }, m_shooter));
+
+    m_shootAmpButton.onTrue(m_ampScoreCommand);
   }
 
   public void autonomousPeriodic() {
@@ -161,6 +157,6 @@ public class RobotContainer {
 
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    // m_limelight.periodic();
+    m_limelight.periodic();
   }
 }
