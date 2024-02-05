@@ -84,7 +84,7 @@ public class SwerveModule extends SubsystemBase {
     // This is the the angle through an entire rotation (2 * pi) divided by the
     // encoder resolution.
     m_turningEncoder.setDistancePerRotation(2 * Math.PI);
-    m_turningEncoder.setPositionOffset(gyroOffset);
+    m_turningEncoder.setPositionOffset(gyroOffset + 0.05);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.

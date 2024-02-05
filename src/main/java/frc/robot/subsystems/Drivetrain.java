@@ -29,10 +29,10 @@ public class Drivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.75);
+  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.77);
   private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 0.25);
-  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0);
-  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.25);
+  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, -0.05);
+  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.27);
 
   private final AHRS m_gyro = new AHRS(Port.kMXP);
 
