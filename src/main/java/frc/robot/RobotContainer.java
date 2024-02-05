@@ -43,7 +43,6 @@ public class RobotContainer {
   //Electronics
   private AHRS m_gyro = m_swerve.getGyro();
   // private final PowerDistribution m_powerDistribution = new PowerDistribution();
-  // private final PneumaticsControlModule m_pcm = new PneumaticsControlModule();
   
   //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -58,7 +57,7 @@ public class RobotContainer {
   //private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
   // private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
   // private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
-  // private final JoystickButton m_shootButton = new JoystickButton(m_operatorController, 3);
+  // private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
 
   //Auton things
   private final DriveAuton m_driveAuton = new DriveAuton(m_swerve, m_gyro, m_robot);
@@ -109,7 +108,7 @@ public class RobotContainer {
     //   m_climber.setSpeed(0);
     // }));
 
-    // m_shootButton.whileTrue(new StartEndCommand(
+    // m_shootSpeakerButton.whileTrue(new StartEndCommand(
     // () -> {
     //   m_shooter.setSpeed(1.0);
     // },
