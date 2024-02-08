@@ -123,7 +123,7 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    driveWithJoystick(false);
+    driveWithJoystick(true);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
