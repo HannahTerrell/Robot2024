@@ -10,7 +10,7 @@ public class DriveAuton extends SequentialCommandGroup {
     public DriveAuton(Drivetrain drivetrain, AHRS gyro, XCaliper robot) {
         addRequirements(drivetrain);
         addCommands(
-            new DriveDistance(2.0, drivetrain, gyro, robot) 
+            new DriveDistance(0.5, drivetrain, gyro, robot) 
         );
     }
 }

@@ -120,6 +120,7 @@ public class RobotContainer {
   public void autonomousPeriodic() {
     driveWithJoystick(false);
     m_swerve.updateOdometry();
+
   }
 
   public void teleopPeriodic() {
@@ -156,7 +157,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return m_autonChooser.getSelected();
   }
 
   public void robotPeriodic() {

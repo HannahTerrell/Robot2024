@@ -31,7 +31,7 @@ public class DriveDistance extends Command {
 
         m_robot = robot;
 
-        //addRequirements(drivetrain);
+        addRequirements(drivetrain);
     }
 
     private double getAverageDistance() {
@@ -58,8 +58,7 @@ public class DriveDistance extends Command {
         rotation = Math.min(Math.abs(rotation), 0.3) * Math.signum(rotation);
         rotation = rotation * -1; // turn the opposite direction
 
-        drivetrain.drive(speed, speed, rotation, false, m_robot.getPeriod());
-
+        drivetrain.drive(0, speed, rotation, false, m_robot.getPeriod());
     }
 
     @Override
