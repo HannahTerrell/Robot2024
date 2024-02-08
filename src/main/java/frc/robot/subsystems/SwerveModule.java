@@ -21,8 +21,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.wpilibj.AnalogInput;
 //import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.AnalogEncoder8612;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -39,20 +42,23 @@ public class SwerveModule extends SubsystemBase {
   private final CANSparkMax m_turningMotor;
 
   private final SparkAbsoluteEncoder m_driveEncoder;
-  private final AnalogEncoder m_turningEncoder;
+  private final AnalogEncoder8612 m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
-      new ProfiledPIDController(1, 0, 0, 
+      new ProfiledPIDController(2.5, 0, 0,
         new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
-  private DoublePublisher m_EncoderPublisher;
+  private DoublePublisher m_EncoderDistancePublisher;
+  private DoublePublisher m_EncoderVoltagePublisher;
+  private DoublePublisher m_TurnPublisher;
+  private AnalogInput m_turningInput;
 
 
   /**
@@ -72,7 +78,8 @@ public class SwerveModule extends SubsystemBase {
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
     m_driveEncoder = m_driveMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    m_turningEncoder = new AnalogEncoder(turningEncoderChannel);
+    m_turningInput = new AnalogInput(turningEncoderChannel);
+    m_turningEncoder = new AnalogEncoder8612(m_turningInput);
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
@@ -90,8 +97,14 @@ public class SwerveModule extends SubsystemBase {
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-    m_EncoderPublisher = NetworkTableInstance.getDefault()
-      .getDoubleTopic("/SwerveModules/" + name).publish();
+    m_EncoderDistancePublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Distance").publish();
+    
+    m_EncoderVoltagePublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Voltage").publish();
+
+    m_TurnPublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/TurnOutput").publish();
   }
 
   /**
@@ -120,7 +133,7 @@ public class SwerveModule extends SubsystemBase {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    var encoderRotation = new Rotation2d(m_turningEncoder.get());
+    var encoderRotation = new Rotation2d(m_turningEncoder.getDistance());
 
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, encoderRotation);
@@ -143,10 +156,12 @@ public class SwerveModule extends SubsystemBase {
     final double turnFeedforward =
         m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
-    m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+    m_driveMotor.setVoltage(driveOutput);
+    m_turningMotor.setVoltage(turnOutput);
 
-    m_EncoderPublisher.set(m_turningEncoder.get());
+    m_EncoderDistancePublisher.set(m_turningEncoder.getDistance());
+    m_EncoderVoltagePublisher.set(m_turningInput.getVoltage());
+    m_TurnPublisher.set(turnOutput);
   }
 
   public double getEncoderDistance() {
