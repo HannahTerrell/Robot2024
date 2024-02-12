@@ -2,7 +2,6 @@ package frc.robot.commands.Autonomous;
 
 import java.util.List;
 import java.util.function.Consumer;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,60 +19,50 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.SwerveModule;
 
-public class PathAuton1 extends Command {
+public class PathAuton1 extends SequentialCommandGroup {
     private Drivetrain m_drivetrain;
-    private Consumer<SwerveModuleState[]> stateConsumer;
+    Trajectory trajectory;
+    TrajectoryConfig trajectoryConfig;
     private PIDController xController = new PIDController(1, 0, 0);
     private PIDController yController = new PIDController(1, 0, 0); 
     private ProfiledPIDController rotController = new ProfiledPIDController(2.5, 0, 0,
         new TrapezoidProfile.Constraints(SwerveModule.kModuleMaxAngularVelocity, SwerveModule.kModuleMaxAngularAcceleration));
+    SwerveControllerCommand swerveControllerCommand;
 
     public PathAuton1(Drivetrain drivetrain) {
         super();
         m_drivetrain = drivetrain;
         rotController.enableContinuousInput(-Math.PI, Math.PI);
-    }
 
-    TrajectoryConfig trajectoryConfig = new TrajectoryConfig(Drivetrain.kMaxSpeed, 1)
-        .setKinematics(m_drivetrain.getKinematics());
+        trajectoryConfig = new TrajectoryConfig(Drivetrain.kMaxSpeed, 1)
+            .setKinematics(m_drivetrain.getKinematics());
 
-    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(0, 0, new Rotation2d(0)),
-        List.of(
-            new Translation2d(0, 1)
-        ), 
-        new Pose2d(0, 1, new Rotation2d(0)),
-        trajectoryConfig
-    );
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        trajectory, 
-        m_drivetrain::getPose, 
-        m_drivetrain.getKinematics(), 
-        xController,
-        yController,
-        rotController,
-        stateConsumer, 
-        m_drivetrain
-    );
-
-    @Override
-    public void initialize() {
-        new SequentialCommandGroup(
-            new InstantCommand(() -> m_drivetrain.resetOdometry(trajectory.getInitialPose())),
-            swerveControllerCommand
+        trajectory = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, new Rotation2d(0)),
+            List.of(
+                new Translation2d(1, 1),
+                new Translation2d(2, -1)
+            ), 
+            new Pose2d(3, 0, new Rotation2d(0)),
+            trajectoryConfig
         );
-    }
 
-    @Override
-    public boolean isFinished() {
-        return swerveControllerCommand.isFinished();
-    }
+        swerveControllerCommand = new SwerveControllerCommand(
+            trajectory, 
+            m_drivetrain::getPose, 
+            m_drivetrain.getKinematics(), 
+            xController,
+            yController,
+            rotController,
+            m_drivetrain::setModuleStates, 
+            m_drivetrain
+        );
 
-   @Override
-    public void end(boolean interrupted) {
-        super.end(interrupted);
-        m_drivetrain.stopModules();
+        addCommands(
+            new InstantCommand(() -> m_drivetrain.resetOdometry(trajectory.getInitialPose())),
+            swerveControllerCommand,
+            new InstantCommand(() -> m_drivetrain.stopModules())
+        );
     }
 
 }

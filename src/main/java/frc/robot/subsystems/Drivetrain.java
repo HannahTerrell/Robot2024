@@ -82,13 +82,16 @@ public class Drivetrain extends SubsystemBase {
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(chassisSpeed);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_backLeft.setDesiredState(swerveModuleStates[2]);
-    m_backRight.setDesiredState(swerveModuleStates[3]);
-
+    setModuleStates(swerveModuleStates);
     m_SwerveStatePublisher.set(swerveModuleStates);
     m_ChassisSpeedPublisher.set(chassisSpeed);
+  }
+
+  public void setModuleStates(SwerveModuleState[] states) {
+    m_frontLeft.setDesiredState(states[0]);
+    m_frontRight.setDesiredState(states[1]);
+    m_backLeft.setDesiredState(states[2]);
+    m_backRight.setDesiredState(states[3]);
   }
 
   /** Updates the field relative position of the robot. */
@@ -149,6 +152,15 @@ public class Drivetrain extends SubsystemBase {
   public SwerveModule getModule(int index) {
     SwerveModule[] modules = {m_frontLeft, m_frontRight, m_backLeft, m_backRight};
     return modules[index];
+  }
+
+  public SwerveModuleState[] getStates() {
+    SwerveModuleState[] states = new SwerveModuleState[3];
+    states[0] = getModule(0).getState();
+    states[1] = getModule(1).getState();
+    states[2] = getModule(2).getState();
+    states[3] = getModule(3).getState();
+    return states;
   }
 
   public void stopModules() {
