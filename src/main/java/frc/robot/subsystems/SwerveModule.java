@@ -34,8 +34,8 @@ public class SwerveModule extends SubsystemBase {
   private static final double kWheelRadius = 0.1016;
   private static final double kEncoderResolution = 42 * 6.12;
 
-  private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
-  private static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
+  public static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
+  public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
@@ -143,17 +143,14 @@ public class SwerveModule extends SubsystemBase {
     state.speedMetersPerSecond *= state.angle.minus(encoderRotation).getCos();
 
     // Calculate the drive output from the drive PID controller.
-    final double driveOutput =
-        m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+    final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
 
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput =
-        m_turningPIDController.calculate(m_turningEncoder.getDistance(), state.angle.getRadians());
+    final double turnOutput = m_turningPIDController.calculate(m_turningEncoder.getDistance(), state.angle.getRadians());
 
-    final double turnFeedforward =
-        m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
+    final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
     m_driveMotor.setVoltage(driveOutput);
     m_turningMotor.setVoltage(turnOutput);
@@ -169,6 +166,11 @@ public class SwerveModule extends SubsystemBase {
 
   public CANSparkMax getModuleMotor() {
     return m_driveMotor;
+  }
+
+  public void stop() {
+    m_driveMotor.set(0);
+    m_turningMotor.set(0);
   }
 
 }

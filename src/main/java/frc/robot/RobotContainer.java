@@ -10,7 +10,6 @@ import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-// import edu.wpi.first.wpilibj.PneumaticsControlModule;
 // import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -61,6 +60,7 @@ public class RobotContainer {
 
   //Auton things
   private final DriveAuton m_driveAuton = new DriveAuton(m_swerve, m_gyro, m_robot);
+  private final PathAuton1 m_pathAuton1 = new PathAuton1(m_swerve);
   SendableChooser<Command> m_autonChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -70,6 +70,7 @@ public class RobotContainer {
     m_robot = robot;
 
     //Adding auton routines
+    m_autonChooser.setDefaultOption("Path Auton 1", m_pathAuton1);
     m_autonChooser.addOption("Drive Auton", m_driveAuton);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
@@ -145,8 +146,6 @@ public class RobotContainer {
     // the right by default.
     final var rot =
        -m_rotLimiter.calculate(MathUtil.applyDeadband(m_driverController.getRightX(), 0.2)) * Drivetrain.kMaxAngularSpeed;
-
-    // System.out.println("XSpeed: " + xSpeed + " Y Speed: " + ySpeed + " Rotation: " + rot);
     
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());
   }

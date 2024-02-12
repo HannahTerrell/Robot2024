@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -13,7 +14,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
-
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -88,7 +88,6 @@ public class Drivetrain extends SubsystemBase {
     m_backRight.setDesiredState(swerveModuleStates[3]);
 
     m_SwerveStatePublisher.set(swerveModuleStates);
-
     m_ChassisSpeedPublisher.set(chassisSpeed);
   }
 
@@ -127,6 +126,42 @@ public class Drivetrain extends SubsystemBase {
 
   public AHRS getGyro() {
     return m_gyro;
+  }
+
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    m_odometry.resetPosition(m_gyro.getRotation2d(),
+        new SwerveModulePosition[] {
+          m_frontLeft.getPosition(),
+          m_frontRight.getPosition(),
+          m_backLeft.getPosition(),
+          m_backRight.getPosition()
+        }, pose);
+  }
+
+  public SwerveDriveKinematics getKinematics() {
+    return m_kinematics;
+  }
+
+  public SwerveModule getModule(int index) {
+    SwerveModule[] modules = {m_frontLeft, m_frontRight, m_backLeft, m_backRight};
+    return modules[index];
+  }
+
+  public void stopModules() {
+    m_frontLeft.stop();
+    m_frontRight.stop();
+    m_backLeft.stop();
+    m_backRight.stop();
+  }
+
+  @Override
+  public void periodic() {
+    updateOdometry();
+    SmartDashboard.putString("Robot Position", getPose().getTranslation().toString());
   }
 }
  

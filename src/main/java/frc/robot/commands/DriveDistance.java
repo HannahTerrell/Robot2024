@@ -14,7 +14,7 @@ public class DriveDistance extends Command {
     private Drivetrain drivetrain;
     private double distanceMeters;
     private double startingRotation;
-    private XCaliper m_robot;
+    private XCaliper robot;
 
     private PIDController speedController;
     private PIDController rotationController;
@@ -25,11 +25,10 @@ public class DriveDistance extends Command {
         this.distanceMeters = distanceMeters;
         this.drivetrain = drivetrain;
         this.gyro = gyro;
+        this.robot = robot;
 
         speedController = new PIDController(3, 0, 0);
-        rotationController = new PIDController(0.03, 0, 0.00);
-
-        m_robot = robot;
+        rotationController = new PIDController(0.03, 0, 0);
 
         addRequirements(drivetrain);
     }
@@ -58,7 +57,7 @@ public class DriveDistance extends Command {
         rotation = Math.min(Math.abs(rotation), 0.3) * Math.signum(rotation);
         rotation = rotation * -1; // turn the opposite direction
 
-        drivetrain.drive(0, speed, rotation, false, m_robot.getPeriod());
+        drivetrain.drive(speed, 0, rotation, false, robot.getPeriod());
     }
 
     @Override
