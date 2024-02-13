@@ -118,12 +118,6 @@ public class RobotContainer {
     // }));
   }
 
-  public void autonomousPeriodic() {
-    driveWithJoystick(false);
-    m_swerve.updateOdometry();
-
-  }
-
   public void teleopPeriodic() {
     driveWithJoystick(true);
   }
