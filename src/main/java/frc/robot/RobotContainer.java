@@ -40,7 +40,7 @@ public class RobotContainer {
   // private final Limelight m_limelight = new Limelight();
 
   //Electronics
-  private AHRS m_gyro = m_swerve.getGyro();
+  //private AHRS m_gyro = m_swerve.getGyro();
   // private final PowerDistribution m_powerDistribution = new PowerDistribution();
   
   //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
@@ -59,8 +59,9 @@ public class RobotContainer {
   // private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
 
   //Auton things
-  private final DriveAuton m_driveAuton = new DriveAuton(m_swerve, m_gyro, m_robot);
   private final PathAuton1 m_pathAuton1 = new PathAuton1(m_swerve);
+  private final PathAuton2 m_pathAuton2 = new PathAuton2(m_swerve);
+  private final PathAuton3 m_pathAuton3 = new PathAuton3(m_swerve);
   SendableChooser<Command> m_autonChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -70,8 +71,9 @@ public class RobotContainer {
     m_robot = robot;
 
     //Adding auton routines
-    m_autonChooser.setDefaultOption("Path Auton 1", m_pathAuton1);
-    m_autonChooser.addOption("Drive Auton", m_driveAuton);
+    m_autonChooser.setDefaultOption("One-Note Auton", m_pathAuton1);
+    m_autonChooser.addOption("Two-Note Auton", m_pathAuton2);
+    m_autonChooser.addOption("Drive Auton", m_pathAuton3);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 
