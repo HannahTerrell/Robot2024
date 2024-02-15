@@ -14,33 +14,29 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
-//import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
-//import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AnalogEncoder8612;
-
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 public class SwerveModule extends SubsystemBase {
-  private static final double kWheelRadius = 0.1016;
-  private static final double kEncoderResolution = 42 * 6.12;
-
+  private static final double kWheelRadius = 0.0508;
+  private static final double kDriveGearboxRatio = 6.12;
+  
   public static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
 
-  private final SparkAbsoluteEncoder m_driveEncoder;
+  private final RelativeEncoder m_driveEncoder;
   private final AnalogEncoder8612 m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
@@ -76,15 +72,23 @@ public class SwerveModule extends SubsystemBase {
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
-    m_driveEncoder = m_driveMotor.getAbsoluteEncoder(Type.kDutyCycle);
+    m_driveEncoder = m_driveMotor.getEncoder();
     m_turningInput = new AnalogInput(turningEncoderChannel);
     m_turningEncoder = new AnalogEncoder8612(m_turningInput);
+
+    // HANNAH: We are trying to get the drive encoders to work right. They were
+    // saying always 0 - and then we realized we needed to use m_driveMotor.getEncoder()
+    // instead of m_driveMotor.getAbsoluteEncoder() - but now the ratio is wrong.
+    // If I drive it about 15ft, it says it moved about 1/1000m backwards.
+    // I'm puzzled, but at least we are getting some value from the drive encoders now.
+    var encoderResolution = m_driveEncoder.getCountsPerRevolution(); // 4096
+    var driveDistancePerMotorRotation = (kWheelRadius * 2 * Math.PI) / kDriveGearboxRatio;
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveEncoder.setPositionConversionFactor(2 * Math.PI * kWheelRadius / kEncoderResolution);
-    m_driveEncoder.setVelocityConversionFactor(2 * Math.PI * kWheelRadius / kEncoderResolution);
+    m_driveEncoder.setPositionConversionFactor(driveDistancePerMotorRotation / 1.65);
+    m_driveEncoder.setVelocityConversionFactor(driveDistancePerMotorRotation / encoderResolution / 60);
 
     // Set the distance (in this case, angle) in radians per pulse for the turning encoder.
     // This is the the angle through an entire rotation (2 * pi) divided by the
@@ -155,7 +159,7 @@ public class SwerveModule extends SubsystemBase {
     m_driveMotor.setVoltage(driveOutput);
     m_turningMotor.setVoltage(turnOutput);
 
-    m_EncoderDistancePublisher.set(m_turningEncoder.getDistance());
+    m_EncoderDistancePublisher.set(m_driveEncoder.getPosition());
     m_EncoderVoltagePublisher.set(m_turningInput.getVoltage());
     m_TurnPublisher.set(turnOutput);
   }

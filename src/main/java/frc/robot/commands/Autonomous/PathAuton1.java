@@ -13,18 +13,21 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.SwerveModule;
 
 public class PathAuton1 extends SequentialCommandGroup {
     private Drivetrain m_drivetrain;
-    Trajectory trajectory;
+    Trajectory trajectory1;
+    Trajectory trajectory2;
     TrajectoryConfig trajectoryConfig;
     private PIDController xController = new PIDController(1, 0, 0);
     private PIDController yController = new PIDController(1, 0, 0); 
     private ProfiledPIDController rotController = new ProfiledPIDController(2.5, 0, 0,
         new TrapezoidProfile.Constraints(SwerveModule.kModuleMaxAngularVelocity, SwerveModule.kModuleMaxAngularAcceleration));
-    SwerveControllerCommand swerveControllerCommand;
+    SwerveControllerCommand swerveCommand1;
+    SwerveControllerCommand swerveCommand2;
 
     public PathAuton1(Drivetrain drivetrain) {
         super();
@@ -34,18 +37,37 @@ public class PathAuton1 extends SequentialCommandGroup {
         trajectoryConfig = new TrajectoryConfig(Drivetrain.kMaxSpeed, 1)
             .setKinematics(m_drivetrain.getKinematics());
 
-        trajectory = TrajectoryGenerator.generateTrajectory(
+        trajectory1 = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(
-                new Translation2d(1, 1),
-                new Translation2d(2, -1)
+                new Translation2d(1, 1)
+            ), 
+            new Pose2d(2, 2, new Rotation2d(1.5)),
+            trajectoryConfig
+        );
+
+        trajectory2 = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(2, 2, new Rotation2d(1.5)),
+            List.of(
+                new Translation2d(2.5, 1)
             ), 
             new Pose2d(3, 0, new Rotation2d(0)),
             trajectoryConfig
         );
 
-        swerveControllerCommand = new SwerveControllerCommand(
-            trajectory, 
+        swerveCommand1 = new SwerveControllerCommand(
+            trajectory1, 
+            m_drivetrain::getPose, 
+            m_drivetrain.getKinematics(), 
+            xController,
+            yController,
+            rotController,
+            m_drivetrain::setModuleStates, 
+            m_drivetrain
+        );
+
+        swerveCommand2 = new SwerveControllerCommand(
+            trajectory2, 
             m_drivetrain::getPose, 
             m_drivetrain.getKinematics(), 
             xController,
@@ -56,8 +78,11 @@ public class PathAuton1 extends SequentialCommandGroup {
         );
 
         addCommands(
-            new InstantCommand(() -> m_drivetrain.resetOdometry(trajectory.getInitialPose())),
-            swerveControllerCommand,
+            new InstantCommand(() -> m_drivetrain.resetOdometry(trajectory1.getInitialPose())),
+            swerveCommand1,
+            new InstantCommand(() -> m_drivetrain.stopModules()),
+            new WaitCommand(1),
+            swerveCommand2,
             new InstantCommand(() -> m_drivetrain.stopModules())
         );
     }
