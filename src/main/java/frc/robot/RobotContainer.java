@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 // import edu.wpi.first.wpilibj2.command.RunCommand;
 // import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -37,7 +38,7 @@ public class RobotContainer {
   // private final Intake m_intake = new Intake();
   // private final Shooter m_shooter = new Shooter();
   // private final Climber m_climber = new Climber();
-  // private final Limelight m_limelight = new Limelight();
+  private final Limelight m_limelight = new Limelight();
 
   //Electronics
   //private AHRS m_gyro = m_swerve.getGyro();
@@ -57,6 +58,7 @@ public class RobotContainer {
   // private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
   // private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
   // private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
+  private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
 
   //Auton things
   private final PathAuton1 m_pathAuton1 = new PathAuton1(m_swerve);
@@ -127,21 +129,29 @@ public class RobotContainer {
   private void driveWithJoystick(boolean fieldRelative) {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
-    final var xSpeed =
+    var xSpeed =
         -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.2)) * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
-    final var ySpeed =
+    var ySpeed =
         -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.2)) * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
-    final var rot =
+    var rot =
        -m_rotLimiter.calculate(MathUtil.applyDeadband(m_driverController.getRightX(), 0.2)) * Drivetrain.kMaxAngularSpeed;
+
+    double limelight_tx = m_limelight.getTX().getDouble(0);
+
+    if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
+      // xSpeed = m_xspeedLimiter.calculate(1) * Drivetrain.kMaxSpeed;
+      // ySpeed = m_yspeedLimiter.calculate(1) * Drivetrain.kMaxSpeed;
+        rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
+    }
     
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());
   }
@@ -157,6 +167,6 @@ public class RobotContainer {
 
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    // m_limelight.periodic();
+    m_limelight.periodic();
   }
 }
