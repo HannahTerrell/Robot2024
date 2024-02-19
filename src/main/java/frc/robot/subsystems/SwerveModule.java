@@ -48,8 +48,8 @@ public class SwerveModule extends SubsystemBase {
         new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(1, 3);
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(1, 0.5);
+  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.5, 0.5);
+  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.5, 0.5);
   private DoublePublisher m_EncoderDistancePublisher;
   private DoublePublisher m_EncoderVoltagePublisher;
   private DoublePublisher m_TurnPublisher;
@@ -156,8 +156,8 @@ public class SwerveModule extends SubsystemBase {
 
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    m_driveMotor.setVoltage(driveOutput);
-    m_turningMotor.setVoltage(turnOutput);
+    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
+    m_turningMotor.setVoltage(turnOutput + turnFeedforward);
 
     m_EncoderDistancePublisher.set(m_driveEncoder.getPosition());
     m_EncoderVoltagePublisher.set(m_turningInput.getVoltage());

@@ -42,27 +42,28 @@ public class PathAuton2 extends SequentialCommandGroup {
         trajectory1 = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(
-                new Translation2d(1, 1)
+                new Translation2d(1, 0.5)
             ), 
-            new Pose2d(2, 2, new Rotation2d(1.5)),
+            new Pose2d(1.7, 1.1, new Rotation2d(1.5)),
             trajectoryConfig
         );
-
+    
         trajectory2 = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(2, 2, new Rotation2d(1.5)),
+            new Pose2d(1.7, 1.1, new Rotation2d(1.5)),
             List.of(
-                new Translation2d(2.5, 1)
+                new Translation2d(1.7, 0.5),
+                new Translation2d(1.7, 0)
             ), 
-            new Pose2d(3, 0, new Rotation2d(0)),
+            new Pose2d(2.3, -0.3, new Rotation2d(0)),
             trajectoryConfig
         );
 
         trajectory3 = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(3, 0, new Rotation2d(0)),
+            new Pose2d(2.3, -0.5, new Rotation2d(0)),
             List.of(
-                new Translation2d(1, 1)
+                new Translation2d(1.0, 0.5)
             ), 
-            new Pose2d(0, 2, new Rotation2d(1.5)),
+            new Pose2d(-0.3, 1.4, new Rotation2d(1.5)),
             trajectoryConfig
         );
 

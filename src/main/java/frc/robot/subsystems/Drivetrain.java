@@ -31,8 +31,8 @@ public class Drivetrain extends SubsystemBase {
 
   private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.8);
   private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 0.3);
-  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.98);
-  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.28);
+  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.95);
+  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.3);
 
   private final AHRS m_gyro = new AHRS(Port.kMXP);
 

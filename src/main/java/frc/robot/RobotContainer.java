@@ -6,7 +6,7 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.Autonomous.*;
-import com.kauailabs.navx.frc.AHRS;
+//import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
