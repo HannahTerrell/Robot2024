@@ -213,3 +213,4 @@ public class AnalogEncoder8612 implements Sendable, AutoCloseable {
     builder.addDoubleProperty("Distance Per Rotation", this::getDistancePerRotation, null);
   }
 }
+

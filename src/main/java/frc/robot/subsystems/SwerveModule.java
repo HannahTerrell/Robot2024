@@ -19,7 +19,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.AnalogInput;
+//import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AnalogEncoder8612;
 import com.revrobotics.CANSparkMax;
@@ -108,6 +110,14 @@ public class SwerveModule extends SubsystemBase {
 
     m_TurnPublisher = NetworkTableInstance.getDefault()
       .getDoubleTopic("/SwerveModules/" + name + "/TurnOutput").publish();
+    m_EncoderDistancePublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Distance").publish();
+    
+    m_EncoderVoltagePublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Voltage").publish();
+
+    m_TurnPublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/TurnOutput").publish();
   }
 
   /**
@@ -156,8 +166,8 @@ public class SwerveModule extends SubsystemBase {
 
     final double turnFeedforward = m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
-    m_driveMotor.setVoltage(driveOutput + driveFeedforward);
-    m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+    m_driveMotor.setVoltage(driveOutput);
+    m_turningMotor.setVoltage(turnOutput);
 
     m_EncoderDistancePublisher.set(m_driveEncoder.getPosition());
     m_EncoderVoltagePublisher.set(m_turningInput.getVoltage());
