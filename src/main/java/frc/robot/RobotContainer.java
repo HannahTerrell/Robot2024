@@ -5,7 +5,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.*;
-import frc.robot.commands.*;
+//import frc.robot.commands.*;
 import frc.robot.commands.Autonomous.*;
 //import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants.OperatorConstants;
@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 //import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -42,7 +41,7 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
 
   //Commands
-  private final AmpScore m_ampScoreCommand = new AmpScore(m_shooter, m_arm);
+  //private final AmpScore m_ampScoreCommand = new AmpScore(m_shooter, m_arm);
 
   //Electronics
   //private AHRS m_gyro = m_swerve.getGyro();
@@ -105,19 +104,21 @@ public class RobotContainer {
   private void configureBindings() {
     m_climbUpButton.onTrue(new RunCommand(() -> {
       m_climber.climbUp();
-    }, m_climber));
+    }));
 
     m_climbDownButton.onTrue(new RunCommand(() -> {
       m_climber.climbDown();
-    }, m_climber));
+    }));
 
-    // m_shootSpeakerButton.whileTrue(new StartEndCommand(
-    // () -> {
-    //   m_shooter.setSpeed(1.0);
-    // },
-    // () -> {
-    //   m_shooter.setSpeed(0);
-    // }));
+    m_shootAmpButton.onTrue(new RunCommand(() -> {
+      m_arm.moveToTag(m_limelight);
+      m_shooter.shootAmp();
+    }));
+
+    m_shootSpeakerButton.onTrue(new RunCommand(() -> {
+      m_arm.moveToTag(m_limelight);
+      m_shooter.shootSpeaker();
+    }));
   }
 
   public void autonomousPeriodic() {
@@ -154,6 +155,7 @@ public class RobotContainer {
       // xSpeed = m_xspeedLimiter.calculate(1) * Drivetrain.kMaxSpeed;
       // ySpeed = m_yspeedLimiter.calculate(1) * Drivetrain.kMaxSpeed;
         rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
+        m_arm.moveToTag(m_limelight);
     }
     
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());
@@ -170,7 +172,6 @@ public class RobotContainer {
 
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    m_limelight.periodic();
     m_limelight.periodic();
   }
 }

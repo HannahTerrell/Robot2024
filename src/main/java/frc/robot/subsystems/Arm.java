@@ -34,9 +34,9 @@ public class Arm extends SubsystemBase {
         m_armTimer.reset();
     }
 
-    public void moveToAngle(Limelight limelight) {
+    public void moveToTag(Limelight limelight) {
         double limelight_ty = limelight.getTY().getDouble(0);
-        while (Math.abs(limelight_ty) > 2) {
+        if (Math.abs(limelight_ty) > 2) {
             m_armMotor.set(limelight_ty * 0.01);
         }
     }
