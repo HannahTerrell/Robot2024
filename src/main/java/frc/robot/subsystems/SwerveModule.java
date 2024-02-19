@@ -48,8 +48,8 @@ public class SwerveModule extends SubsystemBase {
         new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.5, 0.5);
-  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.5, 0.5);
+  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.2, 0.5);
+  private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.2, 0.6);
   private DoublePublisher m_EncoderDistancePublisher;
   private DoublePublisher m_EncoderVoltagePublisher;
   private DoublePublisher m_TurnPublisher;
