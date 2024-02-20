@@ -34,10 +34,10 @@ public class RobotContainer {
 
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
-  // private final Intake m_intake = new Intake();
-  // private final Shooter m_shooter = new Shooter();
-  // private final Climber m_climber = new Climber();
-  // private final Arm m_arm = new Arm();
+  private final Intake m_intake = new Intake();
+  private final Shooter m_shooter = new Shooter();
+  private final Climber m_climber = new Climber();
+  private final Arm m_arm = new Arm();
   private final Limelight m_limelight = new Limelight();
 
   //Commands
@@ -84,12 +84,11 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    // m_intake.setDefaultCommand(
-    //   new RunCommand(() -> {
-    //     m_intake.setSpeed(-(m_operatorController.getRawAxis(m_intakeAxis)));
-    //     m_intake.feed();
-    //   },
-    //   m_intake));
+    m_intake.setDefaultCommand(
+      new RunCommand(() -> {
+        m_intake.intakeAndFeed(-m_operatorController.getRawAxis(m_intakeAxis));
+      },
+      m_intake));
   }
 
   /**
@@ -102,23 +101,23 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // m_climbUpButton.onTrue(new RunCommand(() -> {
-    //   m_climber.climbUp();
-    // }));
+    m_climbUpButton.onTrue(new RunCommand(() -> {
+      m_climber.climbUp();
+    }));
 
-    // m_climbDownButton.onTrue(new RunCommand(() -> {
-    //   m_climber.climbDown();
-    // }));
+    m_climbDownButton.onTrue(new RunCommand(() -> {
+      m_climber.climbDown();
+    }));
 
-    // m_shootAmpButton.onTrue(new RunCommand(() -> {
-    //   m_arm.moveToTag(m_limelight);
-    //   m_shooter.shootAmp();
-    // }));
+    m_shootAmpButton.onTrue(new RunCommand(() -> {
+      m_arm.moveToTag(m_limelight);
+      m_shooter.shootAmp();
+    }));
 
-    // m_shootSpeakerButton.onTrue(new RunCommand(() -> {
-    //   m_arm.moveToTag(m_limelight);
-    //   m_shooter.shootSpeaker();
-    // }));
+    m_shootSpeakerButton.onTrue(new RunCommand(() -> {
+      m_arm.moveToTag(m_limelight);
+      m_shooter.shootSpeaker();
+    }));
   }
 
   public void autonomousPeriodic() {
@@ -155,7 +154,7 @@ public class RobotContainer {
       // xSpeed = m_xspeedLimiter.calculate(1) * Drivetrain.kMaxSpeed;
       // ySpeed = m_yspeedLimiter.calculate(1) * Drivetrain.kMaxSpeed;
         rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
-        // m_arm.moveToTag(m_limelight);
+        m_arm.moveToTag(m_limelight);
     }
     
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());

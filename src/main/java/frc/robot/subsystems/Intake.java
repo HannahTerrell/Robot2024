@@ -11,7 +11,8 @@ public class Intake extends SubsystemBase {
   private CANSparkMax m_intakeMotor = new CANSparkMax(9, MotorType.kBrushless);
   private CANSparkMax m_feedMotor = new CANSparkMax(10, MotorType.kBrushless);
   private DigitalInput m_sensor = new DigitalInput(0);
-  private double m_speed;
+  private double m_intakeSpeed;
+  private double m_feedSpeed;
 
   public Intake() {
     super();
@@ -19,19 +20,18 @@ public class Intake extends SubsystemBase {
     m_feedMotor.setIdleMode(IdleMode.kBrake);
   }
 
-  public void setSpeed(double speed) {
-    m_speed = speed;
-  }
-
-  public void feed() {
-    while (m_sensor.get()) {
-      m_feedMotor.set(0.4);
+  public void intakeAndFeed(double speed) {
+    m_intakeSpeed = speed;
+    if (m_sensor.get()) {
+      m_feedSpeed = speed;
     }
+
   }
 
   @Override
   public void periodic() {
-      m_intakeMotor.set(m_speed);
+      m_intakeMotor.set(m_intakeSpeed);
+      m_feedMotor.set(m_feedSpeed);
       SmartDashboard.putNumber("Intake Speed", m_intakeMotor.get());
   }
 }
