@@ -5,25 +5,23 @@
 package frc.robot;
 
 import frc.robot.subsystems.*;
-//import frc.robot.commands.*;
-import frc.robot.commands.Autonomous.*;
-//import com.kauailabs.navx.frc.AHRS;
+import frc.robot.commands.AmpScore;
+import frc.robot.commands.SpeakerScore;
+//import frc.robot.commands.Autonomous.*;
 import frc.robot.Constants.OperatorConstants;
-
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-// import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-//import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -44,11 +42,8 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
 
   //Commands
-  //private final AmpScore m_ampScoreCommand = new AmpScore(m_shooter, m_arm);
-
-  //Electronics
-  //private AHRS m_gyro = m_swerve.getGyro();
-  // private final PowerDistribution m_powerDistribution = new PowerDistribution();
+  private final AmpScore ampScore = new AmpScore(m_shooter, m_arm);
+  private final SpeakerScore speakerScore = new SpeakerScore(m_shooter, m_arm, m_limelight);
   
   //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -68,10 +63,9 @@ public class RobotContainer {
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
 
   //Auton things
-  private final PathAuton1 m_pathAuton1 = new PathAuton1(m_swerve);
-  private final PathAuton2 m_pathAuton2 = new PathAuton2(m_swerve);
-  private final PathAuton3 m_pathAuton3 = new PathAuton3(m_swerve);
   private final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
+  private final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
+  private final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
   SendableChooser<Command> m_autonChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -80,11 +74,16 @@ public class RobotContainer {
     configureBindings();
     m_robot = robot;
 
+    //Commands for PathPlanner
+    NamedCommands.registerCommand("stopModules", new InstantCommand(() -> m_swerve.stopModules()));
+    NamedCommands.registerCommand("intakeAndFeed", new InstantCommand(() -> m_intake.intakeAndFeed(0.4)));
+    NamedCommands.registerCommand("shootSpeaker", speakerScore);
+    NamedCommands.registerCommand("shootAmp", ampScore);
+
     //Adding auton routines
-    m_autonChooser.setDefaultOption("One-Note Auton", m_pathAuton1);
-    m_autonChooser.addOption("Two-Note Auton", m_pathAuton2);
-    m_autonChooser.addOption("Drive Auton", m_pathAuton3);
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
+    m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
+    m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 

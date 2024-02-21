@@ -2,31 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.5521146085027211,
-      "y": 6.993104356579084
+      "x": 1.37,
+      "y": 5.54
     },
-    "rotation": 90.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "To Amp"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "stopModules"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootAmp"
+            "name": "shootSpeaker"
           }
         },
         {
@@ -36,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp To Note"
+                  "pathName": "Speaker To Note (Center)"
                 }
               },
               {
@@ -52,6 +40,12 @@
           "type": "named",
           "data": {
             "name": "stopModules"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSpeaker"
           }
         }
       ]
