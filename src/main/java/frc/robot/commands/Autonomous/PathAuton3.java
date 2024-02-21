@@ -55,7 +55,7 @@ public class PathAuton3 extends SequentialCommandGroup {
         );
 
         addCommands(
-            new InstantCommand(() -> m_drivetrain.resetOdometry(trajectory.getInitialPose())),
+            new InstantCommand(() -> m_drivetrain.resetPose(trajectory.getInitialPose())),
             swerveCommand,
             new InstantCommand(() -> m_drivetrain.stopModules())
         );

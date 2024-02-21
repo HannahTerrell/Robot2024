@@ -15,6 +15,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -50,6 +56,8 @@ public class Drivetrain extends SubsystemBase {
             m_backRight.getPosition()
           });
 
+  private ChassisSpeeds chassisSpeed = new ChassisSpeeds();
+
   private StructArrayPublisher<SwerveModuleState> m_SwerveStatePublisher;
   private StructPublisher<ChassisSpeeds> m_ChassisSpeedPublisher;
 
@@ -58,9 +66,30 @@ public class Drivetrain extends SubsystemBase {
 
     m_SwerveStatePublisher = NetworkTableInstance.getDefault()
       .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
-
     m_ChassisSpeedPublisher = NetworkTableInstance.getDefault()
       .getStructTopic("/ChassisSpeeds", ChassisSpeeds.struct).publish();
+
+    AutoBuilder.configureHolonomic(
+      this::getPose,
+      this::resetPose,
+      this::getCurrentSpeeds,
+      this::driveRobotRelative,
+      new HolonomicPathFollowerConfig(
+        new PIDConstants(1.0, 0.0, 0.0), 
+        new PIDConstants(2.5, 0.0, 0.0), 
+        kMaxSpeed, 
+        0.381,
+        new ReplanningConfig()
+      ),
+      () -> {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+          return alliance.get() == DriverStation.Alliance.Red;
+        }
+        return false;
+      },
+      this
+    );
   }
 
   /**
@@ -72,13 +101,16 @@ public class Drivetrain extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, double periodSeconds) {
-    var chassisSpeed = ChassisSpeeds.discretize(
+    chassisSpeed = ChassisSpeeds.discretize(
                 fieldRelative
                     ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                     : new ChassisSpeeds(xSpeed, ySpeed, rot),
                 periodSeconds);
+   driveRobotRelative(chassisSpeed);
+  }
 
+  public void driveRobotRelative(ChassisSpeeds chassisSpeed) {
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(chassisSpeed);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
@@ -92,6 +124,10 @@ public class Drivetrain extends SubsystemBase {
     m_frontRight.setDesiredState(states[1]);
     m_backLeft.setDesiredState(states[2]);
     m_backRight.setDesiredState(states[3]);
+  }
+
+  public ChassisSpeeds getCurrentSpeeds() {
+    return chassisSpeed;
   }
 
   /** Updates the field relative position of the robot. */
@@ -135,7 +171,7 @@ public class Drivetrain extends SubsystemBase {
     return m_odometry.getPoseMeters();
   }
 
-  public void resetOdometry(Pose2d pose) {
+  public void resetPose(Pose2d pose) {
     m_odometry.resetPosition(m_gyro.getRotation2d(),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),

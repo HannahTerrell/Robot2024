@@ -79,7 +79,7 @@ public class PathAuton1 extends SequentialCommandGroup {
         );
 
         addCommands(
-            new InstantCommand(() -> m_drivetrain.resetOdometry(trajectory1.getInitialPose())),
+            new InstantCommand(() -> m_drivetrain.resetPose(trajectory1.getInitialPose())),
             swerveCommand1,
             new InstantCommand(() -> m_drivetrain.stopModules()),
             new WaitCommand(1),

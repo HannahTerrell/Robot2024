@@ -9,6 +9,9 @@ import frc.robot.subsystems.*;
 import frc.robot.commands.Autonomous.*;
 //import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants.OperatorConstants;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 // import edu.wpi.first.wpilibj.PowerDistribution;
@@ -68,6 +71,7 @@ public class RobotContainer {
   private final PathAuton1 m_pathAuton1 = new PathAuton1(m_swerve);
   private final PathAuton2 m_pathAuton2 = new PathAuton2(m_swerve);
   private final PathAuton3 m_pathAuton3 = new PathAuton3(m_swerve);
+  private final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
   SendableChooser<Command> m_autonChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -80,6 +84,7 @@ public class RobotContainer {
     m_autonChooser.setDefaultOption("One-Note Auton", m_pathAuton1);
     m_autonChooser.addOption("Two-Note Auton", m_pathAuton2);
     m_autonChooser.addOption("Drive Auton", m_pathAuton3);
+    m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 
