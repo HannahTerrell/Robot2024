@@ -66,6 +66,8 @@ public class RobotContainer {
   private final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
   private final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
   private final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
+  private final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
+  private final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto");
   SendableChooser<Command> m_autonChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -75,8 +77,8 @@ public class RobotContainer {
     m_robot = robot;
 
     //Commands for PathPlanner
-    NamedCommands.registerCommand("stopModules", new InstantCommand(() -> m_swerve.stopModules()));
-    NamedCommands.registerCommand("intakeAndFeed", new InstantCommand(() -> m_intake.intakeAndFeed(0.4)));
+    NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()).withTimeout(2));
+    NamedCommands.registerCommand("intakeAndFeed", new RunCommand(() -> m_intake.intakeAndFeed(0.4)));
     NamedCommands.registerCommand("shootSpeaker", speakerScore);
     NamedCommands.registerCommand("shootAmp", ampScore);
 
@@ -84,6 +86,8 @@ public class RobotContainer {
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
     m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
+    m_autonChooser.addOption("Demo Auton", m_pathplanner4);
+    m_autonChooser.addOption("Speaker-Podium Auton", m_pathplanner5);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 

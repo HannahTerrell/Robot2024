@@ -1,26 +1,27 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Shooter extends SubsystemBase {
-  private CANSparkMax m_shootMotor = new CANSparkMax(13, MotorType.kBrushless);
+  private TalonFX m_shootMotor = new TalonFX(14);
+  private TalonFX m_shootFollower = new TalonFX(15);
 
   public Shooter() {
     super();
-    m_shootMotor.setIdleMode(IdleMode.kBrake);
+    m_shootMotor.setNeutralMode(NeutralModeValue.Brake);
+    m_shootFollower.setControl(new Follower(m_shootMotor.getDeviceID(), false));
   }
 
   public void shootSpeaker() {
-    m_shootMotor.set(0.8);
+    m_shootMotor.set(0.5);
   }
 
   public void shootAmp() {
-    m_shootMotor.set(0.3);
+    m_shootMotor.set(0.1);
   }
 
   @Override

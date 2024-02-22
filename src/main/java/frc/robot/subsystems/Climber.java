@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Climber extends SubsystemBase {
-  private CANSparkMax m_leftClimbMotor = new CANSparkMax(11, MotorType.kBrushless);
-  private CANSparkMax m_rightClimbMotor = new CANSparkMax(12, MotorType.kBrushless);
+  private CANSparkMax m_leftClimbMotor = new CANSparkMax(12, MotorType.kBrushless);
+  private CANSparkMax m_rightClimbMotor = new CANSparkMax(13, MotorType.kBrushless);
   private Timer m_timer = new Timer();
 
     public Climber() {

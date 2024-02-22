@@ -9,7 +9,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
   private CANSparkMax m_intakeMotor = new CANSparkMax(9, MotorType.kBrushless);
-  private CANSparkMax m_feedMotor = new CANSparkMax(10, MotorType.kBrushless);
+  private CANSparkMax m_intakeFollower = new CANSparkMax(10, MotorType.kBrushless);
+  private CANSparkMax m_feedMotor = new CANSparkMax(11, MotorType.kBrushless);
   private DigitalInput m_sensor = new DigitalInput(0);
   private double m_intakeSpeed;
   private double m_feedSpeed;
@@ -17,6 +18,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
     super();
     m_intakeMotor.setIdleMode(IdleMode.kBrake);
+    m_intakeFollower.follow(m_intakeMotor);
     m_feedMotor.setIdleMode(IdleMode.kBrake);
   }
 

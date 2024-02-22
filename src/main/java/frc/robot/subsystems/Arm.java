@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
-    private CANSparkMax m_armMotor = new CANSparkMax(14, MotorType.kBrushless);
+    private CANSparkMax m_armMotor = new CANSparkMax(16, MotorType.kBrushless);
     private Timer m_armTimer = new Timer();
 
     public Arm() {
