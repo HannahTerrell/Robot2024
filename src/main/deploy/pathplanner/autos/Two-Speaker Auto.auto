@@ -39,12 +39,6 @@
         {
           "type": "named",
           "data": {
-            "name": "stopModules"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shootSpeaker"
           }
         }

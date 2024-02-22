@@ -20,12 +20,6 @@
         {
           "type": "named",
           "data": {
-            "name": "stopModules"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "shootAmp"
           }
         },
@@ -46,12 +40,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopModules"
           }
         }
       ]
