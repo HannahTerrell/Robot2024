@@ -5,8 +5,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.*;
-import frc.robot.commands.AmpScore;
-import frc.robot.commands.SpeakerScore;
+import frc.robot.commands.*;
 //import frc.robot.commands.Autonomous.*;
 import frc.robot.Constants.OperatorConstants;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -44,8 +42,10 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
 
   //Commands
-  private final AmpScore ampScore = new AmpScore(m_shooter, m_arm);
-  private final SpeakerScore speakerScore = new SpeakerScore(m_shooter, m_arm, m_limelight);
+  private final ArmUp armUp = new ArmUp(m_arm);
+  private final ArmDown armDown = new ArmDown(m_arm);
+  // private final AmpScore ampScore = new AmpScore(m_shooter, armUp, armDown);
+  // private final SpeakerScore speakerScore = new SpeakerScore(m_shooter, armUp, armDown, m_limelight);
   
   //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -83,8 +83,8 @@ public class RobotContainer {
     //Commands for PathPlanner
     NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()).withTimeout(2));
     NamedCommands.registerCommand("intakeAndFeed", new RunCommand(() -> m_intake.intakeAndFeed(0.4)));
-    NamedCommands.registerCommand("shootSpeaker", speakerScore);
-    NamedCommands.registerCommand("shootAmp", ampScore);
+    // NamedCommands.registerCommand("shootSpeaker", speakerScore);
+    // NamedCommands.registerCommand("shootAmp", ampScore);
 
     //Adding auton routines
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
@@ -137,13 +137,9 @@ public class RobotContainer {
       m_shooter.stop();
     }));
 
-    m_armUpButton.onTrue(new InstantCommand(() -> {
-      m_arm.moveUp();
-    }));
+    m_armUpButton.onTrue(armUp);
 
-    m_armDownButton.onTrue(new InstantCommand(() -> {
-      m_arm.moveDown();
-    }));
+    m_armDownButton.onTrue(armDown);
   }
 
   public void autonomousPeriodic() {

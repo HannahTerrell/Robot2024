@@ -5,12 +5,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.*;
 
 public class SpeakerScore extends SequentialCommandGroup {
-    public SpeakerScore(Shooter shooter, Arm arm, Limelight limelight) {
-        addRequirements(shooter, arm, limelight);
+    public SpeakerScore(Shooter shooter, ArmUp armUp, ArmDown armDown, Limelight limelight) {
+        addRequirements(shooter, limelight);
         addCommands(
-            new RunCommand(() -> arm.moveToTag(limelight)),
+            armUp,
             new RunCommand(() -> shooter.shootSpeaker()).withTimeout(1),
-            new RunCommand(() -> arm.moveDown())
+            armDown
         );
     }
 }
