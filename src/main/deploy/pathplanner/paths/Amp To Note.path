@@ -17,22 +17,6 @@
     {
       "anchor": {
         "x": 1.79,
-        "y": 7.00479851102106
-      },
-      "prevControl": {
-        "x": 1.79,
-        "y": 6.336499935047537
-      },
-      "nextControl": {
-        "x": 1.79,
-        "y": 7.673097086994584
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.79,
         "y": 6.659084862112717
       },
       "prevControl": {
@@ -62,17 +46,17 @@
   ],
   "rotationTargets": [
     {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    },
+    {
       "waypointRelativePos": 2.0,
       "rotationDegrees": 180.0,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 3.0,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 1,
+      "waypointRelativePos": 0.5,
       "rotationDegrees": 90.0,
       "rotateFast": false
     }
@@ -81,7 +65,7 @@
   "eventMarkers": [
     {
       "name": "Stop Modules",
-      "waypointRelativePos": 3.0,
+      "waypointRelativePos": 2.0,
       "command": {
         "type": "sequential",
         "data": {

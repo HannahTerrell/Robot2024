@@ -35,10 +35,10 @@ public class Drivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.8);
+  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.67);
   private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 0.3);
-  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.95);
-  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.3);
+  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.55);
+  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.04);
 
   private final AHRS m_gyro = new AHRS(Port.kMXP);
 
@@ -111,6 +111,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds chassisSpeed) {
+    //System.out.println(chassisSpeed);
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(chassisSpeed);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
@@ -188,15 +189,6 @@ public class Drivetrain extends SubsystemBase {
   public SwerveModule getModule(int index) {
     SwerveModule[] modules = {m_frontLeft, m_frontRight, m_backLeft, m_backRight};
     return modules[index];
-  }
-
-  public SwerveModuleState[] getStates() {
-    SwerveModuleState[] states = new SwerveModuleState[3];
-    states[0] = getModule(0).getState();
-    states[1] = getModule(1).getState();
-    states[2] = getModule(2).getState();
-    states[3] = getModule(3).getState();
-    return states;
   }
 
   public void stopModules() {

@@ -56,7 +56,7 @@ public class RobotContainer {
   //Buttons and axes
   private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
   private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
-  private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 0);
+  private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 1);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
@@ -158,8 +158,6 @@ public class RobotContainer {
     double limelight_tx = m_limelight.getTX().getDouble(0);
 
     if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
-      // xSpeed = m_xspeedLimiter.calculate(1) * Drivetrain.kMaxSpeed;
-      // ySpeed = m_yspeedLimiter.calculate(1) * Drivetrain.kMaxSpeed;
         rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
         m_arm.moveToTag(m_limelight);
     }
