@@ -18,20 +18,20 @@ public class Arm extends SubsystemBase {
 
     public void moveUp() {
         m_armTimer.start();
-        m_armMotor.set(0.5);
-        if (m_armTimer.hasElapsed(2.0)) {
+        m_armMotor.set(0.1);
+        if (m_armTimer.hasElapsed(1.0)) {
             m_armMotor.set(0);
+            m_armTimer.reset();
         }
-        m_armTimer.reset();
     }
 
     public void moveDown() {
         m_armTimer.start();
-        m_armMotor.set(-0.5);
-        if (m_armTimer.hasElapsed(2.0)) {
+        m_armMotor.set(-0.1);
+        if (m_armTimer.hasElapsed(1.0)) {
             m_armMotor.set(0);
+            m_armTimer.reset();
         }
-        m_armTimer.reset();
     }
 
     public void moveToTag(Limelight limelight) {

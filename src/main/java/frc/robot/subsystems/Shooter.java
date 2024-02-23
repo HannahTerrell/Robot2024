@@ -12,16 +12,21 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     super();
+    m_shootFollower.setControl(new Follower(m_shootMotor.getDeviceID(), true));
     m_shootMotor.setNeutralMode(NeutralModeValue.Brake);
-    m_shootFollower.setControl(new Follower(m_shootMotor.getDeviceID(), false));
+    m_shootFollower.setNeutralMode(NeutralModeValue.Brake);
   }
 
   public void shootSpeaker() {
-    m_shootMotor.set(0.5);
+    m_shootMotor.set(-0.5);
   }
 
   public void shootAmp() {
-    m_shootMotor.set(0.1);
+    m_shootMotor.set(-0.1);
+  }
+
+  public void stop() {
+    m_shootMotor.set(0);
   }
 
   @Override

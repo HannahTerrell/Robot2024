@@ -18,9 +18,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -59,6 +62,8 @@ public class RobotContainer {
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 1);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
+  private final POVButton m_armUpButton = new POVButton(m_operatorController, 0);
+  private final POVButton m_armDownButton = new POVButton(m_operatorController, 180);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
 
   //Auton things
@@ -116,14 +121,28 @@ public class RobotContainer {
       m_climber.climbDown();
     }));
 
-    m_shootAmpButton.onTrue(new RunCommand(() -> {
-      m_arm.moveToTag(m_limelight);
+    m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
+      //m_arm.moveToTag(m_limelight);
       m_shooter.shootAmp();
+    },
+    () -> {
+      m_shooter.stop();
     }));
 
-    m_shootSpeakerButton.onTrue(new RunCommand(() -> {
-      m_arm.moveToTag(m_limelight);
+    m_shootSpeakerButton.whileTrue(new StartEndCommand(() -> {
+      //m_arm.moveToTag(m_limelight);
       m_shooter.shootSpeaker();
+    },
+    () -> {
+      m_shooter.stop();
+    }));
+
+    m_armUpButton.onTrue(new InstantCommand(() -> {
+      m_arm.moveUp();
+    }));
+
+    m_armDownButton.onTrue(new InstantCommand(() -> {
+      m_arm.moveDown();
     }));
   }
 
