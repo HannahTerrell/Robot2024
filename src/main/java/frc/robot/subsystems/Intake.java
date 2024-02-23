@@ -18,8 +18,9 @@ public class Intake extends SubsystemBase {
   public Intake() {
     super();
     m_intakeMotor.setIdleMode(IdleMode.kBrake);
-   //m_intakeFollower.follow(m_intakeMotor);
+    m_intakeFollower.setIdleMode(IdleMode.kBrake);
     m_feedMotor.setIdleMode(IdleMode.kBrake);
+    m_intakeFollower.follow(m_intakeMotor);
   }
 
   public void intakeAndFeed(double speed) {
@@ -33,7 +34,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
       m_intakeMotor.set(m_intakeSpeed);
-      m_intakeFollower.set(m_intakeSpeed);
       m_feedMotor.set(m_feedSpeed);
       SmartDashboard.putNumber("Intake Speed", m_intakeMotor.get());
   }

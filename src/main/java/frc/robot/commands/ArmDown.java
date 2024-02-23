@@ -20,12 +20,12 @@ public class ArmDown extends Command {
 
     @Override
     public void execute() {
-        m_arm.setSpeed(-0.3);
+        m_arm.setSpeed(-0.5);
     }
 
     @Override
     public boolean isFinished() {
-        return m_armTimer.hasElapsed(2.0);
+        return m_armTimer.hasElapsed(4);
     }
 
     @Override
