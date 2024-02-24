@@ -44,7 +44,7 @@ public class RobotContainer {
   //Commands
   private final ArmUp armUp = new ArmUp(m_arm);
   private final ArmDown armDown = new ArmDown(m_arm);
-  // private final AmpScore ampScore = new AmpScore(m_shooter, armUp, armDown);
+  //private final AmpScore ampScore = new AmpScore(m_shooter, armUp, armDown);
   // private final SpeakerScore speakerScore = new SpeakerScore(m_shooter, armUp, armDown, m_limelight);
   
   //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
@@ -58,10 +58,12 @@ public class RobotContainer {
 
   //Buttons and axes
   private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
-  private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, 2);
-  private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, 1);
+  private final JoystickButton m_leftClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_rightClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
+  private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, 2);
+   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
   private final POVButton m_armUpButton = new POVButton(m_operatorController, 0);
   private final POVButton m_armDownButton = new POVButton(m_operatorController, 180);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
@@ -78,13 +80,14 @@ public class RobotContainer {
   public RobotContainer(XCaliper robot) {
     // Configure the trigger bindings
     configureBindings();
-    m_robot = robot;
 
     //Commands for PathPlanner
     NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()).withTimeout(2));
     NamedCommands.registerCommand("intakeAndFeed", new RunCommand(() -> m_intake.intakeAndFeed(0.4)));
     // NamedCommands.registerCommand("shootSpeaker", speakerScore);
     // NamedCommands.registerCommand("shootAmp", ampScore);
+
+    m_robot = robot;
 
     //Adding auton routines
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
@@ -113,16 +116,21 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_climbUpButton.onTrue(new RunCommand(() -> {
-      m_climber.climbUp();
+    m_leftClimbButton.whileTrue(new StartEndCommand(() -> {
+      m_climber.climb("left", 0.2);
+    }, 
+    () -> {
+      m_climber.stop();
     }));
 
-    m_climbDownButton.onTrue(new RunCommand(() -> {
-      m_climber.climbDown();
+    m_rightClimbButton.whileTrue(new StartEndCommand(() -> {
+      m_climber.climb("right", 0.2);
+    }, 
+    () -> {
+      m_climber.stop();
     }));
 
     m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
-      //m_arm.moveToTag(m_limelight);
       m_shooter.shootAmp();
     },
     () -> {
@@ -130,8 +138,21 @@ public class RobotContainer {
     }));
 
     m_shootSpeakerButton.whileTrue(new StartEndCommand(() -> {
-      //m_arm.moveToTag(m_limelight);
       m_shooter.shootSpeaker();
+    },
+    () -> {
+      m_shooter.stop();
+    }));
+
+    m_feedOnlyButton.whileTrue(new StartEndCommand(() -> {
+      m_shooter.feedOnly();
+    },
+    () -> {
+      m_shooter.stop();
+    }));
+
+    m_shootOnlyButton.whileTrue(new StartEndCommand(() -> {
+      m_shooter.shootSpeakerOnly();
     },
     () -> {
       m_shooter.stop();

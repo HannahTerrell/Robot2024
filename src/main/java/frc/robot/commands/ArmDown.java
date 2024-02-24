@@ -15,24 +15,24 @@ public class ArmDown extends Command {
 
     @Override
     public void initialize() {
+        m_armTimer.reset();
         m_armTimer.start();
     }
 
     @Override
     public void execute() {
-        m_arm.setSpeed(-0.5);
+        m_arm.setSpeed(-1);
     }
 
     @Override
     public boolean isFinished() {
-        return m_armTimer.hasElapsed(4);
+        return m_armTimer.hasElapsed(1.98);
     }
 
     @Override
     public void end(boolean interrupted) {
         super.end(interrupted);
         m_arm.setSpeed(0);
-        m_armTimer.reset();
     }
 
 }
