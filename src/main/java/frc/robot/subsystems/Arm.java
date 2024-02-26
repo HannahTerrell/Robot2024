@@ -25,6 +25,10 @@ public class Arm extends SubsystemBase {
         }
     }
 
+    public void stop() {
+        m_armMotor.set(0);
+    }
+
     @Override
     public void periodic() {
         m_armMotor.set(m_speed);

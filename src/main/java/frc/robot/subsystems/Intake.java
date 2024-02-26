@@ -19,8 +19,12 @@ public class Intake extends SubsystemBase {
     m_intakeFollower.follow(m_intakeMotor, true);
   }
 
-  public void intakeAndFeed(double speed) {
+  public void intake(double speed) {
     m_speed = speed;
+  }
+
+  public void stop() {
+    m_intakeMotor.set(0);
   }
 
   @Override

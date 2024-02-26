@@ -72,15 +72,13 @@ public class SwerveModule extends SubsystemBase {
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
+    m_driveMotor.setSmartCurrentLimit(70);
+    m_turningMotor.setSmartCurrentLimit(70);
+
     m_driveEncoder = m_driveMotor.getEncoder();
     m_turningInput = new AnalogInput(turningEncoderChannel);
     m_turningEncoder = new AnalogEncoder8612(m_turningInput);
 
-    // HANNAH: We are trying to get the drive encoders to work right. They were
-    // saying always 0 - and then we realized we needed to use m_driveMotor.getEncoder()
-    // instead of m_driveMotor.getAbsoluteEncoder() - but now the ratio is wrong.
-    // If I drive it about 15ft, it says it moved about 1/1000m backwards.
-    // I'm puzzled, but at least we are getting some value from the drive encoders now.
     var encoderResolution = m_driveEncoder.getCountsPerRevolution(); // 4096
     var driveDistancePerMotorRotation = (kWheelRadius * 2 * Math.PI) / kDriveGearboxRatio;
 
@@ -184,6 +182,10 @@ public class SwerveModule extends SubsystemBase {
     m_driveMotor.set(0);
     m_turningMotor.set(0);
     System.out.println("Module Stopped");
+  }
+
+  public double getTurningEncoderValue() {
+    return m_turningEncoder.getAbsolutePosition();
   }
 
 }

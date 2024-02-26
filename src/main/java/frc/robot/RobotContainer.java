@@ -6,7 +6,6 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-//import frc.robot.commands.Autonomous.*;
 import frc.robot.Constants.OperatorConstants;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -21,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+//import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -37,15 +36,21 @@ public class RobotContainer {
   private final Drivetrain m_swerve = new Drivetrain();
   private final Intake m_intake = new Intake();
   private final Shooter m_shooter = new Shooter();
-  private final Climber m_climber = new Climber();
+  //private final Climber m_climber = new Climber();
   private final Arm m_arm = new Arm();
   private final Limelight m_limelight = new Limelight();
 
   //Commands
   private final ArmUp armUp = new ArmUp(m_arm);
   private final ArmDown armDown = new ArmDown(m_arm);
+  private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
+  private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
+  private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
   //private final AmpScore ampScore = new AmpScore(m_shooter, armUp, armDown);
   // private final SpeakerScore speakerScore = new SpeakerScore(m_shooter, armUp, armDown, m_limelight);
+
+  //Auton chooser
+  SendableChooser<Command> m_autonChooser = new SendableChooser<>();
   
   //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -58,36 +63,41 @@ public class RobotContainer {
 
   //Buttons and axes
   private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
-  private final JoystickButton m_leftClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton m_rightClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
+  private final int m_armAxis = XboxController.Axis.kRightY.value;
+  // private final JoystickButton m_leftClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
+  // private final JoystickButton m_rightClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
   private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, 2);
-   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
-  private final POVButton m_armUpButton = new POVButton(m_operatorController, 0);
-  private final POVButton m_armDownButton = new POVButton(m_operatorController, 180);
+  private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
+  private final JoystickButton m_shootAndFeedButton = new JoystickButton(m_operatorController, 8);
+  // private final POVButton m_armUpButton = new POVButton(m_operatorController, 0);
+  // private final POVButton m_armDownButton = new POVButton(m_operatorController, 180);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
-
-  //Auton things
-  private final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
-  private final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
-  private final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
-  private final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
-  private final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto");
-  SendableChooser<Command> m_autonChooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(XCaliper robot) {
     // Configure the trigger bindings
     configureBindings();
 
+    m_robot = robot;
+
     //Commands for PathPlanner
     NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()).withTimeout(2));
-    NamedCommands.registerCommand("intakeAndFeed", new RunCommand(() -> m_intake.intakeAndFeed(0.4)));
+    NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
+    NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
+    NamedCommands.registerCommand("stopSystems", stopSystems);
+    NamedCommands.registerCommand("armUp", armUp);
+    NamedCommands.registerCommand("armDown", armDown);
     // NamedCommands.registerCommand("shootSpeaker", speakerScore);
     // NamedCommands.registerCommand("shootAmp", ampScore);
 
-    m_robot = robot;
+    //Auton things
+    final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
+    final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
+    final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
+    final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
+    final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto");
 
     //Adding auton routines
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
@@ -101,9 +111,15 @@ public class RobotContainer {
   public void teleopInit() {
     m_intake.setDefaultCommand(
       new RunCommand(() -> {
-        m_intake.intakeAndFeed(-m_operatorController.getRawAxis(m_intakeAxis));
+        m_intake.intake(-m_operatorController.getRawAxis(m_intakeAxis));
       },
       m_intake));
+
+      m_arm.setDefaultCommand(
+      new RunCommand(() -> {
+        m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
+      },
+      m_arm));
   }
 
   /**
@@ -116,19 +132,19 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_leftClimbButton.whileTrue(new StartEndCommand(() -> {
-      m_climber.climb("left", 0.2);
-    }, 
-    () -> {
-      m_climber.stop();
-    }));
+    // m_leftClimbButton.whileTrue(new StartEndCommand(() -> {
+    //   m_climber.climb("left", 0.2);
+    // }, 
+    // () -> {
+    //   m_climber.stop();
+    // }));
 
-    m_rightClimbButton.whileTrue(new StartEndCommand(() -> {
-      m_climber.climb("right", 0.2);
-    }, 
-    () -> {
-      m_climber.stop();
-    }));
+    // m_rightClimbButton.whileTrue(new StartEndCommand(() -> {
+    //   m_climber.climb("right", 0.2);
+    // }, 
+    // () -> {
+    //   m_climber.stop();
+    // }));
 
     m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
       m_shooter.shootAmp();
@@ -158,9 +174,11 @@ public class RobotContainer {
       m_shooter.stop();
     }));
 
-    m_armUpButton.onTrue(armUp);
+    m_shootAndFeedButton.whileTrue(feedAndShoot);
 
-    m_armDownButton.onTrue(armDown);
+    // m_armUpButton.onTrue(armUp);
+
+    // m_armDownButton.onTrue(armDown);
   }
 
   public void autonomousPeriodic() {
@@ -169,7 +187,7 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    driveWithJoystick(true);
+    driveWithJoystick(false);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {

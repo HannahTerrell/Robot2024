@@ -202,6 +202,10 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     updateOdometry();
     SmartDashboard.putString("Robot Position", getPose().getTranslation().toString());
+    SmartDashboard.putNumber("Front Left Turn Encoder", m_frontLeft.getTurningEncoderValue());
+    SmartDashboard.putNumber("Front Right Turn Encoder", m_frontRight.getTurningEncoderValue());
+    SmartDashboard.putNumber("Back Left Turn Encoder", m_backLeft.getTurningEncoderValue());
+    SmartDashboard.putNumber("Back Right Turn Encoder", m_backRight.getTurningEncoderValue());
   }
 }
  
