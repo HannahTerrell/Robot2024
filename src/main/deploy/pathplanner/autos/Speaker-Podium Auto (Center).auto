@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.37,
-      "y": 5.54
+      "x": 1.32,
+      "y": 5.57
     },
     "rotation": 180.0
   },
@@ -18,19 +18,13 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "stopSystems"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To Note (Center)"
+                  "pathName": "Speaker To Podium (Center)"
                 }
               },
               {
@@ -43,9 +37,21 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Note To Speaker (Center)"
+            "pathName": "Podium To Speaker (Center)"
           }
         },
         {
@@ -58,6 +64,12 @@
           "type": "named",
           "data": {
             "name": "stopSystems"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopModules"
           }
         }
       ]

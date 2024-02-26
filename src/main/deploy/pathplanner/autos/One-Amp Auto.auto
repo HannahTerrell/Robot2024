@@ -20,7 +20,19 @@
         {
           "type": "named",
           "data": {
+            "name": "armUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shootAmp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "armDown"
           }
         },
         {

@@ -30,16 +30,47 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To Podium"
+                  "pathName": "Speaker To Podium (Non-Amp)"
                 }
               }
             ]
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Podium To Speaker (Non-Amp)"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "shootSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker To Center (Non-Amp)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAndFeed"
+                }
+              }
+            ]
           }
         }
       ]

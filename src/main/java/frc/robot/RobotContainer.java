@@ -83,28 +83,30 @@ public class RobotContainer {
     m_robot = robot;
 
     //Commands for PathPlanner
-    NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()).withTimeout(2));
+    NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()));
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
     NamedCommands.registerCommand("stopSystems", stopSystems);
     NamedCommands.registerCommand("armUp", armUp);
     NamedCommands.registerCommand("armDown", armDown);
-    // NamedCommands.registerCommand("shootSpeaker", speakerScore);
-    // NamedCommands.registerCommand("shootAmp", ampScore);
+    NamedCommands.registerCommand("shootSpeaker", new RunCommand(() -> m_shooter.shootSpeaker()).withTimeout(1.0));
+    NamedCommands.registerCommand("shootAmp", new RunCommand(() -> m_shooter.shootAmp()).withTimeout(1.0));
 
     //Auton things
     final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
     final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
     final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
     final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
-    final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto");
+    final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
+    final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
 
     //Adding auton routines
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
     m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
     m_autonChooser.addOption("Demo Auton", m_pathplanner4);
-    m_autonChooser.addOption("Speaker-Podium Auton", m_pathplanner5);
+    m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
+    m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 

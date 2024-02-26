@@ -8,35 +8,19 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4410201412995422,
-        "y": 4.898673652645474
+        "x": 1.3707054194735167,
+        "y": 4.361919607030098
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4174820372432768,
-        "y": 3.9643183559871398
-      },
-      "prevControl": {
-        "x": 1.966414999772071,
-        "y": 3.9643183559871398
-      },
-      "nextControl": {
-        "x": 0.8685490747144808,
-        "y": 3.9643183559871398
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.388096855965791,
+        "x": 2.63367409925703,
         "y": 4.092954054853979
       },
       "prevControl": {
-        "x": 3.388096855965791,
+        "x": 1.6336740992570302,
         "y": 4.092954054853979
       },
       "nextControl": null,
@@ -46,12 +30,12 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 1.0,
       "rotationDegrees": 180.0,
       "rotateFast": false
     },
     {
-      "waypointRelativePos": 1,
+      "waypointRelativePos": 0.5,
       "rotationDegrees": 180.0,
       "rotateFast": false
     }
@@ -60,7 +44,7 @@
   "eventMarkers": [
     {
       "name": "Stop Modules",
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "sequential",
         "data": {
@@ -90,7 +74,7 @@
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 120.46554491945989,
+    "rotation": 120.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

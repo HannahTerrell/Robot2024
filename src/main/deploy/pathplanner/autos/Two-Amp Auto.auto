@@ -20,7 +20,19 @@
         {
           "type": "named",
           "data": {
+            "name": "armUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shootAmp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "armDown"
           }
         },
         {
@@ -43,6 +55,18 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Note To Amp"
@@ -51,7 +75,56 @@
         {
           "type": "named",
           "data": {
+            "name": "armUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shootAmp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "armDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Amp To Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAndFeed"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
           }
         }
       ]
