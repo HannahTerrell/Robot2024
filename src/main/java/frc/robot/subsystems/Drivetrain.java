@@ -28,17 +28,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
   public static final double kMaxSpeed = 5.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1 rotation per second
+  public static final double kMaxAngularSpeed = 1.5 * Math.PI; // 1.5 rotations per second
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
   private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.67);
+  //Comp bot offsets: 0.67, 0.3, 0.55, 0.04
+  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.81);
   private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 0.3);
-  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.55);
-  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.04);
+  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.99);
+  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.28);
 
   private final AHRS m_gyro = new AHRS(Port.kMXP);
 

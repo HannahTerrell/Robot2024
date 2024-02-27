@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -83,7 +84,7 @@ public class RobotContainer {
     m_robot = robot;
 
     //Commands for PathPlanner
-    NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()));
+    NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()).withTimeout(1.0));
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
     NamedCommands.registerCommand("stopSystems", stopSystems);

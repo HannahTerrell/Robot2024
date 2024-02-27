@@ -165,7 +165,7 @@ public class SwerveModule extends SubsystemBase {
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
 
-    m_EncoderDistancePublisher.set(m_driveEncoder.getPosition());
+    m_EncoderDistancePublisher.set(m_turningEncoder.getDistance());
     m_EncoderVoltagePublisher.set(m_turningInput.getVoltage());
     m_TurnPublisher.set(turnOutput);
   }
