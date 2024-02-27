@@ -35,23 +35,23 @@ public class RobotContainer {
 
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
-  private final Intake m_intake = new Intake();
-  private final Shooter m_shooter = new Shooter();
-  //private final Climber m_climber = new Climber();
-  private final Arm m_arm = new Arm();
+  // private final Intake m_intake = new Intake();
+  // private final Shooter m_shooter = new Shooter();
+  // private final Climber m_climber = new Climber();
+  // private final Arm m_arm = new Arm();
   private final Limelight m_limelight = new Limelight();
 
   //Commands
-  private final ArmUp armUp = new ArmUp(m_arm);
-  private final ArmDown armDown = new ArmDown(m_arm);
-  private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
-  private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
-  private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
+  // private final ArmUp armUp = new ArmUp(m_arm);
+  // private final ArmDown armDown = new ArmDown(m_arm);
+  // private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
+  // private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
+  // private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
   //private final AmpScore ampScore = new AmpScore(m_shooter, armUp, armDown);
   // private final SpeakerScore speakerScore = new SpeakerScore(m_shooter, armUp, armDown, m_limelight);
 
-  //Auton chooser
-  SendableChooser<Command> m_autonChooser = new SendableChooser<>();
+  //Auton chooser initiation
+  SendableChooser<Command> m_autonChooser;
   
   //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
   private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
@@ -84,14 +84,14 @@ public class RobotContainer {
     m_robot = robot;
 
     //Commands for PathPlanner
-    NamedCommands.registerCommand("stopModules", new RunCommand(() -> m_swerve.stopModules()).withTimeout(1.0));
-    NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
-    NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
-    NamedCommands.registerCommand("stopSystems", stopSystems);
-    NamedCommands.registerCommand("armUp", armUp);
-    NamedCommands.registerCommand("armDown", armDown);
-    NamedCommands.registerCommand("shootSpeaker", new RunCommand(() -> m_shooter.shootSpeaker()).withTimeout(1.0));
-    NamedCommands.registerCommand("shootAmp", new RunCommand(() -> m_shooter.shootAmp()).withTimeout(1.0));
+    NamedCommands.registerCommand("stopModules", new InstantCommand(() -> {m_swerve.stopModules();}));
+    // NamedCommands.registerCommand("stopSystems", stopSystems);
+    // NamedCommands.registerCommand("shootSpeaker", new RunCommand(() -> {m_shooter.shootSpeaker();}).withTimeout(1.0));
+    // NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
+    // NamedCommands.registerCommand("armUp", armUp);
+    // NamedCommands.registerCommand("armDown", armDown);
+    // NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
+    // NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
 
     //Auton things
     final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
@@ -100,29 +100,34 @@ public class RobotContainer {
     final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
     final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
     final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
+    final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
 
-    //Adding auton routines
+    //Auton chooser
+    m_autonChooser = new SendableChooser<>();
+
+    //Adding auton routines to chooser
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
     m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
     m_autonChooser.addOption("Demo Auton", m_pathplanner4);
     m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
     m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
+    m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 
   public void teleopInit() {
-    m_intake.setDefaultCommand(
-      new RunCommand(() -> {
-        m_intake.intake(-m_operatorController.getRawAxis(m_intakeAxis));
-      },
-      m_intake));
+    // m_intake.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     m_intake.intake(-m_operatorController.getRawAxis(m_intakeAxis));
+    //   },
+    //   m_intake));
 
-      m_arm.setDefaultCommand(
-      new RunCommand(() -> {
-        m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
-      },
-      m_arm));
+    //   m_arm.setDefaultCommand(
+    //   new RunCommand(() -> {
+    //     m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
+    //   },
+    //   m_arm));
   }
 
   /**
@@ -149,35 +154,35 @@ public class RobotContainer {
     //   m_climber.stop();
     // }));
 
-    m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
-      m_shooter.shootAmp();
-    },
-    () -> {
-      m_shooter.stop();
-    }));
+    // m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
+    //   m_shooter.shootAmp();
+    // },
+    // () -> {
+    //   m_shooter.stop();
+    // }));
 
-    m_shootSpeakerButton.whileTrue(new StartEndCommand(() -> {
-      m_shooter.shootSpeaker();
-    },
-    () -> {
-      m_shooter.stop();
-    }));
+    // m_shootSpeakerButton.whileTrue(new StartEndCommand(() -> {
+    //   m_shooter.shootSpeaker();
+    // },
+    // () -> {
+    //   m_shooter.stop();
+    // }));
 
-    m_feedOnlyButton.whileTrue(new StartEndCommand(() -> {
-      m_shooter.feedOnly();
-    },
-    () -> {
-      m_shooter.stop();
-    }));
+    // m_feedOnlyButton.whileTrue(new StartEndCommand(() -> {
+    //   m_shooter.feedOnly();
+    // },
+    // () -> {
+    //   m_shooter.stop();
+    // }));
 
-    m_shootOnlyButton.whileTrue(new StartEndCommand(() -> {
-      m_shooter.shootSpeakerOnly();
-    },
-    () -> {
-      m_shooter.stop();
-    }));
+    // m_shootOnlyButton.whileTrue(new StartEndCommand(() -> {
+    //   m_shooter.shootSpeakerOnly();
+    // },
+    // () -> {
+    //   m_shooter.stop();
+    // }));
 
-    m_shootAndFeedButton.whileTrue(feedAndShoot);
+    // m_shootAndFeedButton.whileTrue(feedAndShoot);
 
     // m_armUpButton.onTrue(armUp);
 
@@ -190,7 +195,7 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    driveWithJoystick(false);
+    driveWithJoystick(true);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
@@ -215,8 +220,8 @@ public class RobotContainer {
     double limelight_tx = m_limelight.getTX().getDouble(0);
 
     if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
-        rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
-        m_arm.moveToTag(m_limelight);
+        //rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
+       // m_arm.moveToTag(m_limelight);
     }
     
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());
@@ -234,5 +239,7 @@ public class RobotContainer {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     m_limelight.periodic();
+
+    SmartDashboard.putData(CommandScheduler.getInstance());
   }
 }

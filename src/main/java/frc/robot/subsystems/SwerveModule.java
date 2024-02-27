@@ -33,6 +33,8 @@ public class SwerveModule extends SubsystemBase {
   public static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
+  private String m_name;
+
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
 
@@ -50,8 +52,8 @@ public class SwerveModule extends SubsystemBase {
   // Gains are for example purposes only - must be determined for your own robot!
   private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.2, 0.5);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0.2, 0.6);
-  private DoublePublisher m_EncoderDistancePublisher;
-  private DoublePublisher m_EncoderVoltagePublisher;
+  private DoublePublisher m_turningEncoderDistancePublisher;
+  private DoublePublisher m_turningEncoderVoltagePublisher;
   private DoublePublisher m_TurnPublisher;
   private AnalogInput m_turningInput;
 
@@ -69,6 +71,7 @@ public class SwerveModule extends SubsystemBase {
       int turningMotorChannel,
       int turningEncoderChannel,
       double gyroOffset) {
+    m_name = name;
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
@@ -98,18 +101,10 @@ public class SwerveModule extends SubsystemBase {
     // to be continuous.
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-    m_EncoderDistancePublisher = NetworkTableInstance.getDefault()
+    m_turningEncoderDistancePublisher = NetworkTableInstance.getDefault()
       .getDoubleTopic("/SwerveModules/" + name + "/Distance").publish();
     
-    m_EncoderVoltagePublisher = NetworkTableInstance.getDefault()
-      .getDoubleTopic("/SwerveModules/" + name + "/Voltage").publish();
-
-    m_TurnPublisher = NetworkTableInstance.getDefault()
-      .getDoubleTopic("/SwerveModules/" + name + "/TurnOutput").publish();
-    m_EncoderDistancePublisher = NetworkTableInstance.getDefault()
-      .getDoubleTopic("/SwerveModules/" + name + "/Distance").publish();
-    
-    m_EncoderVoltagePublisher = NetworkTableInstance.getDefault()
+    m_turningEncoderVoltagePublisher = NetworkTableInstance.getDefault()
       .getDoubleTopic("/SwerveModules/" + name + "/Voltage").publish();
 
     m_TurnPublisher = NetworkTableInstance.getDefault()
@@ -165,8 +160,6 @@ public class SwerveModule extends SubsystemBase {
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
 
-    m_EncoderDistancePublisher.set(m_turningEncoder.getDistance());
-    m_EncoderVoltagePublisher.set(m_turningInput.getVoltage());
     m_TurnPublisher.set(turnOutput);
   }
 
@@ -188,4 +181,9 @@ public class SwerveModule extends SubsystemBase {
     return m_turningEncoder.getAbsolutePosition();
   }
 
+
+  public void periodic() {
+    m_turningEncoderDistancePublisher.set(m_turningEncoder.getDistance());
+    m_turningEncoderVoltagePublisher.set(m_turningInput.getVoltage());
+  }
 }
