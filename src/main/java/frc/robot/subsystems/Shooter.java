@@ -24,17 +24,17 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shootSpeaker() {
-    m_feedMotor.set(1);
+    m_feedMotor.set(0.5);
     m_shootMotor.set(-0.7);
   }
 
   public void shootAmp() {
-    m_feedMotor.set(1);
+    m_feedMotor.set(0.5);
     m_shootMotor.set(-0.3);
   }
 
   public void feedOnly() {
-    m_feedMotor.set(1);
+    m_feedMotor.set(0.5);
   }
 
   public void shootSpeakerOnly() {

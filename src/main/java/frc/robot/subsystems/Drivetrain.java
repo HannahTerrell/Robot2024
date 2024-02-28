@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -35,21 +36,22 @@ public class Drivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-  //Comp bot offsets: 0.67, 0.3, 0.55, 0.04
-  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.81);
-  private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 0.3);
-  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.99);
-  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.28);
+  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.66);
+  private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 0.59);
+  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.56);
+  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.04);
 
   private final AHRS m_gyro = new AHRS(Port.kMXP);
 
   private final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
+  private Rotation2d rotation = new Rotation2d(m_gyro.getRoll());
+  
   private final SwerveDriveOdometry m_odometry =
       new SwerveDriveOdometry(
           m_kinematics,
-          m_gyro.getRotation2d(),
+          rotation,
           new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -105,7 +107,7 @@ public class Drivetrain extends SubsystemBase {
     chassisSpeed = ChassisSpeeds.discretize(
                 fieldRelative
                     ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                        xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+                        xSpeed, ySpeed, rot, rotation)
                     : new ChassisSpeeds(xSpeed, ySpeed, rot),
                 periodSeconds);
    driveRobotRelative(chassisSpeed);
@@ -135,7 +137,7 @@ public class Drivetrain extends SubsystemBase {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(
-        m_gyro.getRotation2d(),
+        rotation,
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -174,7 +176,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetPose(Pose2d pose) {
-    m_odometry.resetPosition(m_gyro.getRotation2d(),
+    m_odometry.resetPosition(new Rotation2d(m_gyro.getRoll()),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),

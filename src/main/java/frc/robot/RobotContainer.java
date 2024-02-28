@@ -35,18 +35,18 @@ public class RobotContainer {
 
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
-  // private final Intake m_intake = new Intake();
-  // private final Shooter m_shooter = new Shooter();
-  // private final Climber m_climber = new Climber();
-  // private final Arm m_arm = new Arm();
+  private final Intake m_intake = new Intake();
+  private final Shooter m_shooter = new Shooter();
+  private final Climber m_climber = new Climber();
+  private final Arm m_arm = new Arm();
   private final Limelight m_limelight = new Limelight();
 
   //Commands
-  // private final ArmUp armUp = new ArmUp(m_arm);
-  // private final ArmDown armDown = new ArmDown(m_arm);
-  // private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
-  // private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
-  // private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
+  private final ArmUp armUp = new ArmUp(m_arm);
+  private final ArmDown armDown = new ArmDown(m_arm);
+  private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
+  private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
+  private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
   //private final AmpScore ampScore = new AmpScore(m_shooter, armUp, armDown);
   // private final SpeakerScore speakerScore = new SpeakerScore(m_shooter, armUp, armDown, m_limelight);
 
@@ -65,13 +65,12 @@ public class RobotContainer {
   //Buttons and axes
   private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
   private final int m_armAxis = XboxController.Axis.kRightY.value;
-  // private final JoystickButton m_leftClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
-  // private final JoystickButton m_rightClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton m_leftClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_rightClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
   private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, 2);
   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
-  private final JoystickButton m_shootAndFeedButton = new JoystickButton(m_operatorController, 8);
   // private final POVButton m_armUpButton = new POVButton(m_operatorController, 0);
   // private final POVButton m_armDownButton = new POVButton(m_operatorController, 180);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
@@ -85,13 +84,13 @@ public class RobotContainer {
 
     //Commands for PathPlanner
     NamedCommands.registerCommand("stopModules", new InstantCommand(() -> {m_swerve.stopModules();}));
-    // NamedCommands.registerCommand("stopSystems", stopSystems);
-    // NamedCommands.registerCommand("shootSpeaker", new RunCommand(() -> {m_shooter.shootSpeaker();}).withTimeout(1.0));
-    // NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
-    // NamedCommands.registerCommand("armUp", armUp);
-    // NamedCommands.registerCommand("armDown", armDown);
-    // NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
-    // NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
+    NamedCommands.registerCommand("stopSystems", stopSystems);
+    NamedCommands.registerCommand("shootSpeaker", new RunCommand(() -> {m_shooter.shootSpeaker();}).withTimeout(1.0));
+    NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
+    NamedCommands.registerCommand("armUp", armUp);
+    NamedCommands.registerCommand("armDown", armDown);
+    NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
+    NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
 
     //Auton things
     final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
@@ -117,17 +116,17 @@ public class RobotContainer {
   }
 
   public void teleopInit() {
-    // m_intake.setDefaultCommand(
-    //   new RunCommand(() -> {
-    //     m_intake.intake(-m_operatorController.getRawAxis(m_intakeAxis));
-    //   },
-    //   m_intake));
+    m_intake.setDefaultCommand(
+      new RunCommand(() -> {
+        m_intake.intake(-m_operatorController.getRawAxis(m_intakeAxis));
+      },
+      m_intake));
 
-    //   m_arm.setDefaultCommand(
-    //   new RunCommand(() -> {
-    //     m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
-    //   },
-    //   m_arm));
+      m_arm.setDefaultCommand(
+      new RunCommand(() -> {
+        m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
+      },
+      m_arm));
   }
 
   /**
@@ -140,49 +139,47 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // m_leftClimbButton.whileTrue(new StartEndCommand(() -> {
-    //   m_climber.climb("left", 0.2);
-    // }, 
-    // () -> {
-    //   m_climber.stop();
-    // }));
+    m_leftClimbButton.whileTrue(new StartEndCommand(() -> {
+      m_climber.climb("left", 0.2);
+    }, 
+    () -> {
+      m_climber.stop();
+    }));
 
-    // m_rightClimbButton.whileTrue(new StartEndCommand(() -> {
-    //   m_climber.climb("right", 0.2);
-    // }, 
-    // () -> {
-    //   m_climber.stop();
-    // }));
+    m_rightClimbButton.whileTrue(new StartEndCommand(() -> {
+      m_climber.climb("right", 0.2);
+    }, 
+    () -> {
+      m_climber.stop();
+    }));
 
-    // m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
-    //   m_shooter.shootAmp();
-    // },
-    // () -> {
-    //   m_shooter.stop();
-    // }));
+    m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
+      m_shooter.shootAmp();
+    },
+    () -> {
+      m_shooter.stop();
+    }));
 
-    // m_shootSpeakerButton.whileTrue(new StartEndCommand(() -> {
-    //   m_shooter.shootSpeaker();
-    // },
-    // () -> {
-    //   m_shooter.stop();
-    // }));
+    m_shootSpeakerButton.whileTrue(new StartEndCommand(() -> {
+      m_shooter.shootSpeaker();
+    },
+    () -> {
+      m_shooter.stop();
+    }));
 
-    // m_feedOnlyButton.whileTrue(new StartEndCommand(() -> {
-    //   m_shooter.feedOnly();
-    // },
-    // () -> {
-    //   m_shooter.stop();
-    // }));
+    m_feedOnlyButton.whileTrue(new StartEndCommand(() -> {
+      m_shooter.feedOnly();
+    },
+    () -> {
+      m_shooter.stop();
+    }));
 
-    // m_shootOnlyButton.whileTrue(new StartEndCommand(() -> {
-    //   m_shooter.shootSpeakerOnly();
-    // },
-    // () -> {
-    //   m_shooter.stop();
-    // }));
-
-    // m_shootAndFeedButton.whileTrue(feedAndShoot);
+    m_shootOnlyButton.whileTrue(new StartEndCommand(() -> {
+      m_shooter.shootSpeakerOnly();
+    },
+    () -> {
+      m_shooter.stop();
+    }));
 
     // m_armUpButton.onTrue(armUp);
 
@@ -220,8 +217,8 @@ public class RobotContainer {
     double limelight_tx = m_limelight.getTX().getDouble(0);
 
     if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
-        //rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
-       // m_arm.moveToTag(m_limelight);
+        rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
+        m_arm.moveToTag(m_limelight);
     }
     
     m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());

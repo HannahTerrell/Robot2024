@@ -33,8 +33,6 @@ public class SwerveModule extends SubsystemBase {
   public static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
-  private String m_name;
-
   private final CANSparkMax m_driveMotor;
   private final CANSparkMax m_turningMotor;
 
@@ -71,7 +69,6 @@ public class SwerveModule extends SubsystemBase {
       int turningMotorChannel,
       int turningEncoderChannel,
       double gyroOffset) {
-    m_name = name;
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 

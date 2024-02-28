@@ -17,6 +17,7 @@ public class Intake extends SubsystemBase {
     m_intakeMotor.setIdleMode(IdleMode.kBrake);
     m_intakeFollower.setIdleMode(IdleMode.kBrake);
     m_intakeFollower.follow(m_intakeMotor, true);
+    //m_intakeMotor.getEncoder().setPosition(0);
   }
 
   public void intake(double speed) {
@@ -31,5 +32,6 @@ public class Intake extends SubsystemBase {
   public void periodic() {
       m_intakeMotor.set(m_speed);
       SmartDashboard.putNumber("Intake Speed", m_intakeMotor.get());
+      //SmartDashboard.putNumber("Intake Position", m_intakeMotor.getEncoder().getPosition());
   }
 }
