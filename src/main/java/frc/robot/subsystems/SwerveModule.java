@@ -169,9 +169,8 @@ public class SwerveModule extends SubsystemBase {
   }
 
   public void stop() {
-    m_driveMotor.set(0);
-    m_turningMotor.set(0);
-    System.out.println("Module Stopped");
+    m_driveMotor.setVoltage(0);
+    m_turningMotor.setVoltage(0);
   }
 
   public double getTurningEncoderValue() {

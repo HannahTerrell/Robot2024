@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-//import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -65,14 +64,13 @@ public class RobotContainer {
   //Buttons and axes
   private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
   private final int m_armAxis = XboxController.Axis.kRightY.value;
-  private final JoystickButton m_leftClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
-  private final JoystickButton m_rightClimbButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
+  private final JoystickButton m_stopClimbButton = new JoystickButton(m_operatorController, 7);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
   private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, 2);
   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
-  // private final POVButton m_armUpButton = new POVButton(m_operatorController, 0);
-  // private final POVButton m_armDownButton = new POVButton(m_operatorController, 180);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -139,17 +137,15 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_leftClimbButton.whileTrue(new StartEndCommand(() -> {
-      m_climber.climb("left", 0.2);
-    }, 
-    () -> {
-      m_climber.stop();
+    m_climbUpButton.onTrue(new RunCommand(() -> {
+      m_climber.climbUp(-1);
     }));
 
-    m_rightClimbButton.whileTrue(new StartEndCommand(() -> {
-      m_climber.climb("right", 0.2);
-    }, 
-    () -> {
+    m_climbDownButton.onTrue(new RunCommand(() -> {
+      m_climber.climbDown(1);
+    }));
+
+    m_stopClimbButton.onTrue(new RunCommand(() -> {
       m_climber.stop();
     }));
 
@@ -180,10 +176,6 @@ public class RobotContainer {
     () -> {
       m_shooter.stop();
     }));
-
-    // m_armUpButton.onTrue(armUp);
-
-    // m_armDownButton.onTrue(armDown);
   }
 
   public void autonomousPeriodic() {
@@ -192,7 +184,7 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    driveWithJoystick(true);
+    driveWithJoystick(false);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
