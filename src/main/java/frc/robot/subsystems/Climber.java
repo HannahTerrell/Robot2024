@@ -16,8 +16,9 @@ public class Climber extends SubsystemBase {
       super();
       m_climbMotor.setIdleMode(IdleMode.kBrake);
       m_climbFollower.setIdleMode(IdleMode.kBrake);
-      m_climbFollower.follow(m_climbMotor, true);
+      // m_climbFollower.follow(m_climbMotor, true);
       m_climbMotor.getEncoder().setPosition(0);
+      m_climbFollower.getEncoder().setPosition(0);
     }
 
     public void climbUp(double speed) {
@@ -28,14 +29,27 @@ public class Climber extends SubsystemBase {
       m_speed = speed;
     }
 
+    public void adjustSide(String side) {
+      if (side.equals("left")) {
+        m_climbMotor.set(0.3);
+        m_climbFollower.stopMotor();
+      } else if (side.equals("right")) {
+        m_climbMotor.stopMotor();
+        m_climbFollower.set(0.3);
+      }
+    }
+
     public void stop() {
-      m_climbMotor.set(0);
+      m_climbMotor.stopMotor();
+      m_climbFollower.stopMotor();
     }
 
     @Override
     public void periodic() {
       m_climbMotor.set(m_speed);
-      SmartDashboard.putNumber("Climber Position", m_climbMotor.getEncoder().getPosition());
+      m_climbFollower.set(m_speed);
+      SmartDashboard.putNumber("Left Climber Position", m_climbMotor.getEncoder().getPosition());
+      SmartDashboard.putNumber("Right Climber Position", m_climbFollower.getEncoder().getPosition());
     }
 
 

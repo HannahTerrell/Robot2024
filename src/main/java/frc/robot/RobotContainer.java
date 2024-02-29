@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -66,6 +67,8 @@ public class RobotContainer {
   private final int m_armAxis = XboxController.Axis.kRightY.value;
   private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
+  private final POVButton m_leftClimbAdjust = new POVButton(m_operatorController, 90);
+  private final POVButton m_rightClimbAdjust = new POVButton(m_operatorController, 270);
   private final JoystickButton m_stopClimbButton = new JoystickButton(m_operatorController, 7);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
@@ -146,6 +149,20 @@ public class RobotContainer {
     }));
 
     m_stopClimbButton.onTrue(new RunCommand(() -> {
+      m_climber.stop();
+    }));
+
+    m_leftClimbAdjust.whileTrue(new StartEndCommand(() -> {
+      m_climber.adjustSide("left");
+    },
+    () -> {
+      m_climber.stop();
+    }));
+
+    m_rightClimbAdjust.whileTrue(new StartEndCommand(() -> {
+      m_climber.adjustSide("right");
+    },
+    () -> {
       m_climber.stop();
     }));
 
