@@ -48,7 +48,6 @@ public class RobotContainer {
   private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
   private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
   //private final AmpScore ampScore = new AmpScore(m_shooter, armUp, armDown);
-  // private final SpeakerScore speakerScore = new SpeakerScore(m_shooter, armUp, armDown, m_limelight);
 
   //Auton chooser initiation
   SendableChooser<Command> m_autonChooser;
@@ -101,6 +100,7 @@ public class RobotContainer {
     final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
     final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
     final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
+    final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Test Auto");
 
     //Auton chooser
     m_autonChooser = new SendableChooser<>();
@@ -113,6 +113,7 @@ public class RobotContainer {
     m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
     m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
     m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
+    m_autonChooser.addOption("Test Auton", m_pathplanner8);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 
@@ -201,7 +202,7 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    driveWithJoystick(false);
+    driveWithJoystick(true);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
