@@ -24,7 +24,8 @@ public class Intake extends SubsystemBase {
   }
 
   public void stop() {
-    m_intakeMotor.set(0);
+    m_speed = 0;
+    m_intakeMotor.stopMotor();
   }
 
   @Override

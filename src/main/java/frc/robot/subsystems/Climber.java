@@ -40,6 +40,7 @@ public class Climber extends SubsystemBase {
     }
 
     public void stop() {
+      m_speed = 0;
       m_climbMotor.stopMotor();
       m_climbFollower.stopMotor();
     }

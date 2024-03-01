@@ -53,6 +53,8 @@ public class SwerveModule extends SubsystemBase {
   private DoublePublisher m_turningEncoderDistancePublisher;
   private DoublePublisher m_turningEncoderVoltagePublisher;
   private DoublePublisher m_TurnPublisher;
+  private DoublePublisher m_driveVelocityPublisher;
+  private DoublePublisher m_driveVoltagePublisher;
   private AnalogInput m_turningInput;
 
 
@@ -99,13 +101,19 @@ public class SwerveModule extends SubsystemBase {
     m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
     m_turningEncoderDistancePublisher = NetworkTableInstance.getDefault()
-      .getDoubleTopic("/SwerveModules/" + name + "/Distance").publish();
+      .getDoubleTopic("/SwerveModules/" + name + "/Turning/Distance").publish();
     
     m_turningEncoderVoltagePublisher = NetworkTableInstance.getDefault()
-      .getDoubleTopic("/SwerveModules/" + name + "/Voltage").publish();
+      .getDoubleTopic("/SwerveModules/" + name + "/Turning/Voltage").publish();
 
     m_TurnPublisher = NetworkTableInstance.getDefault()
-      .getDoubleTopic("/SwerveModules/" + name + "/TurnOutput").publish();
+      .getDoubleTopic("/SwerveModules/" + name + "/Turning/Output").publish();
+
+    m_driveVelocityPublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Drive/Velocity").publish();
+
+    m_driveVoltagePublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Drive/Voltage").publish();
   }
 
   /**
@@ -158,6 +166,7 @@ public class SwerveModule extends SubsystemBase {
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
 
     m_TurnPublisher.set(turnOutput);
+    m_driveVelocityPublisher.set(driveOutput + driveFeedforward);
   }
 
   public double getEncoderDistance() {
@@ -181,5 +190,6 @@ public class SwerveModule extends SubsystemBase {
   public void periodic() {
     m_turningEncoderDistancePublisher.set(m_turningEncoder.getDistance());
     m_turningEncoderVoltagePublisher.set(m_turningInput.getVoltage());
+    m_driveVelocityPublisher.set(m_driveEncoder.getVelocity());
   }
 }
