@@ -22,7 +22,7 @@ public class XCaliper extends TimedRobot {
 
     var camera = CameraServer.startAutomaticCapture();
     camera.setResolution(160, 120);
-    camera.setFPS(5);
+    camera.setFPS(40);
   }
 
   public void robotPeriodic() {

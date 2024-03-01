@@ -120,7 +120,10 @@ public class RobotContainer {
   public void teleopInit() {
     m_intake.setDefaultCommand(
       new RunCommand(() -> {
-        m_intake.intake(-m_operatorController.getRawAxis(m_intakeAxis));
+        var intakeSpeed = (m_operatorController.getRawAxis(XboxController.Axis.kRightTrigger.value)
+           - m_operatorController.getRawAxis(XboxController.Axis.kLeftTrigger.value));
+        // var intakeSpeed = -(m_operatorController.getRawAxis(m_intakeAxis));
+        m_intake.intake(intakeSpeed);
       },
       m_intake));
 
@@ -221,8 +224,11 @@ public class RobotContainer {
     // positive value when we pull to the left (remember, CCW is positive in
     // mathematics). Xbox controllers return positive values when you pull to
     // the right by default.
+    // var rotWODeadband = m_driverController.getRightTriggerAxis() 
+    //   - m_driverController.getLeftTriggerAxis();
+    var rotWODeadband = m_driverController.getRightX();
     var rot =
-       -m_rotLimiter.calculate(MathUtil.applyDeadband(m_driverController.getRightX(), 0.2)) * Drivetrain.kMaxAngularSpeed;
+       -m_rotLimiter.calculate(MathUtil.applyDeadband(rotWODeadband, 0.2)) * Drivetrain.kMaxAngularSpeed;
 
     double limelight_tx = m_limelight.getTX().getDouble(0);
 
