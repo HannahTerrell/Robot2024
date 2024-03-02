@@ -19,7 +19,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
   public static final double kMaxSpeed = 10.0; // 6 meters per second
-  public static final double kMaxAngularSpeed = 1.5 * Math.PI; // 1.5 rotations per second
+  public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1.5 rotations per second
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
   private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
