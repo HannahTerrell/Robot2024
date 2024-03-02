@@ -151,28 +151,28 @@ public class RobotContainer {
     },
     () -> {
       m_climber.stop();
-    }));
+    }, m_climber));
 
-    m_climbDownButton.onTrue(new StartEndCommand(() -> {
+    m_climbDownButton.whileTrue(new StartEndCommand(() -> {
       m_climber.climbDown(1);
     },
     () -> {
       m_climber.stop();
-    }));
+    }, m_climber));
 
     m_leftClimbAdjust.whileTrue(new StartEndCommand(() -> {
       m_climber.adjustSide("left");
     },
     () -> {
       m_climber.stop();
-    }));
+    }, m_climber));
 
     m_rightClimbAdjust.whileTrue(new StartEndCommand(() -> {
       m_climber.adjustSide("right");
     },
     () -> {
       m_climber.stop();
-    }));
+    }, m_climber));
 
     m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
       m_shooter.shootAmp();
