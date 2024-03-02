@@ -82,14 +82,14 @@ public class SwerveModule extends SubsystemBase {
     m_turningInput = new AnalogInput(turningEncoderChannel);
     m_turningEncoder = new AnalogEncoder8612(m_turningInput);
 
-    var encoderResolution = m_driveEncoder.getCountsPerRevolution(); // 4096
+    //var encoderResolution = m_driveEncoder.getCountsPerRevolution(); // 4096
     var driveDistancePerMotorRotation = (kWheelRadius * 2 * Math.PI) / kDriveGearboxRatio;
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveEncoder.setPositionConversionFactor(driveDistancePerMotorRotation / 1.65);
-    m_driveEncoder.setVelocityConversionFactor(driveDistancePerMotorRotation / encoderResolution / 60);
+    m_driveEncoder.setPositionConversionFactor((driveDistancePerMotorRotation / 1.65) * 1.575);
+    m_driveEncoder.setVelocityConversionFactor(m_driveEncoder.getPositionConversionFactor() / 60);
 
     // Set the distance (in this case, angle) in radians per pulse for the turning encoder.
     // This is the the angle through an entire rotation (2 * pi) divided by the
