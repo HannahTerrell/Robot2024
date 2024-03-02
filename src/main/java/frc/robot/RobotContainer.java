@@ -10,7 +10,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-//import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -59,7 +59,7 @@ public class RobotContainer {
 
   //Controllers
   //private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
-  private final XboxController m_driverController = new XboxController(0);
+  private final Joystick m_driverController = new Joystick(0);
   private final XboxController m_operatorController = new XboxController(1);
 
   //Buttons and axes
@@ -74,7 +74,7 @@ public class RobotContainer {
   private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, 2);
   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, 1);
-  private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 5);
+  private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 7);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(XCaliper robot) {
@@ -207,7 +207,6 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
-    driveWithJoystick(false);
     m_swerve.updateOdometry();
   }
 
@@ -219,13 +218,13 @@ public class RobotContainer {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     var xSpeed =
-        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.2)) * Drivetrain.kMaxSpeed;
+        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getY(), 0.2)) * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     var ySpeed =
-        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.2)) * Drivetrain.kMaxSpeed;
+        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getX(), 0.2)) * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
@@ -233,7 +232,7 @@ public class RobotContainer {
     // the right by default.
     // var rotWODeadband = m_driverController.getRightTriggerAxis() 
     //   - m_driverController.getLeftTriggerAxis();
-    var rotWODeadband = m_driverController.getRightX();
+    var rotWODeadband = m_driverController.getRawAxis(2);
     var rot =
        -m_rotLimiter.calculate(MathUtil.applyDeadband(rotWODeadband, 0.2)) * Drivetrain.kMaxAngularSpeed;
 
