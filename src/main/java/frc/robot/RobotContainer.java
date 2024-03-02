@@ -144,12 +144,18 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_climbUpButton.onTrue(new RunCommand(() -> {
+    m_climbUpButton.whileTrue(new StartEndCommand(() -> {
       m_climber.climbUp(-1);
+    },
+    () -> {
+      m_climber.stop();
     }));
 
-    m_climbDownButton.onTrue(new RunCommand(() -> {
+    m_climbDownButton.onTrue(new StartEndCommand(() -> {
       m_climber.climbDown(1);
+    },
+    () -> {
+      m_climber.stop();
     }));
 
     m_stopClimbButton.onTrue(new RunCommand(() -> {
