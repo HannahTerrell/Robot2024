@@ -73,7 +73,7 @@ public class RobotContainer {
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
   private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, 2);
   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
-  private final JoystickButton m_aimButton = new JoystickButton(m_driverController, 1);
+  private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 5);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
