@@ -16,7 +16,6 @@ public class Climber extends SubsystemBase {
       super();
       m_climbMotor.setIdleMode(IdleMode.kBrake);
       m_climbFollower.setIdleMode(IdleMode.kBrake);
-      // m_climbFollower.follow(m_climbMotor, true);
       m_climbMotor.getEncoder().setPosition(0);
       m_climbFollower.getEncoder().setPosition(0);
     }

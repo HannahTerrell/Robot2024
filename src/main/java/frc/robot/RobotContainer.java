@@ -62,7 +62,7 @@ public class RobotContainer {
   private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
 
   //Buttons and axes
-  private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
+  // private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
   private final int m_armAxis = XboxController.Axis.kRightY.value;
   private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);

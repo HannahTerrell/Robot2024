@@ -55,6 +55,7 @@ public class SwerveModule extends SubsystemBase {
   private DoublePublisher m_TurnPublisher;
   private DoublePublisher m_driveVelocityPublisher;
   private DoublePublisher m_driveVoltagePublisher;
+  private DoublePublisher m_driveDistancePublisher;
   private AnalogInput m_turningInput;
 
 
@@ -114,6 +115,9 @@ public class SwerveModule extends SubsystemBase {
 
     m_driveVoltagePublisher = NetworkTableInstance.getDefault()
       .getDoubleTopic("/SwerveModules/" + name + "/Drive/Voltage").publish();
+
+    m_driveDistancePublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Drive/Distance").publish();
   }
 
   /**
@@ -166,7 +170,7 @@ public class SwerveModule extends SubsystemBase {
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
 
     m_TurnPublisher.set(turnOutput);
-    m_driveVelocityPublisher.set(driveOutput + driveFeedforward);
+    m_driveVoltagePublisher.set(driveOutput + driveFeedforward);
   }
 
   public double getEncoderDistance() {
@@ -191,5 +195,6 @@ public class SwerveModule extends SubsystemBase {
     m_turningEncoderDistancePublisher.set(m_turningEncoder.getDistance());
     m_turningEncoderVoltagePublisher.set(m_turningInput.getVoltage());
     m_driveVelocityPublisher.set(m_driveEncoder.getVelocity());
+    m_driveDistancePublisher.set(m_driveEncoder.getPosition());
   }
 }

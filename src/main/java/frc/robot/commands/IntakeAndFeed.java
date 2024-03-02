@@ -17,7 +17,7 @@ public class IntakeAndFeed extends ParallelCommandGroup {
                 shooter.stop();
             }),
             new StartEndCommand(() -> {
-                intake.intake(0.7);
+                intake.intake(1);
             },
             () -> {
                 intake.stop();
