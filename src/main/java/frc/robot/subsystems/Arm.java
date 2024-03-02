@@ -19,6 +19,17 @@ public class Arm extends SubsystemBase {
 
     public void setSpeed(double speed) {
         m_speed = speed;
+        if (m_armMotor.getEncoder().getPosition() >= 35) {
+            m_speed = speed * .75;
+        }
+
+        if (m_armMotor.getEncoder().getPosition() >= 40) {
+                m_speed = speed * .5;
+        }
+
+        if (m_armMotor.getEncoder().getPosition() >= 45) {
+                m_speed = speed * .25;
+        }
     }
 
     public void moveToTag(Limelight limelight) {

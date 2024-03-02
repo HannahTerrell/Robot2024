@@ -197,6 +197,10 @@ public class Drivetrain extends SubsystemBase {
     m_backRight.stop();
   }
 
+  public void resetFieldRelative() {
+    m_gyro.reset();
+  }
+
   @Override
   public void periodic() {
     updateOdometry();

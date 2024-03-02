@@ -59,8 +59,9 @@ public class RobotContainer {
   private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
   //Controllers
-  private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
-  private final XboxController m_operatorController = new XboxController(OperatorConstants.kOperatorControllerPort);
+  //private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
+  private final XboxController m_driverController = new XboxController(0);
+  private final XboxController m_operatorController = new XboxController(1);
 
   //Buttons and axes
   // private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
@@ -69,12 +70,12 @@ public class RobotContainer {
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
   private final POVButton m_leftClimbAdjust = new POVButton(m_operatorController, 90);
   private final POVButton m_rightClimbAdjust = new POVButton(m_operatorController, 270);
-  private final JoystickButton m_stopClimbButton = new JoystickButton(m_operatorController, 7);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
   private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, 2);
   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, 1);
+  private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 5);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(XCaliper robot) {
@@ -200,6 +201,10 @@ public class RobotContainer {
     () -> {
       m_shooter.stop();
     }));
+
+    m_resetFieldRelativeButton.onTrue(new InstantCommand(() -> {
+      m_swerve.resetFieldRelative();
+    }));
   }
 
   public void autonomousPeriodic() {
@@ -215,13 +220,13 @@ public class RobotContainer {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     var xSpeed =
-        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getX(), 0.2)) * Drivetrain.kMaxSpeed;
+        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.2)) * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     var ySpeed =
-        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getY(), 0.2)) * Drivetrain.kMaxSpeed;
+        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.2)) * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
@@ -229,7 +234,7 @@ public class RobotContainer {
     // the right by default.
     // var rotWODeadband = m_driverController.getRightTriggerAxis() 
     //   - m_driverController.getLeftTriggerAxis();
-    var rotWODeadband = m_driverController.getRawAxis(3);
+    var rotWODeadband = m_driverController.getRightX();
     var rot =
        -m_rotLimiter.calculate(MathUtil.applyDeadband(rotWODeadband, 0.2)) * Drivetrain.kMaxAngularSpeed;
 
