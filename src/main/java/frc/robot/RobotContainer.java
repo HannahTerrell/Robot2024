@@ -69,12 +69,13 @@ public class RobotContainer {
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
   private final POVButton m_leftClimbAdjust = new POVButton(m_operatorController, 90);
   private final POVButton m_rightClimbAdjust = new POVButton(m_operatorController, 270);
-  private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, 3);
-  private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, 4);
-  private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, 2);
-  private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, 1);
+  private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
+  private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
+  private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
+  private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
+  private final JoystickButton m_backfeedButton = new JoystickButton(m_operatorController, 8);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
-  private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 5);
+  private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 7);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(XCaliper robot) {
@@ -196,6 +197,13 @@ public class RobotContainer {
 
     m_shootOnlyButton.whileTrue(new StartEndCommand(() -> {
       m_shooter.shootSpeakerOnly();
+    },
+    () -> {
+      m_shooter.stop();
+    }));
+
+     m_backfeedButton.whileTrue(new StartEndCommand(() -> {
+      m_shooter.backfeed();
     },
     () -> {
       m_shooter.stop();

@@ -45,6 +45,10 @@ public class Shooter extends SubsystemBase {
     m_shootMotor.set(-0.3);
   }
 
+  public void backfeed() {
+    m_feedMotor.set(-0.25);
+  }
+
   public void stop() {
     m_shootMotor.set(0);
     m_feedMotor.set(0);
