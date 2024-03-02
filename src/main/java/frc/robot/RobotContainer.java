@@ -158,10 +158,6 @@ public class RobotContainer {
       m_climber.stop();
     }));
 
-    m_stopClimbButton.onTrue(new RunCommand(() -> {
-      m_climber.stop();
-    }));
-
     m_leftClimbAdjust.whileTrue(new StartEndCommand(() -> {
       m_climber.adjustSide("left");
     },
