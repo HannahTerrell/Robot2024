@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-  public static final double kMaxSpeed = 4.0; // 4 meters per second
+  public static final double kMaxSpeed = 3.0; // 4 meters per second
   public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1.5 rotations per second
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
