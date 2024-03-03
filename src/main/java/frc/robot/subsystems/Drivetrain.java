@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-  public static final double kMaxSpeed = 10.0; // 6 meters per second
+  public static final double kMaxSpeed = 4.0; // 6 meters per second
   public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1.5 rotations per second
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
@@ -54,8 +54,6 @@ public class Drivetrain extends SubsystemBase {
             m_backLeft.getPosition(),
             m_backRight.getPosition()
           });
-
-  private ChassisSpeeds chassisSpeed = new ChassisSpeeds();
 
   private StructArrayPublisher<SwerveModuleState> m_SwerveStatePublisher;
   private StructPublisher<ChassisSpeeds> m_ChassisSpeedPublisher;
@@ -100,7 +98,7 @@ public class Drivetrain extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, double periodSeconds) {
-    chassisSpeed = ChassisSpeeds.discretize(
+    var chassisSpeed = ChassisSpeeds.discretize(
                 fieldRelative
                     ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         xSpeed, ySpeed, rot, m_gyro.getRotation2d())
@@ -127,7 +125,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public ChassisSpeeds getCurrentSpeeds() {
-    return chassisSpeed;
+    return m_kinematics.toChassisSpeeds(
+      m_frontLeft.getState(),
+      m_frontRight.getState(),
+      m_backLeft.getState(),
+      m_backRight.getState()
+    );
   }
 
   /** Updates the field relative position of the robot. */
@@ -210,7 +213,7 @@ public class Drivetrain extends SubsystemBase {
     m_backLeft.periodic();
     m_backRight.periodic();
 
-    SmartDashboard.putString("Robot Position", getPose().getTranslation().toString());
+    SmartDashboard.putString("Robot Position", getPose().toString());
     SmartDashboard.putNumber("Front Left Turn Encoder", m_frontLeft.getTurningEncoderValue());
     SmartDashboard.putNumber("Front Right Turn Encoder", m_frontRight.getTurningEncoderValue());
     SmartDashboard.putNumber("Back Left Turn Encoder", m_backLeft.getTurningEncoderValue());

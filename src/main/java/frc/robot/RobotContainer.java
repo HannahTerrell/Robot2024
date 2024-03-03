@@ -12,6 +12,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +33,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   private XCaliper m_robot;
+
+  private Field2d m_field = new Field2d();
 
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
@@ -260,5 +263,7 @@ public class RobotContainer {
     m_limelight.periodic();
 
     SmartDashboard.putData(CommandScheduler.getInstance());
+    m_field.setRobotPose(m_swerve.getPose());
+    SmartDashboard.putData("Field", m_field);
   }
 }
