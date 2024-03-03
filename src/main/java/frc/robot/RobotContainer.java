@@ -76,6 +76,8 @@ public class RobotContainer {
   private final JoystickButton m_backfeedButton = new JoystickButton(m_operatorController, 8);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 7);
+  private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer(XCaliper robot) {
@@ -246,6 +248,12 @@ public class RobotContainer {
        -m_rotLimiter.calculate(MathUtil.applyDeadband(rotWODeadband, 0.2)) * Drivetrain.kMaxAngularSpeed;
 
     double limelight_tx = m_limelight.getTX().getDouble(0);
+
+    if (m_precisionButton.getAsBoolean()) {
+      xSpeed *= 0.5;
+      ySpeed *= 0.5;
+      rot *= 0.5;
+    }
 
     if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
         rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
