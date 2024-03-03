@@ -56,6 +56,10 @@ public class SwerveModule extends SubsystemBase {
   private DoublePublisher m_driveVelocityPublisher;
   private DoublePublisher m_driveVoltagePublisher;
   private DoublePublisher m_driveDistancePublisher;
+  private DoublePublisher m_driveDesiredVelocityPublisher;
+  private DoublePublisher m_driveDesiredVelocityRawPublisher;
+  private DoublePublisher m_driveOutputPublisher;
+  private DoublePublisher m_desiredAnglePublisher;
   private AnalogInput m_turningInput;
 
 
@@ -82,14 +86,14 @@ public class SwerveModule extends SubsystemBase {
     m_turningInput = new AnalogInput(turningEncoderChannel);
     m_turningEncoder = new AnalogEncoder8612(m_turningInput);
 
-    var encoderResolution = m_driveEncoder.getCountsPerRevolution(); // 4096
+    //var encoderResolution = m_driveEncoder.getCountsPerRevolution(); // 4096
     var driveDistancePerMotorRotation = (kWheelRadius * 2 * Math.PI) / kDriveGearboxRatio;
 
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveEncoder.setPositionConversionFactor(driveDistancePerMotorRotation / 1.65);
-    m_driveEncoder.setVelocityConversionFactor(driveDistancePerMotorRotation / encoderResolution / 60);
+    m_driveEncoder.setPositionConversionFactor((driveDistancePerMotorRotation / 1.65) * 1.575);
+    m_driveEncoder.setVelocityConversionFactor(m_driveEncoder.getPositionConversionFactor() / 60);
 
     // Set the distance (in this case, angle) in radians per pulse for the turning encoder.
     // This is the the angle through an entire rotation (2 * pi) divided by the
@@ -118,6 +122,18 @@ public class SwerveModule extends SubsystemBase {
 
     m_driveDistancePublisher = NetworkTableInstance.getDefault()
       .getDoubleTopic("/SwerveModules/" + name + "/Drive/Distance").publish();
+
+    m_driveDesiredVelocityPublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Drive/Desired Velocity").publish();
+
+    m_driveDesiredVelocityRawPublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Drive/Desired Velocity (raw)").publish();
+
+    m_driveOutputPublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Drive/Output").publish();
+
+    m_desiredAnglePublisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic("/SwerveModules/" + name + "/Drive/Desired Angle").publish();
   }
 
   /**
@@ -151,13 +167,22 @@ public class SwerveModule extends SubsystemBase {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state = SwerveModuleState.optimize(desiredState, encoderRotation);
 
+    m_driveDesiredVelocityRawPublisher.set(state.speedMetersPerSecond);
+
+    m_desiredAnglePublisher.set(state.angle.getRadians());
+
     // Scale speed by cosine of angle error. This scales down movement perpendicular to the desired
     // direction of travel that can occur when modules change directions. This results in smoother
     // driving.
     state.speedMetersPerSecond *= state.angle.minus(encoderRotation).getCos();
 
+    m_driveDesiredVelocityPublisher.set(state.speedMetersPerSecond);
+
+
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
+
+    m_driveOutputPublisher.set(driveOutput);
 
     final double driveFeedforward = m_driveFeedforward.calculate(state.speedMetersPerSecond);
 
