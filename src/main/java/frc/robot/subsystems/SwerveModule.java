@@ -22,6 +22,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AnalogEncoder8612;
+import frc.robot.Constants;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -40,7 +42,7 @@ public class SwerveModule extends SubsystemBase {
   private final AnalogEncoder8612 m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = new PIDController(5, 0, 0);
+  private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
@@ -68,14 +70,14 @@ public class SwerveModule extends SubsystemBase {
    * @param driveMotorChannel PWM output for the drive motor.
    * @param turningMotorChannel PWM output for the turning motor.
    * @param turningEncoderChannel Input for the turning encoder channel
-   * @param gyroOffset Amount to adjust the zero angle of the module by
+   * @param gyroOffsetInRadians Amount to adjust the zero angle of the module by
    */
   public SwerveModule(
       String name,
       int driveMotorChannel,
       int turningMotorChannel,
       int turningEncoderChannel,
-      double gyroOffset) {
+      double gyroOffsetInRadians) {
     m_driveMotor = new CANSparkMax(driveMotorChannel, MotorType.kBrushless);
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
 
@@ -98,8 +100,10 @@ public class SwerveModule extends SubsystemBase {
     // Set the distance (in this case, angle) in radians per pulse for the turning encoder.
     // This is the the angle through an entire rotation (2 * pi) divided by the
     // encoder resolution.
-    m_turningEncoder.setDistancePerRotation(2 * Math.PI);
-    m_turningEncoder.setPositionOffset(gyroOffset);
+    m_turningEncoder.setDistancePerRotation(Constants.Tau);
+
+    var positionOffset = (gyroOffsetInRadians % Constants.Tau) / (Constants.Tau);
+    m_turningEncoder.setPositionOffset(positionOffset);
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -201,6 +205,11 @@ public class SwerveModule extends SubsystemBase {
   public double getEncoderDistance() {
     return m_driveEncoder.getPosition();
   }
+
+  public void resetEncoderDistance() {
+    m_driveEncoder.setPosition(0);
+  }
+
 
   public CANSparkMax getModuleMotor() {
     return m_driveMotor;

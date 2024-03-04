@@ -26,18 +26,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-  public static final double kMaxSpeed = 3.0; // 4 meters per second
-  public static final double kMaxAngularSpeed = 2.5 * Math.PI; // 1.5 rotations per second
+  public static final double kMaxSpeed = 4.5; // 4.5 meters per second
+  public static final double kMaxAngularSpeed = 1.5 * Math.PI; // 1.5 rotations per second
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
   private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 0.66);
-  private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 0.59);
-  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 0.56);
-  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, 0.04);
+  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, .9795);
+  private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 3.6947);
+  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, .3615);
+  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, .217);
 
   private final AHRS m_gyro = new AHRS(Port.kMXP);
 
@@ -202,18 +202,22 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetFieldRelative() {
     m_gyro.reset();
+
+    m_frontLeft.resetEncoderDistance();
+    m_frontRight.resetEncoderDistance();
+    m_backLeft.resetEncoderDistance();
+    m_backRight.resetEncoderDistance();
+
+    resetPose(getPose());
   }
 
   @Override
   public void periodic() {
     updateOdometry();
 
-    m_frontLeft.periodic();
-    m_frontRight.periodic();
-    m_backLeft.periodic();
-    m_backRight.periodic();
 
     SmartDashboard.putString("Robot Position", getPose().getTranslation().toString());
+    SmartDashboard.putString("Robot Speed", getCurrentSpeeds().toString());
     SmartDashboard.putNumber("Front Left Turn Encoder", m_frontLeft.getTurningEncoderValue());
     SmartDashboard.putNumber("Front Right Turn Encoder", m_frontRight.getTurningEncoderValue());
     SmartDashboard.putNumber("Back Left Turn Encoder", m_backLeft.getTurningEncoderValue());
