@@ -30,7 +30,7 @@ public class SwerveModule extends SubsystemBase {
   private static final double kWheelRadius = 0.0508;
   private static final double kDriveGearboxRatio = 6.12;
   
-  public static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
+  public static final double kModuleMaxAngularVelocity = 2.5 * Math.PI;
   public static final double kModuleMaxAngularAcceleration = 2 * Math.PI; // radians per second squared
 
   private final CANSparkMax m_driveMotor;
