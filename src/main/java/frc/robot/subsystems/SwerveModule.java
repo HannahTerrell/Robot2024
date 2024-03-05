@@ -44,7 +44,7 @@ public class SwerveModule extends SubsystemBase {
   private final AnalogEncoder8612 m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = new PIDController(2, 0, 0);
+  private final PIDController m_drivePIDController = new PIDController(2, 0.1, 0.1);
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
@@ -52,7 +52,7 @@ public class SwerveModule extends SubsystemBase {
         new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(2, 3);
+  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0.5, 3.1);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0, 0);
   private DoublePublisher m_turningEncoderDistancePublisher;
   private DoublePublisher m_turningEncoderVoltagePublisher;
