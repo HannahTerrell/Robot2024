@@ -121,6 +121,7 @@ public class RobotContainer {
     // m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
     // m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
     m_autonChooser.addOption("Test Auton", m_pathplanner8);
+    m_autonChooser.addOption("Drive", new RunCommand(() -> m_swerve.drive(0.1, 0, 0, false, m_robot.getPeriod())));
     // m_autonChooser.addOption("Out Auton", m_pathplanner9);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
@@ -232,13 +233,13 @@ public class RobotContainer {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
     var xSpeed =
-        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.2)) * Drivetrain.kMaxSpeed;
+        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.05)) * Drivetrain.kMaxSpeed;
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
     var ySpeed =
-        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.2)) * Drivetrain.kMaxSpeed;
+        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.05)) * Drivetrain.kMaxSpeed;
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in

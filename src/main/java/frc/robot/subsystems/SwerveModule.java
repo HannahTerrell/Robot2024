@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AnalogEncoder8612;
 import frc.robot.Constants;
 
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -50,7 +52,7 @@ public class SwerveModule extends SubsystemBase {
         new TrapezoidProfile.Constraints(kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(0, 0);
+  private final SimpleMotorFeedforward m_driveFeedforward = new SimpleMotorFeedforward(2, 3);
   private final SimpleMotorFeedforward m_turnFeedforward = new SimpleMotorFeedforward(0, 0);
   private DoublePublisher m_turningEncoderDistancePublisher;
   private DoublePublisher m_turningEncoderVoltagePublisher;
@@ -60,9 +62,10 @@ public class SwerveModule extends SubsystemBase {
   private DoublePublisher m_driveDistancePublisher;
   private DoublePublisher m_driveDesiredVelocityPublisher;
   private DoublePublisher m_driveDesiredVelocityRawPublisher;
-  private DoublePublisher m_driveInputVelocityPublisher;
   private DoublePublisher m_driveOutputPublisher;
   private DoublePublisher m_desiredAnglePublisher;
+
+  private Runnable[] m_periodicPublishers;
   private AnalogInput m_turningInput;
 
   /**
@@ -133,14 +136,28 @@ public class SwerveModule extends SubsystemBase {
     m_driveDesiredVelocityRawPublisher = NetworkTableInstance.getDefault()
       .getDoubleTopic("/SwerveModules/" + name + "/Drive/Desired Velocity (raw)").publish();
 
-    m_driveInputVelocityPublisher = NetworkTableInstance.getDefault()
-      .getDoubleTopic("/SwerveModules/" + name + "/Drive/InputVelocity").publish();
-
     m_driveOutputPublisher = NetworkTableInstance.getDefault()
       .getDoubleTopic("/SwerveModules/" + name + "/Drive/Output").publish();
 
     m_desiredAnglePublisher = NetworkTableInstance.getDefault()
       .getDoubleTopic("/SwerveModules/" + name + "/Drive/Desired Angle").publish();
+
+    m_periodicPublishers = new Runnable[] {
+      createPeriodicPublisher("/SwerveModules/" + name + "/State/Speed", () -> getState().speedMetersPerSecond),
+      createPeriodicPublisher("/SwerveModules/" + name + "/State/Angle", () -> getState().angle.getRadians()),
+      createPeriodicPublisher("/SwerveModules/" + name + "/Position/Distance", () -> getPosition().distanceMeters),
+      createPeriodicPublisher("/SwerveModules/" + name + "/Position/Angle", () -> getState().angle.getRadians()),
+    };
+  }
+
+  private Runnable createPeriodicPublisher(String name, DoubleSupplier valueSupplier)
+  {
+    var publisher = NetworkTableInstance.getDefault()
+      .getDoubleTopic(name).publish();
+
+    return () -> {
+      publisher.set(valueSupplier.getAsDouble());
+    };
   }
 
   /**
@@ -184,7 +201,6 @@ public class SwerveModule extends SubsystemBase {
     state.speedMetersPerSecond *= state.angle.minus(encoderRotation).getCos();
 
     m_driveDesiredVelocityPublisher.set(state.speedMetersPerSecond);
-    m_driveInputVelocityPublisher.set(m_driveEncoder.getVelocity());
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput = m_drivePIDController.calculate(m_driveEncoder.getVelocity(), state.speedMetersPerSecond);
@@ -231,5 +247,9 @@ public class SwerveModule extends SubsystemBase {
     m_turningEncoderVoltagePublisher.set(m_turningInput.getVoltage());
     m_driveVelocityPublisher.set(m_driveEncoder.getVelocity());
     m_driveDistancePublisher.set(m_driveEncoder.getPosition());
+
+    for (var publisher : m_periodicPublishers) {
+      publisher.run();
+    }
   }
 }

@@ -227,6 +227,9 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putString("Robot/Pose/Translation", pose.getTranslation().toString());
     SmartDashboard.putString("Robot/Speed", getCurrentSpeeds().toString());
     SmartDashboard.putNumber("Robot/Gyro/Heading", m_gyro.getRotation2d().getRadians());
+    SmartDashboard.putNumber("Robot/Accel/X", m_gyro.getWorldLinearAccelX());
+    SmartDashboard.putNumber("Robot/Accel/Y", m_gyro.getWorldLinearAccelY());
+    SmartDashboard.putNumber("Robot/Accel/Z", m_gyro.getWorldLinearAccelZ());
   }
 }
  
