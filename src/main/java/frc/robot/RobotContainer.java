@@ -99,28 +99,28 @@ public class RobotContainer {
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
 
     //Auton things
-    // final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
+    final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
     // final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
     final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
     // final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
     // final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
     // final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
     // final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
-    // final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Test Auto");
+    final Command m_pathplanner8 = new PathPlannerAuto("Test Auto");
     // final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Out Auto");
 
     //Auton chooser
     m_autonChooser = new SendableChooser<>();
 
     //Adding auton routines to chooser
-    // m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
+    m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     // m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
     m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
     // m_autonChooser.addOption("Demo Auton", m_pathplanner4);
     // m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
     // m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
     // m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
-    // m_autonChooser.addOption("Test Auton", m_pathplanner8);
+    m_autonChooser.addOption("Test Auton", m_pathplanner8);
     // m_autonChooser.addOption("Out Auton", m_pathplanner9);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
@@ -217,11 +217,11 @@ public class RobotContainer {
 
     m_resetFieldRelativeButton.onTrue(new InstantCommand(() -> {
       m_swerve.resetFieldRelative();
+      System.out.println("Position reset");
     }));
   }
 
   public void autonomousPeriodic() {
-    m_swerve.updateOdometry();
   }
 
   public void teleopPeriodic() {
@@ -272,15 +272,18 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_autonChooser.getSelected();
+    return m_autonChooser.getSelected().andThen(m_swerve::stopModules);
   }
 
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
+    
+    m_swerve.updateOdometry();
+    m_field.setRobotPose(m_swerve.getPose());
     m_limelight.periodic();
 
+
     SmartDashboard.putData(CommandScheduler.getInstance());
-    m_field.setRobotPose(m_swerve.getPose());
     SmartDashboard.putData("Field", m_field);
   }
 }

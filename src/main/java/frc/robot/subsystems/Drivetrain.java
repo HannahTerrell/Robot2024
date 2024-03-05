@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -34,10 +35,10 @@ public class Drivetrain extends SubsystemBase {
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, .9795);
-  private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 3.6947);
-  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, .3615);
-  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, .217);
+  private final SwerveModule m_frontLeft = new SwerveModule("frontLeft", 1, 2, 0, 4.14);
+  private final SwerveModule m_frontRight = new SwerveModule("frontRight", 3, 4, 1, 3.650);
+  private final SwerveModule m_backLeft = new SwerveModule("backLeft", 7, 8, 3, 3.497);
+  private final SwerveModule m_backRight = new SwerveModule("backRight", 5, 6, 2, .1945);
 
   private final AHRS m_gyro = new AHRS(Port.kMXP);
 
@@ -60,6 +61,7 @@ public class Drivetrain extends SubsystemBase {
 
   public Drivetrain() {
     m_gyro.reset();
+    resetPose(new Pose2d());
 
     m_SwerveStatePublisher = NetworkTableInstance.getDefault()
       .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
@@ -104,7 +106,7 @@ public class Drivetrain extends SubsystemBase {
                         xSpeed, ySpeed, rot, m_gyro.getRotation2d())
                     : new ChassisSpeeds(xSpeed, ySpeed, rot),
                 periodSeconds);
-   driveRobotRelative(chassisSpeed);
+    driveRobotRelative(chassisSpeed);
   }
 
   public void driveRobotRelative(ChassisSpeeds chassisSpeed) {
@@ -208,20 +210,23 @@ public class Drivetrain extends SubsystemBase {
     m_backLeft.resetEncoderDistance();
     m_backRight.resetEncoderDistance();
 
-    resetPose(getPose());
+    resetPose(new Pose2d());
+
+    m_frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
+    m_frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
+    m_backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
+    m_backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
   }
 
   @Override
   public void periodic() {
     updateOdometry();
 
-
-    SmartDashboard.putString("Robot Position", getPose().getTranslation().toString());
-    SmartDashboard.putString("Robot Speed", getCurrentSpeeds().toString());
-    SmartDashboard.putNumber("Front Left Turn Encoder", m_frontLeft.getTurningEncoderValue());
-    SmartDashboard.putNumber("Front Right Turn Encoder", m_frontRight.getTurningEncoderValue());
-    SmartDashboard.putNumber("Back Left Turn Encoder", m_backLeft.getTurningEncoderValue());
-    SmartDashboard.putNumber("Back Right Turn Encoder", m_backRight.getTurningEncoderValue());
+    var pose = getPose();
+    SmartDashboard.putNumber("Robot/Pose/Rotation", pose.getRotation().getRadians());
+    SmartDashboard.putString("Robot/Pose/Translation", pose.getTranslation().toString());
+    SmartDashboard.putString("Robot/Speed", getCurrentSpeeds().toString());
+    SmartDashboard.putNumber("Robot/Gyro/Heading", m_gyro.getRotation2d().getRadians());
   }
 }
  
