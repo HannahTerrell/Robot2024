@@ -91,8 +91,12 @@ public class Drivetrain extends SubsystemBase {
                         false);
   }
 
-  public void driveRobotRelative(ChassisSpeeds chassisSpeed) {
+  public void driveFieldRelative(ChassisSpeeds chassisSpeed) {
     swerveDrive.driveFieldOriented(chassisSpeed);
+  }
+
+  public void driveRobotRelative(ChassisSpeeds chassisSpeed) {
+    swerveDrive.drive(chassisSpeed);
   }
 
   public ChassisSpeeds getCurrentSpeeds() {

@@ -99,7 +99,7 @@ public class RobotContainer {
     // final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
     // final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
     // final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
-    // final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Test Auto");
+    final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Test Auto");
     // final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Out Auto");
 
     //Auton chooser
@@ -113,7 +113,7 @@ public class RobotContainer {
     // m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
     // m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
     // m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
-    // m_autonChooser.addOption("Test Auton", m_pathplanner8);
+    m_autonChooser.addOption("Test Auton", m_pathplanner8);
     // m_autonChooser.addOption("Out Auton", m_pathplanner9);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
