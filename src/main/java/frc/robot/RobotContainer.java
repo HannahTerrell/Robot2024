@@ -133,7 +133,7 @@ public class RobotContainer {
       },
       m_intake));
 
-      m_arm.setDefaultCommand(
+    m_arm.setDefaultCommand(
       new RunCommand(() -> {
         m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
       },
