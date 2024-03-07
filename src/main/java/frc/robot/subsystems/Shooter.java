@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
 
   public void shootSpeaker() {
     m_feedMotor.set(0.5);
-    m_shootMotor.set(-0.7);
+    m_shootMotor.set(-0.2);
   }
 
   public void shootAmp() {
@@ -38,11 +38,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shootSpeakerOnly() {
-    m_shootMotor.set(-0.7);
+    m_shootMotor.set(-0.9);
   }
 
   public void shootAmpOnly() {
     m_shootMotor.set(-0.3);
+  }
+
+  public void backfeed() {
+    m_feedMotor.set(-0.25);
   }
 
   public void stop() {

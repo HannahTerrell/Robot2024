@@ -19,6 +19,29 @@ public class Arm extends SubsystemBase {
 
     public void setSpeed(double speed) {
         m_speed = speed;
+        if (m_armMotor.getEncoder().getPosition() >= 35 && speed > 0) {
+            m_speed = speed * .75;
+        }
+
+        if (m_armMotor.getEncoder().getPosition() >= 40 && speed > 0) {
+                m_speed = speed * .5;
+        }
+
+        if (m_armMotor.getEncoder().getPosition() >= 45 && speed > 0) {
+                m_speed = speed * .25;
+        }
+
+        if (m_armMotor.getEncoder().getPosition() <= 10 && speed < 0) {
+                m_speed = speed * .25;
+        }
+
+        // if (m_armMotor.getEncoder().getPosition() >= 20 && speed > 0) {
+        //     double length = 50 - 20;
+        //     System.out.println("Length: " + length);
+        //     double distanceToGo = 50 - m_armMotor.getEncoder().getPosition();
+        //     m_speed = distanceToGo / length;
+        //     System.out.println("Speed: " + m_speed);
+        // }
     }
 
     public void moveToTag(Limelight limelight) {
