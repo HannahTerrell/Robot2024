@@ -51,11 +51,6 @@ public class RobotContainer {
 
   //Auton chooser initiation
   SendableChooser<Command> m_autonChooser;
-  
-  //Slew rate limiters to make joystick inputs more gentle; 1/3 sec from 0 to 1.
-  private final SlewRateLimiter m_xspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_yspeedLimiter = new SlewRateLimiter(3);
-  private final SlewRateLimiter m_rotLimiter = new SlewRateLimiter(3);
 
   //Controllers
   //private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
@@ -97,28 +92,28 @@ public class RobotContainer {
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
 
     //Auton things
-    // final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
+    final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
     // final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
     final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
     // final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
     // final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
     // final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
     // final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
-    // final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Test Auto");
+    final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Test Auto");
     // final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Out Auto");
 
     //Auton chooser
     m_autonChooser = new SendableChooser<>();
 
     //Adding auton routines to chooser
-    // m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
+    m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     // m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
     m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
     // m_autonChooser.addOption("Demo Auton", m_pathplanner4);
     // m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
     // m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
     // m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
-    // m_autonChooser.addOption("Test Auton", m_pathplanner8);
+    m_autonChooser.addOption("Test Auton", m_pathplanner8);
     // m_autonChooser.addOption("Out Auton", m_pathplanner9);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
@@ -133,11 +128,13 @@ public class RobotContainer {
       },
       m_intake));
 
-      m_arm.setDefaultCommand(
+    m_arm.setDefaultCommand(
       new RunCommand(() -> {
         m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
       },
       m_arm));
+
+    m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}, m_swerve));
   }
 
   /**
@@ -219,8 +216,6 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
-    driveWithJoystick(false);
-    m_swerve.updateOdometry();
   }
 
   public void teleopPeriodic() {
@@ -230,14 +225,12 @@ public class RobotContainer {
   private void driveWithJoystick(boolean fieldRelative) {
     // Get the x speed. We are inverting this because Xbox controllers return
     // negative values when we push forward.
-    var xSpeed =
-        -m_xspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftY(), 0.2)) * Drivetrain.kMaxSpeed;
+    double xSpeed = MathUtil.applyDeadband(-m_driverController.getLeftY(), 0.02);
 
     // Get the y speed or sideways/strafe speed. We are inverting this because
     // we want a positive value when we pull to the left. Xbox controllers
     // return positive values when you pull to the right by default.
-    var ySpeed =
-        -m_yspeedLimiter.calculate(MathUtil.applyDeadband(m_driverController.getLeftX(), 0.2)) * Drivetrain.kMaxSpeed;
+    double ySpeed = MathUtil.applyDeadband(-m_driverController.getLeftX(), 0.02);
 
     // Get the rate of angular rotation. We are inverting this because we want a
     // positive value when we pull to the left (remember, CCW is positive in
@@ -245,24 +238,24 @@ public class RobotContainer {
     // the right by default.
     // var rotWODeadband = m_driverController.getRightTriggerAxis() 
     //   - m_driverController.getLeftTriggerAxis();
-    var rotWODeadband = m_driverController.getRightX();
-    var rot =
-       -m_rotLimiter.calculate(MathUtil.applyDeadband(rotWODeadband, 0.2)) * Drivetrain.kMaxAngularSpeed;
+    double rotWODeadband = -m_driverController.getRightX();
+    double rot = MathUtil.applyDeadband(rotWODeadband, 0.02);
 
     double limelight_tx = m_limelight.getTX().getDouble(0);
 
     if (m_precisionButton.getAsBoolean()) {
-      xSpeed *= 0.5;
-      ySpeed *= 0.5;
-      rot *= 0.5;
+      var multiplier = 0.75;
+      xSpeed *= multiplier;
+      ySpeed *= multiplier;
+      rot *= multiplier;
     }
 
     if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
-        rot = -limelight_tx * 0.02 * Drivetrain.kMaxAngularSpeed;
+        rot = -limelight_tx * 0.02;
         m_arm.moveToTag(m_limelight);
     }
     
-    m_swerve.drive(xSpeed, ySpeed, rot, fieldRelative, m_robot.getPeriod());
+    m_swerve.drive(xSpeed, ySpeed, rot);
   }
 
   /**

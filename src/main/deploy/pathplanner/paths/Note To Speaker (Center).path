@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 0.8327743151212798,
+        "x": 1.33992147150961,
         "y": 5.54
       },
       "prevControl": {
-        "x": 1.8327743151212788,
+        "x": 1.814998925100092,
         "y": 5.54
       },
       "nextControl": null,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Stop Modules",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "sequential",
         "data": {
@@ -50,8 +50,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 5.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 720.0
   },
