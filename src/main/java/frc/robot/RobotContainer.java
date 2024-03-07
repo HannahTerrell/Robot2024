@@ -138,6 +138,8 @@ public class RobotContainer {
         m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
       },
       m_arm));
+
+    m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}));
   }
 
   /**
@@ -219,8 +221,6 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
-    driveWithJoystick(false);
-    m_swerve.updateOdometry();
   }
 
   public void teleopPeriodic() {
