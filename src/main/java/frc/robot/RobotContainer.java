@@ -139,7 +139,7 @@ public class RobotContainer {
       },
       m_arm));
 
-    m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}));
+    m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}, m_swerve));
   }
 
   /**
