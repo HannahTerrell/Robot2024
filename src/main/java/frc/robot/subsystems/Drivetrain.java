@@ -83,7 +83,7 @@ public class Drivetrain extends SubsystemBase {
    * @param rot Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, double periodSeconds) {
+  public void drive(double xSpeed, double ySpeed, double rot) {
     swerveDrive.drive(new Translation2d(Math.pow(xSpeed, 3) * swerveDrive.getMaximumVelocity(),
                                           Math.pow(ySpeed, 3) * swerveDrive.getMaximumVelocity()),
                         Math.pow(rot, 3) * swerveDrive.getMaximumAngularVelocity(),
@@ -115,6 +115,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void resetFieldRelative() {
+    resetPose(new Pose2d());
     swerveDrive.zeroGyro();
   }
 
