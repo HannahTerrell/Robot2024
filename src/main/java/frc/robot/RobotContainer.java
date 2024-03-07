@@ -92,7 +92,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
 
     //Auton things
-    // final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
+    final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
     // final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
     final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
     // final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
@@ -106,7 +106,7 @@ public class RobotContainer {
     m_autonChooser = new SendableChooser<>();
 
     //Adding auton routines to chooser
-    // m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
+    m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     // m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
     m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
     // m_autonChooser.addOption("Demo Auton", m_pathplanner4);
