@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Hashtable;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -51,8 +53,18 @@ public class Arm extends SubsystemBase {
     }
 
     public void setAimpointSpeaker(double distance) {
-        // 2m - 12.75, 13.3
+        // distance/setpoint
+        var actuals = new Hashtable<Double, Double>();
 
+        // Collected 2024-03-08 Scott
+        actuals.put(0.0, 0.0);
+        actuals.put(2.0, 13.3);
+
+        // I want to have a table here of distances/setpoints that we have seen work
+        // and then have the arm pick the closest two for that distance, and use
+        // the combinations of the two setpoints, proportional to how close it is to each.
+        // but I haven't gotten there yet.
+        
         // this is a linear formula, and doesn't account for a ballistic arc.
         // it would be good to have a couple distances with encoder measurements here.
         var setpoint = (distance / 6) * 20;

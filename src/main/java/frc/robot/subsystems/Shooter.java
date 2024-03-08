@@ -19,6 +19,8 @@ public class Shooter extends SubsystemBase {
   private double m_feedSpeed = 0;
   private SlewRateLimiter m_shooterRateLimiter = new SlewRateLimiter(10);
 
+  private final double SHOOTER_SPEAKER_SPEED = 1;
+
   public Shooter() {
     super();
     m_shootMotor.setNeutralMode(NeutralModeValue.Brake);
@@ -61,7 +63,7 @@ public class Shooter extends SubsystemBase {
   // NEW STUFF
 
   public void setSpeakerShootSpeed() {
-    m_shooterSpeed = 1;
+    m_shooterSpeed = SHOOTER_SPEAKER_SPEED;
   }
 
   public boolean isShooterAtAmpVelocity() {
@@ -69,7 +71,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean isShooterAtSpeakerVelocity() {
-    return Math.abs(m_shootMotor.getVelocity().getValueAsDouble()) > 95; 
+    return Math.abs(m_shootMotor.getVelocity().getValueAsDouble()) > (SHOOTER_SPEAKER_SPEED * 95); 
   }
 
   public void shoot() {
