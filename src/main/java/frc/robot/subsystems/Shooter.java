@@ -17,32 +17,32 @@ public class Shooter extends SubsystemBase {
 
   public Shooter() {
     super();
-    m_shootFollower.setControl(new Follower(m_shootMotor.getDeviceID(), true));
     m_shootMotor.setNeutralMode(NeutralModeValue.Brake);
+    m_shootFollower.setControl(new Follower(m_shootMotor.getDeviceID(), true));
     m_shootFollower.setNeutralMode(NeutralModeValue.Brake);
     m_feedMotor.setIdleMode(IdleMode.kBrake);
   }
 
   public void shootSpeaker() {
-    m_feedMotor.set(0.5);
-    m_shootMotor.set(-0.2);
+    m_feedMotor.set(1);
+    shootSpeakerOnly();
   }
 
   public void shootAmp() {
-    m_feedMotor.set(0.5);
-    m_shootMotor.set(-0.3);
+    m_feedMotor.set(1);
+    m_shootMotor.set(0.3);
   }
 
   public void feedOnly() {
-    m_feedMotor.set(0.5);
+    m_feedMotor.set(1);
   }
 
   public void shootSpeakerOnly() {
-    m_shootMotor.set(-0.9);
+    m_shootMotor.set(1);
   }
 
   public void shootAmpOnly() {
-    m_shootMotor.set(-0.3);
+    m_shootMotor.set(0.3);
   }
 
   public void backfeed() {
@@ -56,7 +56,9 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter Speed", m_shootMotor.get());
+
+    SmartDashboard.putNumber("Shooter Speed/1", m_shootMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter Speed/2", m_shootFollower.getVelocity().getValueAsDouble());
   }
 
 }
