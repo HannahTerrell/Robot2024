@@ -9,7 +9,6 @@ import frc.robot.commands.*;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 //import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -42,7 +41,7 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
 
   //Commands
-  private final ArmUp armUp = new ArmUp(m_arm);
+  private final AimArm aimArmContinuous = new AimArm(m_arm, m_limelight, true);
   private final ArmDown armDown = new ArmDown(m_arm);
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
   private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
@@ -86,7 +85,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("stopSystems", stopSystems);
     NamedCommands.registerCommand("shootSpeaker", new RunCommand(() -> {m_shooter.shootSpeaker();}).withTimeout(1.0));
     NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
-    NamedCommands.registerCommand("armUp", armUp);
+    // NamedCommands.registerCommand("armUp", armUp);
     NamedCommands.registerCommand("armDown", armDown);
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
@@ -128,13 +127,13 @@ public class RobotContainer {
       },
       m_intake));
 
-    m_arm.setDefaultCommand(
-      new RunCommand(() -> {
-        m_arm.setSpeed(-m_operatorController.getRawAxis(m_armAxis));
-      },
-      m_arm));
-
     m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}, m_swerve));
+
+      m_arm.setDefaultCommand(
+        new RunCommand(() -> {
+          m_arm.adjustAim(-m_operatorController.getRawAxis(m_armAxis) * 1);
+        },
+      m_arm));
   }
 
   /**
@@ -213,6 +212,8 @@ public class RobotContainer {
     m_resetFieldRelativeButton.onTrue(new InstantCommand(() -> {
       m_swerve.resetFieldRelative();
     }));
+
+    m_aimButton.whileTrue(aimArmContinuous);
   }
 
   public void autonomousPeriodic() {
@@ -241,7 +242,7 @@ public class RobotContainer {
     double rotWODeadband = -m_driverController.getRightX();
     double rot = MathUtil.applyDeadband(rotWODeadband, 0.02);
 
-    double limelight_tx = m_limelight.getTX().getDouble(0);
+    double limelight_tx = m_limelight.getTargetX();
 
     if (m_precisionButton.getAsBoolean()) {
       var multiplier = 0.75;
@@ -251,8 +252,7 @@ public class RobotContainer {
     }
 
     if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
-        rot = -limelight_tx * 0.02;
-        m_arm.moveToTag(m_limelight);
+        rot = -limelight_tx * 0.04;
     }
     
     m_swerve.drive(xSpeed, ySpeed, rot);

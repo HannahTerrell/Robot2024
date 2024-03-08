@@ -13,7 +13,7 @@ public class StopSystems extends ParallelCommandGroup {
         addCommands(
             new InstantCommand(() -> {shooter.stop();}),
             new InstantCommand(() -> {intake.stop();}),
-            new InstantCommand(() -> {arm.stop();})
+            new InstantCommand(() -> {arm.setPositionDown();})
         );
     }
 }

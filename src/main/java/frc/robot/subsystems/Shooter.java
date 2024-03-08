@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.TargetType;
 
 public class Shooter extends SubsystemBase {
   private TalonFX m_shootMotor = new TalonFX(14);
@@ -43,6 +44,22 @@ public class Shooter extends SubsystemBase {
 
   public void shootAmpOnly() {
     m_shootMotor.set(0.3);
+  }
+
+  public void shoot(TargetType target) {
+    switch (target) {
+      case AMP:
+        m_shootMotor.set(-0.3);
+        break;
+
+      case SPEAKER:
+        m_shootMotor.set(-0.7);
+        break;
+
+      default:
+        // can't shoot at that until you tell me how
+        break;
+    }
   }
 
   public void backfeed() {
