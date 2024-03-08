@@ -11,7 +11,7 @@ public class ShootSpeaker extends SequentialCommandGroup {
                 shooter::backfeed,
                 shooter::stopFeed,
                 shooter
-            ).withTimeout(0.25),
+            ).withTimeout(0.15),
             new ShooterSpinUp(shooter),
             new StartEndCommand(
                 shooter::shoot,

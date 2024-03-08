@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,9 +25,12 @@ public class Arm extends SubsystemBase {
 
     public Arm() {
       super();
-      m_armMotor.setIdleMode(IdleMode.kBrake);
+      m_armMotor.setIdleMode(IdleMode.kCoast);
       m_armMotor.getEncoder().setPosition(0);
       setPositionDown();
+
+    SendableRegistry.setName(m_positionController, "Arm/Position Controller");
+      SmartDashboard.putData(m_positionController);
     }
 
     public void setPositionDown() {
