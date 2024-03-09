@@ -64,10 +64,10 @@ public class Arm extends SubsystemBase {
         // and then have the arm pick the closest two for that distance, and use
         // the combinations of the two setpoints, proportional to how close it is to each.
         // but I haven't gotten there yet.
-        
+
         // this is a linear formula, and doesn't account for a ballistic arc.
         // it would be good to have a couple distances with encoder measurements here.
-        var setpoint = (distance / 6) * 20;
+        var setpoint = (distance / 2) * 13.3;
         setpoint = MathUtil.clamp(setpoint, 0, MAX_SETPOINT);
 
         m_positionController.setSetpoint(setpoint);
