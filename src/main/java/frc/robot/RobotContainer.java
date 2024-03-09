@@ -39,6 +39,7 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
 
   //Commands
+  private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
   private final AimArm aimArmContinuous = new AimArm(m_arm, m_limelight, true);
   private final ArmDown armDown = new ArmDown(m_arm);
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
@@ -177,12 +178,7 @@ public class RobotContainer {
       m_shooter.stop();
     }));
 
-    m_shootSpeakerButton.whileTrue(new StartEndCommand(() -> {
-      m_shooter.shootSpeaker();
-    },
-    () -> {
-      m_shooter.stop();
-    }));
+    m_shootSpeakerButton.onTrue(shootSpeaker);
 
     m_feedOnlyButton.whileTrue(new StartEndCommand(() -> {
       m_shooter.feedOnly();
@@ -247,7 +243,7 @@ public class RobotContainer {
       rot *= multiplier;
     }
 
-    if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
+    if (m_aimButton.getAsBoolean() && limelight_tx != 0) {
         rot = -limelight_tx * 0.04;
     }
     

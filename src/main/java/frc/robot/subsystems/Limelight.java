@@ -24,9 +24,13 @@ public class Limelight extends SubsystemBase{
         return ty.getDouble(0);
     }
 
+    public double getTargetDistBlended() {
+        return (getTargetY() + getTargetA()) / 2;
+    }
+
     public double getTargetDist() {
         var y = getTargetY();
-        if (y == -1)return 0;
+        if (y == -1) return 0;
 
         var ty = -y;
 
@@ -92,6 +96,7 @@ public class Limelight extends SubsystemBase{
         SmartDashboard.putNumber("LimelightX", x);
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightDist", getTargetDist());
+        SmartDashboard.putNumber("getTargetDistBlended", getTargetDistBlended());
         SmartDashboard.putNumber("LimelightTag", getAprilTag());
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putString("LimelightLastTargetType", getLastTargetType().toString());

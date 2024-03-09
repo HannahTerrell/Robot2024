@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Hashtable;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -8,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,9 +27,12 @@ public class Arm extends SubsystemBase {
 
     public Arm() {
       super();
-      m_armMotor.setIdleMode(IdleMode.kBrake);
+      m_armMotor.setIdleMode(IdleMode.kCoast);
       m_armMotor.getEncoder().setPosition(0);
       setPositionDown();
+
+    SendableRegistry.setName(m_positionController, "Arm/Position Controller");
+      SmartDashboard.putData(m_positionController);
     }
 
     public void setPositionDown() {
@@ -46,11 +52,21 @@ public class Arm extends SubsystemBase {
     }
 
     public void setAimpointSpeaker(double distance) {
-        // 2m - 12.75, 13.3
+        // distance/setpoint
+        var actuals = new Hashtable<Double, Double>();
+
+        // Collected 2024-03-08 Scott
+        actuals.put(0.0, 0.0);
+        actuals.put(2.0, 13.3);
+
+        // I want to have a table here of distances/setpoints that we have seen work
+        // and then have the arm pick the closest two for that distance, and use
+        // the combinations of the two setpoints, proportional to how close it is to each.
+        // but I haven't gotten there yet.
 
         // this is a linear formula, and doesn't account for a ballistic arc.
         // it would be good to have a couple distances with encoder measurements here.
-        var setpoint = (distance / 6) * 20;
+        var setpoint = (distance / 2) * 13.3;
         setpoint = MathUtil.clamp(setpoint, 0, MAX_SETPOINT);
 
         m_positionController.setSetpoint(setpoint);
