@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
     private CANSparkMax m_armMotor = new CANSparkMax(16, MotorType.kBrushless);
     private RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
-    private PIDController m_positionController = new PIDController(0.07, 0, 0);
+    private PIDController m_positionController = new PIDController(0.19, 0, 0);
     private boolean m_stopped;
 
     // be careful setting this to low (slow) because it also prevents slowing down.
@@ -41,7 +41,6 @@ public class Arm extends SubsystemBase {
     }
 
     public void setAimpointAmp() {
-        // TODO: what posotion should this be?
         m_positionController.setSetpoint(MAX_SETPOINT);
         m_stopped = false;
     }
@@ -67,7 +66,7 @@ public class Arm extends SubsystemBase {
 
         // this is a linear formula, and doesn't account for a ballistic arc.
         // it would be good to have a couple distances with encoder measurements here.
-        var setpoint = (distance / 2) * 13.3;
+        var setpoint = (distance / 4) * 13.3;
         setpoint = MathUtil.clamp(setpoint, 0, MAX_SETPOINT);
 
         m_positionController.setSetpoint(setpoint);
@@ -75,8 +74,7 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean getIsAtSetpoint() {
-        // TODO: does this work right?
-        return Math.abs(m_positionController.getPositionError()) < .01;
+        return Math.abs(m_positionController.getPositionError()) < 0.03;
     }
 
     public void stop() {
