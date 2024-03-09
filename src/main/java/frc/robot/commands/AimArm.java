@@ -32,7 +32,7 @@ public class AimArm extends Command {
             
             case SPEAKER:
                 var distance = limelight.getTargetDist();
-                arm.setAimpointSpeaker(distance);;
+                arm.setAimpointSpeaker(distance);
                 break;
 
             default:

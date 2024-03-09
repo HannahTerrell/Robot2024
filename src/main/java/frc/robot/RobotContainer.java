@@ -9,7 +9,6 @@ import frc.robot.commands.*;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
-//import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,24 +38,22 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
 
   //Commands
-  private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
   private final AimArm aimArmContinuous = new AimArm(m_arm, m_limelight, true);
+  // private final AimArm aimArm = new AimArm(m_arm, m_limelight, false);
   private final ArmDown armDown = new ArmDown(m_arm);
+  private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
   private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
   private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
-  //private final AmpScore ampScore = new AmpScore(m_shooter, armUp, armDown);
 
   //Auton chooser initiation
   SendableChooser<Command> m_autonChooser;
 
   //Controllers
-  //private final Joystick m_driverController = new Joystick(OperatorConstants.kDriverControllerPort);
   private final XboxController m_driverController = new XboxController(0);
   private final XboxController m_operatorController = new XboxController(1);
 
   //Buttons and axes
-  // private final int m_intakeAxis = XboxController.Axis.kLeftY.value;
   private final int m_armAxis = XboxController.Axis.kRightY.value;
   private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
@@ -82,7 +79,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("stopSystems", stopSystems);
     NamedCommands.registerCommand("shootSpeaker", new RunCommand(() -> {m_shooter.shootSpeaker();}).withTimeout(1.0));
     NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
-    // NamedCommands.registerCommand("armUp", armUp);
+    NamedCommands.registerCommand("aimArm", aimArmContinuous);
     NamedCommands.registerCommand("armDown", armDown);
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
@@ -91,7 +88,6 @@ public class RobotContainer {
     final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
     // final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
     final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
-    // final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Demo Auto");
     // final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
     // final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
     // final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
@@ -105,7 +101,6 @@ public class RobotContainer {
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     // m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
     m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
-    // m_autonChooser.addOption("Demo Auton", m_pathplanner4);
     // m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
     // m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
     // m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
@@ -119,14 +114,13 @@ public class RobotContainer {
       new RunCommand(() -> {
         var intakeSpeed = (m_operatorController.getRawAxis(XboxController.Axis.kRightTrigger.value)
            - m_operatorController.getRawAxis(XboxController.Axis.kLeftTrigger.value));
-        // var intakeSpeed = -(m_operatorController.getRawAxis(m_intakeAxis));
         m_intake.intake(intakeSpeed);
       },
       m_intake));
 
     m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}, m_swerve));
 
-      m_arm.setDefaultCommand(
+    m_arm.setDefaultCommand(
         new RunCommand(() -> {
           m_arm.adjustAim(-m_operatorController.getRawAxis(m_armAxis) * 1);
         },
@@ -216,21 +210,10 @@ public class RobotContainer {
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
-    // Get the x speed. We are inverting this because Xbox controllers return
-    // negative values when we push forward.
     double xSpeed = MathUtil.applyDeadband(-m_driverController.getLeftY(), 0.02);
 
-    // Get the y speed or sideways/strafe speed. We are inverting this because
-    // we want a positive value when we pull to the left. Xbox controllers
-    // return positive values when you pull to the right by default.
     double ySpeed = MathUtil.applyDeadband(-m_driverController.getLeftX(), 0.02);
 
-    // Get the rate of angular rotation. We are inverting this because we want a
-    // positive value when we pull to the left (remember, CCW is positive in
-    // mathematics). Xbox controllers return positive values when you pull to
-    // the right by default.
-    // var rotWODeadband = m_driverController.getRightTriggerAxis() 
-    //   - m_driverController.getLeftTriggerAxis();
     double rotWODeadband = -m_driverController.getRightX();
     double rot = MathUtil.applyDeadband(rotWODeadband, 0.02);
 
@@ -243,8 +226,8 @@ public class RobotContainer {
       rot *= multiplier;
     }
 
-    if (m_aimButton.getAsBoolean() && limelight_tx != 0) {
-        rot = -limelight_tx * 0.04;
+    if (m_aimButton.getAsBoolean() && limelight_tx != 0 && Math.abs(limelight_tx) > 2) {
+        rot = -limelight_tx * 0.02;
     }
     
     m_swerve.drive(xSpeed, ySpeed, rot);
