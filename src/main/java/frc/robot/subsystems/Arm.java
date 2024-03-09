@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
     private CANSparkMax m_armMotor = new CANSparkMax(16, MotorType.kBrushless);
     private RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
-    private PIDController m_positionController = new PIDController(0.07, 0, 0);
+    private PIDController m_positionController = new PIDController(0.09, 0, 0);
     private boolean m_stopped;
 
     // be careful setting this to low (slow) because it also prevents slowing down.
@@ -35,7 +35,6 @@ public class Arm extends SubsystemBase {
     }
 
     public void setAimpointAmp() {
-        // TODO: what posotion should this be?
         m_positionController.setSetpoint(MAX_SETPOINT);
         m_stopped = false;
     }
@@ -59,7 +58,6 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean getIsAtSetpoint() {
-        // TODO: does this work right?
         return Math.abs(m_positionController.getPositionError()) < .01;
     }
 

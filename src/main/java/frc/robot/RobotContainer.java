@@ -30,8 +30,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  private XCaliper m_robot;
-
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
   private final Intake m_intake = new Intake();
@@ -74,11 +72,9 @@ public class RobotContainer {
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer(XCaliper robot) {
+  public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
-
-    m_robot = robot;
 
     //Commands for PathPlanner
     NamedCommands.registerCommand("stopModules", new InstantCommand(() -> {m_swerve.stopModules();}));
