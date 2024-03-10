@@ -36,13 +36,13 @@ public class AimArm extends Command {
                 break;
 
             default:
-                // nothing
+                //nothing
                 break;
         }
     }
 
     @Override
     public void end(boolean interrupted) {
-        arm.setPositionDown();
+        // System.out.println("Aim Arm Ended");
     }
 }

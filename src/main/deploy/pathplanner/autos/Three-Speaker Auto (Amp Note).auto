@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.69,
-      "y": 6.68
+      "x": 1.37,
+      "y": 5.54
     },
-    "rotation": 60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -15,12 +15,6 @@
           "type": "named",
           "data": {
             "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
           }
         },
         {
@@ -36,13 +30,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 1.8
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To Note (Amp)"
+                  "pathName": "Speaker To Note (Center)"
                 }
               },
               {
@@ -63,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note To Amp"
+            "pathName": "Note To Speaker (Center)"
           }
         },
         {
@@ -75,7 +69,68 @@
         {
           "type": "named",
           "data": {
-            "name": "shootAmp"
+            "name": "shootSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "armDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "To 3rd Note"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAndFeed"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3rd Note to Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aimArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSpeaker"
           }
         },
         {

@@ -39,7 +39,7 @@ public class RobotContainer {
 
   //Commands
   private final AimArm aimArmContinuous = new AimArm(m_arm, m_limelight, true);
-  // private final AimArm aimArm = new AimArm(m_arm, m_limelight, false);
+  private final AimArm aimArm = new AimArm(m_arm, m_limelight, false);
   private final ArmDown armDown = new ArmDown(m_arm);
   private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
@@ -77,9 +77,9 @@ public class RobotContainer {
     //Commands for PathPlanner
     NamedCommands.registerCommand("stopModules", new InstantCommand(() -> {m_swerve.stopModules();}));
     NamedCommands.registerCommand("stopSystems", stopSystems);
-    NamedCommands.registerCommand("shootSpeaker", new RunCommand(() -> {m_shooter.shootSpeaker();}).withTimeout(1.0));
+    NamedCommands.registerCommand("shootSpeaker", shootSpeaker);
     NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
-    NamedCommands.registerCommand("aimArm", aimArmContinuous);
+    NamedCommands.registerCommand("aimArm", aimArm);
     NamedCommands.registerCommand("armDown", armDown);
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
@@ -88,6 +88,8 @@ public class RobotContainer {
     final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
     // final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
     final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
+    final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Three-Speaker Auto (Amp Note)");
+    final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Three-Speaker Auto (Center)");
     // final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
     // final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
     // final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
@@ -101,6 +103,8 @@ public class RobotContainer {
     m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
     // m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
     m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
+    m_autonChooser.addOption("Three-Speaker Auton (Amp Note)", m_pathplanner4);
+     m_autonChooser.addOption("Three-Speaker Auton (Center)", m_pathplanner5);
     // m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
     // m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
     // m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
