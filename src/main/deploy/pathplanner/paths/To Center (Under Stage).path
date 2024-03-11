@@ -3,25 +3,57 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.68,
-        "y": 6.99
+        "x": 1.94,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.037272222692593,
-        "y": 7.110045901003483
+        "x": 2.94,
+        "y": 5.54
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.8267774427286747,
-        "y": 7.64797700535572
+        "x": 3.6861479990766246,
+        "y": 5.262369499097973
       },
       "prevControl": {
-        "x": 2.481650091505311,
-        "y": 7.215293290985443
+        "x": 2.6006603253377443,
+        "y": 5.621207446773869
+      },
+      "nextControl": {
+        "x": 4.771635672815506,
+        "y": 4.903531551422078
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.896343188697773,
+        "y": 4.1046482092964185
+      },
+      "prevControl": {
+        "x": 5.379354802753409,
+        "y": 4.267323980045038
+      },
+      "nextControl": {
+        "x": 6.413331574642137,
+        "y": 3.941972438547798
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.281950694955519,
+        "y": 4.1046482092964185
+      },
+      "prevControl": {
+        "x": 7.281950694955519,
+        "y": 4.1046482092964185
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +65,7 @@
   "eventMarkers": [
     {
       "name": "Stop Modules",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 3.0,
       "command": {
         "type": "sequential",
         "data": {
@@ -57,13 +89,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

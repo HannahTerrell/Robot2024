@@ -2,37 +2,25 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.55,
-      "y": 6.99
+      "x": 1.37,
+      "y": 5.54
     },
-    "rotation": -90.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "To Amp"
+            "name": "shootSpeaker"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootAmp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "armDown"
+            "name": "stopSystems"
           }
         },
         {
@@ -42,13 +30,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 4.0
+                  "waitTime": 1.8
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp To Note"
+                  "pathName": "Speaker To Note (Center)"
                 }
               },
               {
@@ -61,12 +49,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "stopSystems"
@@ -75,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note To Amp"
+            "pathName": "Note To Speaker (Center)"
           }
         },
         {
@@ -87,7 +69,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootAmp"
+            "name": "shootSpeaker"
           }
         },
         {
@@ -109,13 +91,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 4.0
+                  "waitTime": 3.0
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Amp To Center"
+                  "pathName": "To Center (Under Stage)"
                 }
               },
               {
@@ -128,9 +110,27 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 1.0
+            "pathName": "To Speaker (Under Stage)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aimArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "armDown"
           }
         },
         {

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 4.36
+      "x": 1.32,
+      "y": 5.57
     },
-    "rotation": -60.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -22,24 +22,36 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "intakeAndFeed"
+                  "pathName": "Speaker To Podium (Center)"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Speaker To Podium (Non-Amp)"
+                  "name": "intakeAndFeed"
                 }
               }
             ]
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Podium To Speaker (Non-Amp)"
+            "pathName": "Podium to Speaker (Center)"
           }
         },
         {
@@ -55,22 +67,9 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Speaker To Center (Non-Amp)"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeAndFeed"
-                }
-              }
-            ]
+            "name": "stopModules"
           }
         }
       ]

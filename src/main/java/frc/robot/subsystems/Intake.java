@@ -30,7 +30,7 @@ public class Intake extends SubsystemBase {
   public void intakeWithSensor(double speed) {
     m_speed = speed;
     m_sensorTimer.reset();
-    if (!m_sensor.get()) {
+    if (m_sensor.get() == false) {
       m_sensorTimer.start();
       if (m_sensorTimer.hasElapsed(0.5)) {
         stop();
@@ -48,5 +48,8 @@ public class Intake extends SubsystemBase {
   public void periodic() {
       m_intakeMotor.set(m_speed);
       SmartDashboard.putNumber("Intake Speed", m_intakeMotor.get());
+      if (m_sensor.get() == false) {
+        System.out.println("Interrupted");
+      }
   }
 }

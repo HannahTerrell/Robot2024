@@ -85,31 +85,30 @@ public class RobotContainer {
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
 
     //Auton things
-    final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("One-Amp Auto");
-    // final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Two-Amp Auto");
+    final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("Three-Speaker Auto (Non-Amp)");
+    final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Three-Speaker Auto (Podium)");
     final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
     final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Three-Speaker Auto (Amp Note)");
     final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Three-Speaker Auto (Center)");
-    // final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Speaker-Podium Auto (Non-Amp)");
-    // final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Speaker-Podium Auto (Center)");
-    // final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
-    final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Test Auto");
-    // final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Out Auto");
+    final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Three-Speaker Auto (Amp Side)");
+    final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
+    final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Two-Speaker Auto (Podium)");
+    final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Three-Speaker Auto (Under Stage)");
+
 
     //Auton chooser
     m_autonChooser = new SendableChooser<>();
 
     //Adding auton routines to chooser
-    m_autonChooser.addOption("One-Amp Auton", m_pathplanner1);
-    // m_autonChooser.addOption("Two-Amp Auton", m_pathplanner2);
-    m_autonChooser.addOption("Two-Speaker Auton", m_pathplanner3);
-    m_autonChooser.addOption("Three-Speaker Auton (Amp Note)", m_pathplanner4);
-     m_autonChooser.addOption("Three-Speaker Auton (Center)", m_pathplanner5);
-    // m_autonChooser.addOption("Speaker-Podium Auton (Non-Amp)", m_pathplanner5);
-    // m_autonChooser.addOption("Speaker-Podium Auton (Center)", m_pathplanner6);
-    // m_autonChooser.addOption("Disruption Auton", m_pathplanner7);
-    m_autonChooser.addOption("Test Auton", m_pathplanner8);
-    // m_autonChooser.addOption("Out Auton", m_pathplanner9);
+    m_autonChooser.addOption("Two-Speaker Auto", m_pathplanner3);
+    m_autonChooser.addOption("Two-Speaker Auto (Podium)", m_pathplanner8);
+    m_autonChooser.addOption("Three-Speaker Auto (Non-Amp)", m_pathplanner1);
+    m_autonChooser.addOption("Three-Speaker Auto (Center, Podium)", m_pathplanner2);
+    m_autonChooser.addOption("Three-Speaker Auto (Center, Amp Note)", m_pathplanner4);
+    m_autonChooser.addOption("Three-Speaker Auto (Center, Center)", m_pathplanner5);
+    m_autonChooser.addOption("Three-Speaker Auto (Center, Under Stage)", m_pathplanner9);
+    m_autonChooser.addOption("Three-Speaker Auto (Amp Side)", m_pathplanner6);
+    m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
   }
 

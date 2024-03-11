@@ -1,12 +1,10 @@
 package frc.robot.subsystems;
 
 import java.util.Hashtable;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -17,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
     private CANSparkMax m_armMotor = new CANSparkMax(16, MotorType.kBrushless);
     private RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
-    private PIDController m_positionController = new PIDController(0.25, 0, 0);
+    private PIDController m_positionController = new PIDController(0.2, 0, 0);
     private boolean m_stopped;
 
     // be careful setting this to low (slow) because it also prevents slowing down.
@@ -74,7 +72,7 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean getIsAtSetpoint() {
-        return Math.abs(m_positionController.getPositionError()) < 0.05;
+        return Math.abs(m_positionController.getPositionError()) < 0.1;
     }
 
     public void stop() {
