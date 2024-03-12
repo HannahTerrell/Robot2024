@@ -248,6 +248,7 @@ public class RobotContainer {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     m_limelight.periodic();
+    SmartDashboard.putBoolean("Have Note?", !m_intake.hasNote());
 
     SmartDashboard.putData(CommandScheduler.getInstance());
   }
