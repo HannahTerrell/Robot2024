@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LEDs;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Limelight;
 
@@ -14,6 +15,12 @@ public class AimArm extends Command {
         this.arm = arm;
         this.limelight = limelight;
         this.continuous = continuous;
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        LEDs.setAiming(true);
     }
 
     @Override
@@ -44,5 +51,6 @@ public class AimArm extends Command {
     @Override
     public void end(boolean interrupted) {
         // System.out.println("Aim Arm Ended");
+        LEDs.setAiming(false);
     }
 }
