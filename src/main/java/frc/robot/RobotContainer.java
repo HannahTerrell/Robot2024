@@ -230,7 +230,7 @@ public class RobotContainer {
     }
 
     if (m_aimButton.getAsBoolean() && limelight_tx != 0) {
-        rot = -limelight_tx * 0.03;
+        rot = -limelight_tx * 0.035;
     }
     
     m_swerve.drive(xSpeed, ySpeed, rot);

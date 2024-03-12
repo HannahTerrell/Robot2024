@@ -24,13 +24,13 @@ public class Arm extends SubsystemBase {
     private final double MAX_SETPOINT = 50;
 
     public Arm() {
-      super();
-      m_armMotor.setIdleMode(IdleMode.kCoast);
-      m_armMotor.getEncoder().setPosition(0);
-      setPositionDown();
+        super();
+        m_armMotor.setIdleMode(IdleMode.kCoast);
+        m_armMotor.getEncoder().setPosition(0);
+        setPositionDown();
 
-    SendableRegistry.setName(m_positionController, "Arm/Position Controller");
-      SmartDashboard.putData(m_positionController);
+        SendableRegistry.setName(m_positionController, "Arm/Position Controller");
+        SmartDashboard.putData(m_positionController);
     }
 
     public void setPositionDown() {
@@ -45,8 +45,7 @@ public class Arm extends SubsystemBase {
 
     public void adjustAim(double rate) {
         m_positionController.setSetpoint(
-            MathUtil.clamp(m_positionController.getSetpoint() + rate, 0, MAX_SETPOINT)
-        );
+                MathUtil.clamp(m_positionController.getSetpoint() + rate, 0, MAX_SETPOINT));
     }
 
     public void setAimpointSpeaker(double distance) {
@@ -59,7 +58,8 @@ public class Arm extends SubsystemBase {
 
         // I want to have a table here of distances/setpoints that we have seen work
         // and then have the arm pick the closest two for that distance, and use
-        // the combinations of the two setpoints, proportional to how close it is to each.
+        // the combinations of the two setpoints, proportional to how close it is to
+        // each.
         // but I haven't gotten there yet.
 
         // this is a linear formula, and doesn't account for a ballistic arc.
@@ -82,11 +82,14 @@ public class Arm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if (!m_stopped)
-        {
+        if (!m_stopped) {
             var speed = m_positionController.calculate(m_armEncoder.getPosition());
             speed = MathUtil.clamp(speed, -1, 1);
             speed = m_rateLimiter.calculate(speed);
+
+            if (Math.abs(m_positionController.getPositionError()) < 5) {
+                speed = MathUtil.clamp(speed, -.15, 0.25);
+            }
 
             m_armMotor.set(speed);
         }
