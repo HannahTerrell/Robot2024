@@ -43,6 +43,8 @@ public class AimArm extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        // System.out.println("Aim Arm Ended");
+        if (continuous) {
+            arm.setPositionDown();
+        }
     }
 }
