@@ -91,6 +91,14 @@ public class Drivetrain extends SubsystemBase {
                         false);
   }
 
+    public void driveAiming(double xSpeed, double ySpeed, double rot) {
+    swerveDrive.drive(new Translation2d(Math.pow(xSpeed, 3) * swerveDrive.getMaximumVelocity(),
+                                          Math.pow(ySpeed, 3) * swerveDrive.getMaximumVelocity()),
+                        rot * swerveDrive.getMaximumAngularVelocity(),
+                        true,
+                        false);
+  }
+
   public void driveFieldRelative(ChassisSpeeds chassisSpeed) {
     swerveDrive.driveFieldOriented(chassisSpeed);
   }

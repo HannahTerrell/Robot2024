@@ -6,9 +6,15 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+
+import org.ejml.dense.row.mult.SubmatrixOps_DDRM;
+
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -68,6 +74,9 @@ public class RobotContainer {
   private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 7);
   private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
 
+  private boolean m_wasAimPressedBefore = false;
+  private PIDController m_rotationAimController = new PIDController(0.035, 0.015, 0.03);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -110,6 +119,8 @@ public class RobotContainer {
     m_autonChooser.addOption("Three-Speaker Auto (Amp Side)", m_pathplanner6);
     m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
+
+    SmartDashboard.putData(m_rotationAimController);
   }
 
   public void teleopInit() {
@@ -209,7 +220,6 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
-    driveWithJoystick(true);
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
@@ -230,8 +240,22 @@ public class RobotContainer {
     }
 
     if (m_aimButton.getAsBoolean() && limelight_tx != 0) {
-        rot = -limelight_tx * 0.035;
+      if (!m_wasAimPressedBefore) {
+        m_rotationAimController.reset();
+      }
+
+      rot = m_rotationAimController.calculate(limelight_tx);
+      SmartDashboard.putNumber("Aim rot - pre clamp", rot);
+      rot = MathUtil.clamp(rot, -0.5, 0.5);
+      SmartDashboard.putNumber("Aim rot", rot);
+    } else {
+      SmartDashboard.putNumber("Aim rot - pre clamp", 0);
+      SmartDashboard.putNumber("Aim rot", 0);
     }
+
+    m_wasAimPressedBefore = m_aimButton.getAsBoolean();
+
+    SmartDashboard.putNumber("Teleop rot", rot);
     
     m_swerve.drive(xSpeed, ySpeed, rot);
   }
