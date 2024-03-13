@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
 import java.io.File;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -24,24 +23,20 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain extends SubsystemBase {
-  public static final double kMaxSpeed = 4.0; // 4 meters per second
+  public static final double kMaxSpeed = 4.5; // 4 meters per second
   public static final double kMaxAngularSpeed = 1.5 * Math.PI; // 1.5 rotations per second
 
   //Swerve drive object.
   private final SwerveDrive swerveDrive;
 
-  //Maximum speed of the robot in meters per second, used to limit acceleration.
-  public double maximumSpeed = Units.feetToMeters(14.5);
-
   public Drivetrain() {
     var directory = new File(Filesystem.getDeployDirectory(), "swerve");
 
-    System.out.println("Drivetrain");
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
+      swerveDrive = new SwerveParser(directory).createSwerveDrive(kMaxSpeed);
       // Alternative method if you don't want to supply the conversion factor via JSON files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
@@ -84,9 +79,9 @@ public class Drivetrain extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   public void drive(double xSpeed, double ySpeed, double rot) {
-    swerveDrive.drive(new Translation2d(Math.pow(xSpeed, 3) * swerveDrive.getMaximumVelocity(),
-                                          Math.pow(ySpeed, 3) * swerveDrive.getMaximumVelocity()),
-                        Math.pow(rot, 3) * swerveDrive.getMaximumAngularVelocity(),
+    swerveDrive.drive(new Translation2d(xSpeed * swerveDrive.getMaximumVelocity(),
+                                          ySpeed * swerveDrive.getMaximumVelocity()),
+                        rot * swerveDrive.getMaximumAngularVelocity(),
                         true,
                         false);
   }

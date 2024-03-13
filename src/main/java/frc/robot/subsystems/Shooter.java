@@ -93,5 +93,4 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/Speed", m_shootMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Shooter/Feed", m_feedMotor.getEncoder().getVelocity());
   }
-
 }
