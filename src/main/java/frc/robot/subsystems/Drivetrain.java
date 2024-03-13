@@ -84,19 +84,15 @@ public class Drivetrain extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the field.
    */
   public void drive(double xSpeed, double ySpeed, double rot) {
-    swerveDrive.drive(new Translation2d(Math.pow(xSpeed, 3) * swerveDrive.getMaximumVelocity(),
-                                          Math.pow(ySpeed, 3) * swerveDrive.getMaximumVelocity()),
-                        Math.pow(rot, 3) * swerveDrive.getMaximumAngularVelocity(),
-                        true,
-                        false);
-  }
-
-    public void driveAiming(double xSpeed, double ySpeed, double rot) {
-    swerveDrive.drive(new Translation2d(Math.pow(xSpeed, 3) * swerveDrive.getMaximumVelocity(),
-                                          Math.pow(ySpeed, 3) * swerveDrive.getMaximumVelocity()),
-                        rot * swerveDrive.getMaximumAngularVelocity(),
-                        true,
-                        false);
+    swerveDrive.drive(
+      new Translation2d(
+        xSpeed * swerveDrive.getMaximumVelocity(),
+        ySpeed * swerveDrive.getMaximumVelocity()
+      ),
+      rot * swerveDrive.getMaximumAngularVelocity(),
+      true,
+      false
+    );
   }
 
   public void driveFieldRelative(ChassisSpeeds chassisSpeed) {

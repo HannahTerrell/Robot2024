@@ -75,7 +75,7 @@ public class RobotContainer {
   private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
 
   private boolean m_wasAimPressedBefore = false;
-  private PIDController m_rotationAimController = new PIDController(0.035, 0.015, 0.03);
+  private PIDController m_rotationAimController = new PIDController(0.015, 0.00001, 0.0040);
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -120,7 +120,7 @@ public class RobotContainer {
     m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
 
-    SmartDashboard.putData(m_rotationAimController);
+    SmartDashboard.putData("Aim PID Controller", m_rotationAimController);
   }
 
   public void teleopInit() {
@@ -139,6 +139,8 @@ public class RobotContainer {
           m_arm.adjustAim(-m_operatorController.getRawAxis(m_armAxis) * 1);
         },
       m_arm));
+
+    m_shooter.setDefaultCommand(new RunCommand(() -> {}, m_shooter));
   }
 
   /**
@@ -223,12 +225,11 @@ public class RobotContainer {
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
-    double xSpeed = MathUtil.applyDeadband(-m_driverController.getLeftY(), 0.02);
-
-    double ySpeed = MathUtil.applyDeadband(-m_driverController.getLeftX(), 0.02);
+    double xSpeed = Math.pow(MathUtil.applyDeadband(-m_driverController.getLeftY(), 0.02), 3);
+    double ySpeed = Math.pow(MathUtil.applyDeadband(-m_driverController.getLeftX(), 0.02), 3);
 
     double rotWODeadband = -m_driverController.getRightX();
-    double rot = MathUtil.applyDeadband(rotWODeadband, 0.02);
+    double rot = Math.pow(MathUtil.applyDeadband(rotWODeadband, 0.02), 3);
 
     double limelight_tx = m_limelight.getTargetX();
 

@@ -19,14 +19,19 @@
           },
           "open": true
         },
+        "PIDController[3]": {
+          "open": true
+        },
         "open": true
       }
     },
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Aim PID Controller": "PIDController",
       "/SmartDashboard/Arm/Position Controller": "PIDController",
       "/SmartDashboard/Auton Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/PIDController[3]": "PIDController",
       "/SmartDashboard/Scheduler": "Scheduler",
       "/SmartDashboard/navX-Sensor[1]": "Gyro"
     },
