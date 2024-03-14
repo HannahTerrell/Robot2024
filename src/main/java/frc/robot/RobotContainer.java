@@ -6,13 +6,8 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
-
-import org.ejml.dense.row.mult.SubmatrixOps_DDRM;
-
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.util.PIDConstants;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
@@ -136,7 +131,7 @@ public class RobotContainer {
 
     m_arm.setDefaultCommand(
         new RunCommand(() -> {
-          m_arm.adjustAim(-m_operatorController.getRawAxis(m_armAxis) * 1);
+          m_arm.adjustAim(-m_operatorController.getRawAxis(m_armAxis) * 1.5);
         },
       m_arm));
 

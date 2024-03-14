@@ -9,10 +9,10 @@
       "FMSInfo": {
         "open": true
       },
-      "Shuffleboard": {
-        "open": true
-      },
       "SmartDashboard": {
+        "Aim PID Controller": {
+          "open": true
+        },
         "Arm": {
           "Position Controller": {
             "open": true

@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Arm extends SubsystemBase {
     private CANSparkMax m_armMotor = new CANSparkMax(16, MotorType.kBrushless);
     private RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
-    private PIDController m_positionController = new PIDController(0.07, 0, 0);
+    private PIDController m_positionController = new PIDController(0.09, 0.02, 0);
     private boolean m_stopped;
 
     // be careful setting this to low (slow) because it also prevents slowing down.
@@ -72,7 +72,7 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean getIsAtSetpoint() {
-        return Math.abs(m_positionController.getPositionError()) < 0.1;
+        return Math.abs(m_positionController.getPositionError()) < 0.4;
     }
 
     public void stop() {
@@ -96,6 +96,7 @@ public class Arm extends SubsystemBase {
 
         SmartDashboard.putNumber("Arm Position", m_armEncoder.getPosition());
         SmartDashboard.putNumber("Arm Setpoint", m_positionController.getSetpoint());
+        SmartDashboard.putNumber("Arm Setpoint Error", m_positionController.getPositionError());
         SmartDashboard.putNumber("Arm Speed", m_armMotor.get());
         SmartDashboard.putBoolean("Arm Is At Setpoint", getIsAtSetpoint());
     }

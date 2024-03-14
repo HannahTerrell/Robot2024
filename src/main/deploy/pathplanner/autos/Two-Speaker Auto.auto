@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "aimArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shootSpeaker"
           }
         },
