@@ -9,7 +9,6 @@ import frc.robot.commands.*;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -70,8 +69,7 @@ public class RobotContainer {
   private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
 
   private boolean m_wasAimPressedBefore = false;
-  private PIDController m_rotationAimController = new PIDController(0.015, 0.00001, 0.0040);
-
+  private RotationAimController m_rotationAimController = new RotationAimController(m_limelight);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -98,6 +96,8 @@ public class RobotContainer {
     final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
     final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Two-Speaker Auto (Podium)");
     final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Three-Speaker Auto (Under Stage)");
+    final PathPlannerAuto m_pathplanner10 = new PathPlannerAuto("Two-Speaker Auto (Non-Amp)");
+
 
 
     //Auton chooser
@@ -112,10 +112,11 @@ public class RobotContainer {
     m_autonChooser.addOption("Three-Speaker Auto (Center, Center)", m_pathplanner5);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Under Stage)", m_pathplanner9);
     m_autonChooser.addOption("Three-Speaker Auto (Amp Side)", m_pathplanner6);
+    m_autonChooser.addOption("Two-Speaker Auto (Non-Amp)", m_pathplanner10);
     m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
 
-    SmartDashboard.putData("Aim PID Controller", m_rotationAimController);
+    SmartDashboard.putData("Aim PID Controller", m_rotationAimController.getInternalController());
   }
 
   public void teleopInit() {
@@ -240,13 +241,7 @@ public class RobotContainer {
         m_rotationAimController.reset();
       }
 
-      rot = m_rotationAimController.calculate(limelight_tx);
-      SmartDashboard.putNumber("Aim rot - pre clamp", rot);
-      rot = MathUtil.clamp(rot, -0.5, 0.5);
-      SmartDashboard.putNumber("Aim rot", rot);
-    } else {
-      SmartDashboard.putNumber("Aim rot - pre clamp", 0);
-      SmartDashboard.putNumber("Aim rot", 0);
+      rot = m_rotationAimController.calculate();
     }
 
     m_wasAimPressedBefore = m_aimButton.getAsBoolean();
