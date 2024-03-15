@@ -7,11 +7,7 @@ import frc.robot.subsystems.Shooter;
 public class ShootSpeaker extends SequentialCommandGroup {
     public ShootSpeaker(Shooter shooter) {
         addCommands(
-            new StartEndCommand(
-                shooter::backfeed,
-                shooter::stopFeed,
-                shooter
-            ).withTimeout(0.15),
+            new ShooterBackfeed(shooter),
             new ShooterSpinUp(shooter),
             new StartEndCommand(
                 shooter::shoot,
