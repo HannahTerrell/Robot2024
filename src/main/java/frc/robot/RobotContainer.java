@@ -45,6 +45,9 @@ public class RobotContainer {
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
   private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
   private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
+  private final ShooterPrep shooterPrep = new ShooterPrep(m_shooter);
+  // private final SplitShoot splitShoot = new SplitShoot(m_shooter);
+
 
   //Auton chooser initiation
   SendableChooser<Command> m_autonChooser;
@@ -57,13 +60,12 @@ public class RobotContainer {
   private final int m_armAxis = XboxController.Axis.kRightY.value;
   private final JoystickButton m_climbUpButton = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton m_climbDownButton = new JoystickButton(m_operatorController, XboxController.Button.kRightBumper.value);
-  private final POVButton m_leftClimbAdjust = new POVButton(m_operatorController, 90);
-  private final POVButton m_rightClimbAdjust = new POVButton(m_operatorController, 270);
   private final JoystickButton m_shootSpeakerButton = new JoystickButton(m_operatorController, XboxController.Button.kX.value);
   private final JoystickButton m_shootAmpButton = new JoystickButton(m_operatorController, XboxController.Button.kY.value);
   private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
   private final JoystickButton m_backfeedButton = new JoystickButton(m_operatorController, 8);
+  private final POVButton m_shooterPrepButton  = new POVButton(m_operatorController, 0);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 7);
   private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
@@ -163,26 +165,14 @@ public class RobotContainer {
       m_climber.stop();
     }, m_climber));
 
-    m_leftClimbAdjust.whileTrue(new StartEndCommand(() -> {
-      m_climber.adjustSide("left");
-    },
-    () -> {
-      m_climber.stop();
-    }, m_climber));
-
-    m_rightClimbAdjust.whileTrue(new StartEndCommand(() -> {
-      m_climber.adjustSide("right");
-    },
-    () -> {
-      m_climber.stop();
-    }, m_climber));
-
     m_shootAmpButton.whileTrue(new StartEndCommand(() -> {
       m_shooter.shootAmp();
     },
     () -> {
       m_shooter.stop();
     }));
+
+    m_shooterPrepButton.whileTrue(shooterPrep);
 
     m_shootSpeakerButton.onTrue(shootSpeaker);
 

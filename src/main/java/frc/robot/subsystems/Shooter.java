@@ -6,7 +6,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,6 +17,7 @@ public class Shooter extends SubsystemBase {
   private double m_shooterSpeed = 0;
   private double m_feedSpeed = 0;
   private SlewRateLimiter m_shooterRateLimiter = new SlewRateLimiter(10);
+  private boolean hasBackfed = false;
 
   private final double SHOOTER_SPEAKER_SPEED = 1;
 
@@ -41,6 +41,7 @@ public class Shooter extends SubsystemBase {
 
   public void feedOnly() {
     m_feedSpeed = 0.5;
+    hasBackfed = false;
   }
 
   public void shootSpeakerOnly() {
@@ -53,6 +54,14 @@ public class Shooter extends SubsystemBase {
 
   public void backfeed() {
     m_feedSpeed = -0.25;
+  }
+
+  public void setHasBackfed() {
+    hasBackfed = true;
+  }
+
+  public boolean getHasBackfed() {
+    return hasBackfed;
   }
 
   public void stop() {
