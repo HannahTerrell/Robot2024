@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 4.36
+      "x": 0.73,
+      "y": 6.64
     },
-    "rotation": -60.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -36,13 +36,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.5
+                  "waitTime": 2.0
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To Podium (Non-Amp)"
+                  "pathName": "To Note (Amp Side)"
                 }
               },
               {
@@ -57,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Podium To Speaker (Non-Amp)"
+            "pathName": "To Speaker (Amp Side)"
           }
         },
         {
@@ -81,7 +81,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Away From Speaker (Non-Amp)"
+            "pathName": "Away From Speaker (Amp Side)"
           }
         }
       ]

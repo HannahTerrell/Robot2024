@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.89,
-        "y": 6.99
+        "x": 0.89,
+        "y": 4.36
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0858396313664542,
-        "y": 6.99
+        "x": 1.3940937283583965,
+        "y": 3.590105413829062
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.8795509328910394,
-        "y": 6.665668032190766
+        "x": 3.3236292113609864,
+        "y": 1.9997004096572308
       },
       "prevControl": {
-        "x": 1.029101865784912,
-        "y": 7.40467948536844
+        "x": 2.1455209692435053,
+        "y": 2.4887822177211314
+      },
+      "nextControl": {
+        "x": 4.501737453478469,
+        "y": 1.51061860159333
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.46935675637733,
+        "y": 1.029085590934715
+      },
+      "prevControl": {
+        "x": 5.756013335388493,
+        "y": 1.0875563631469138
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,25 +46,7 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "Stop Modules",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "stopModules"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 2.5,
@@ -57,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 60.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

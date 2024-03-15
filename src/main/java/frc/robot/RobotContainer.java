@@ -97,6 +97,8 @@ public class RobotContainer {
     final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Two-Speaker Auto (Podium)");
     final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Three-Speaker Auto (Under Stage)");
     final PathPlannerAuto m_pathplanner10 = new PathPlannerAuto("Two-Speaker Auto (Non-Amp)");
+    final PathPlannerAuto m_pathplanner11 = new PathPlannerAuto("Two-Speaker Auto (Amp Side)");
+
 
 
 
@@ -107,12 +109,13 @@ public class RobotContainer {
     m_autonChooser.addOption("Two-Speaker Auto", m_pathplanner3);
     m_autonChooser.addOption("Two-Speaker Auto (Podium)", m_pathplanner8);
     m_autonChooser.addOption("Three-Speaker Auto (Non-Amp)", m_pathplanner1);
+    m_autonChooser.addOption("Two-Speaker Auto (Non-Amp)", m_pathplanner10);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Podium)", m_pathplanner2);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Amp Note)", m_pathplanner4);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Center)", m_pathplanner5);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Under Stage)", m_pathplanner9);
+    m_autonChooser.addOption("Two-Speaker Auto (Amp Side)", m_pathplanner11);
     m_autonChooser.addOption("Three-Speaker Auto (Amp Side)", m_pathplanner6);
-    m_autonChooser.addOption("Two-Speaker Auto (Non-Amp)", m_pathplanner10);
     m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
 
