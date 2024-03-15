@@ -64,7 +64,7 @@ public class Arm extends SubsystemBase {
 
         // this is a linear formula, and doesn't account for a ballistic arc.
         // it would be good to have a couple distances with encoder measurements here.
-        var setpoint = (distance / 4) * 14.5;
+        var setpoint = (distance / 4) * 14.6;
         setpoint = MathUtil.clamp(setpoint, 0, MAX_SETPOINT);
 
         m_positionController.setSetpoint(setpoint);
