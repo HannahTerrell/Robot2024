@@ -133,6 +133,7 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    swerveDrive.getModules()[0].getAngleMotor().getPosition();
   }
 }
  

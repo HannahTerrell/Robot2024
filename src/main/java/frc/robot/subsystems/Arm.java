@@ -64,7 +64,7 @@ public class Arm extends SubsystemBase {
 
         // this is a linear formula, and doesn't account for a ballistic arc.
         // it would be good to have a couple distances with encoder measurements here.
-        var setpoint = (distance / 4) * 14.6;
+        var setpoint = (distance / 4) * 14.0;
         setpoint = MathUtil.clamp(setpoint, 0, MAX_SETPOINT);
 
         m_positionController.setSetpoint(setpoint);
@@ -83,11 +83,12 @@ public class Arm extends SubsystemBase {
     @Override
     public void periodic() {
         if (!m_stopped) {
-            var speed = m_positionController.calculate(m_armEncoder.getPosition());
+            var position = m_armEncoder.getPosition();
+            var speed = m_positionController.calculate(position);
             speed = MathUtil.clamp(speed, -1, 1);
             speed = m_rateLimiter.calculate(speed);
 
-            if (Math.abs(m_positionController.getPositionError()) < 5) {
+            if ((position < 8 && speed < 0) || (position > 42 && speed > 0)) {
                 speed = MathUtil.clamp(speed, -.10, 0.25);
             }
 
