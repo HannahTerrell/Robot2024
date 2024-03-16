@@ -5,7 +5,7 @@
       "x": 1.37,
       "y": 5.54
     },
-    "rotation": 0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -91,13 +91,13 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.5
+                  "waitTime": 2.0
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "To 3rd Note"
+                  "pathName": "Score to Podium"
                 }
               },
               {
@@ -118,7 +118,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3rd Note to Speaker"
+            "pathName": "Podium to Speaker (Center)"
           }
         },
         {

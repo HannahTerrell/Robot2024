@@ -36,7 +36,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 2.5
                 }
               },
               {
@@ -82,6 +82,12 @@
           "type": "path",
           "data": {
             "pathName": "Away From Speaker (Amp Side)"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
           }
         }
       ]
