@@ -211,6 +211,15 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
+    var alliance = DriverStation.getAlliance();
+        
+    if (m_intake.hasNote()) {
+      m_leds.setGreen();
+    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      m_leds.setRed();
+    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
+      m_leds.setBlue();
+    }
   }
 
   public void teleopPeriodic() {
