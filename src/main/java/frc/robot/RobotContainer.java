@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -36,6 +37,7 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
   private final Arm m_arm = new Arm();
   private final Limelight m_limelight = new Limelight();
+  private final LEDs m_leds = new LEDs();
 
   //Commands
   private final AimArm aimArmContinuous = new AimArm(m_arm, m_limelight, true);
@@ -46,8 +48,6 @@ public class RobotContainer {
   private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
   private final StopSystems stopSystems = new StopSystems(m_shooter, m_intake, m_arm);
   private final ShooterPrep shooterPrep = new ShooterPrep(m_shooter);
-  // private final SplitShoot splitShoot = new SplitShoot(m_shooter);
-
 
   //Auton chooser initiation
   SendableChooser<Command> m_autonChooser;
@@ -214,6 +214,15 @@ public class RobotContainer {
   }
 
   public void teleopPeriodic() {
+    var alliance = DriverStation.getAlliance();
+        
+    if (m_intake.hasNote()) {
+      m_leds.setGreen();
+    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      m_leds.setRed();
+    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
+      m_leds.setBlue();
+    }
   }
 
   private void driveWithJoystick(boolean fieldRelative) {

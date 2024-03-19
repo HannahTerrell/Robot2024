@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
+// import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,11 +20,11 @@ public class XCaliper extends TimedRobot {
       PortForwarder.add(port, "limelight.local", port);
     }
 
-    var camera = CameraServer.startAutomaticCapture();
-    var server = CameraServer.getServer();
-    camera.setResolution(160, 120);
-    camera.setFPS(40);
-    server.setSource(camera);
+    // var camera = CameraServer.startAutomaticCapture();
+    // var server = CameraServer.getServer();
+    // camera.setResolution(160, 120);
+    // camera.setFPS(40);
+    // server.setSource(camera);
   }
 
   public void robotPeriodic() {
