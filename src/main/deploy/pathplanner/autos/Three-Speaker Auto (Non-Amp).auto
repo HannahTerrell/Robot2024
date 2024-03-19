@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To Podium (Non-Amp)"
+                  "pathName": "Speaker To 3 (Non-Amp)"
                 }
               },
               {
@@ -51,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Podium To Speaker (Non-Amp)"
+            "pathName": "3 To Speaker (Non-Amp)"
           }
         },
         {
@@ -79,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To Center (Non-Amp)"
+                  "pathName": "Speaker To 8"
                 }
               },
               {
@@ -94,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Center To Speaker (Non-Amp)"
+            "pathName": "8 To Speaker"
           }
         },
         {

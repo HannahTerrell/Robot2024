@@ -99,6 +99,7 @@ public class RobotContainer {
     final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Two-Speaker Auto (Podium)");
     // final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Three-Speaker Auto (Under Stage)");
     final PathPlannerAuto m_pathplanner10 = new PathPlannerAuto("Two-Speaker Auto (Non-Amp)");
+    final PathPlannerAuto m_pathplanner13 = new PathPlannerAuto("Two-Speaker Toss Auto");
     final PathPlannerAuto m_pathplanner11 = new PathPlannerAuto("Two-Speaker Auto (Amp Side)");
     final PathPlannerAuto m_pathplanner12 = new PathPlannerAuto("Three-Speaker Auto (Podium, With Run)");
 
@@ -112,6 +113,7 @@ public class RobotContainer {
     m_autonChooser.addOption("Two-Speaker Auto (Center, Podium)", m_pathplanner8);
     // m_autonChooser.addOption("Three-Speaker Auto (Non-Amp, Center)", m_pathplanner1);
     m_autonChooser.addOption("Two-Speaker Auto (Non-Amp, Podium)", m_pathplanner10);
+    m_autonChooser.addOption("Two-Speaker Auto With Toss (Non-Amp, Center)", m_pathplanner13);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Podium)", m_pathplanner2);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Podium, With Run)", m_pathplanner12);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Amp Note)", m_pathplanner4);

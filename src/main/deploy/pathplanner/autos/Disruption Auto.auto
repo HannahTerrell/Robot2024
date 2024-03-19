@@ -2,15 +2,33 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.58,
-      "y": 2.46
+      "x": 0.6924444618120005,
+      "y": 4.408696224799858
     },
-    "rotation": 0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "aimArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shootSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "armDown"
+          }
+        },
         {
           "type": "path",
           "data": {

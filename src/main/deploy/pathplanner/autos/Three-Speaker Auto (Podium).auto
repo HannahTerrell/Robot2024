@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To Note (Center)"
+                  "pathName": "Speaker To 2"
                 }
               },
               {
@@ -57,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note To Speaker (Center)"
+            "pathName": "2 To Speaker"
           }
         },
         {
@@ -97,7 +97,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Score to Podium"
+                  "pathName": "Score to 3"
                 }
               },
               {
@@ -118,7 +118,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Podium To Speaker (Center)"
+            "pathName": "3 To Speaker (Center)"
           }
         },
         {

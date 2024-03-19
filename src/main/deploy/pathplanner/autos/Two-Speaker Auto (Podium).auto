@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To Podium (Center)"
+                  "pathName": "Speaker To 3 (Center)"
                 }
               },
               {
@@ -51,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Podium To Speaker (Center)"
+            "pathName": "3 To Speaker (Center)"
           }
         },
         {

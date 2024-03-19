@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
-      "y": 6.64
+      "x": 0.77430354290908,
+      "y": 4.35
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -30,12 +30,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "stopSystems"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -48,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To 4 (Amp Side)"
+                  "pathName": "Speaker To 8"
                 }
               },
               {
@@ -63,31 +57,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "4 To Score"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "aimArm"
+            "pathName": "8 to Toss"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "armDown"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopSystems"
           }
         },
         {
@@ -103,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Score To 1"
+                  "pathName": "Toss to 7"
                 }
               },
               {
@@ -118,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1 to Score"
+            "pathName": "7 to Score"
           }
         },
         {
