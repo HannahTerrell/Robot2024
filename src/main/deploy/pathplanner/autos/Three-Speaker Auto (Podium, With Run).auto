@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "aimArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shootSpeaker"
           }
         },
@@ -118,7 +124,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Podium to Speaker (Center)"
+            "pathName": "Podium To Speaker (Center)"
           }
         },
         {
@@ -146,9 +152,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Away From Speaker (Center)"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.5
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "To Center (Under Stage)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAndFeed"
+                }
+              }
+            ]
           }
         }
       ]
