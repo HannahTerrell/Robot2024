@@ -52,4 +52,8 @@ public class XCaliper extends TimedRobot {
     m_robotContainer.teleopPeriodic();
   }
   
+  @Override
+  public void testInit() {
+    m_robotContainer.testInit();
+  }
 }
