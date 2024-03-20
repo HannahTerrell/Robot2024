@@ -16,8 +16,11 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.AutonConstants;
 import swervelib.SwerveDrive;
+import swervelib.SwerveDriveTest;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -129,6 +132,13 @@ public class Drivetrain extends SubsystemBase {
 
   public void setMotorBrake(boolean brake) {
     swerveDrive.setMotorIdleMode(brake);
+  }
+
+  public SysIdRoutine getSysIdRoutine()
+  {
+    return SwerveDriveTest.setDriveSysIdRoutine(
+      new Config(),
+      this, swerveDrive, 12);
   }
 
   @Override
