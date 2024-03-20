@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import edu.wpi.first.wpilibj.DriverStation;
 
 /**
@@ -51,6 +52,9 @@ public class RobotContainer {
 
   //Auton chooser initiation
   SendableChooser<Command> m_autonChooser;
+
+  // SysId chooser
+  SendableChooser<SysIdCommandPair> m_sysIdChooser;
 
   //Controllers
   private final XboxController m_driverController = new XboxController(0);
@@ -125,6 +129,8 @@ public class RobotContainer {
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
 
     SmartDashboard.putData("Aim PID Controller", m_rotationAimController.getInternalController());
+
+    configureSysIdChooser();
   }
 
   public void teleopInit() {
@@ -280,5 +286,22 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Have Note?", !m_intake.hasNote());
 
     SmartDashboard.putData(CommandScheduler.getInstance());
+  }
+
+  public void configureSysIdChooser() {
+    m_sysIdChooser = new SendableChooser<>();
+
+    var drivetrain = m_swerve.getSysIdRoutine();
+    m_sysIdChooser.addOption("Drivetrain - Drive - Quasistatic", new SysIdCommandPair(drivetrain.quasistatic(Direction.kForward), drivetrain.quasistatic(Direction.kReverse)));
+    m_sysIdChooser.addOption("Drivetrain - Drive - Dynamic", new SysIdCommandPair(drivetrain.dynamic(Direction.kForward), drivetrain.dynamic(Direction.kReverse)));
+
+    SmartDashboard.putData("SysId Chooser", m_sysIdChooser);
+  }
+
+  public void testInit() {
+    var sysIdCommands = m_sysIdChooser.getSelected();
+
+    new POVButton(m_driverController, 0).whileTrue(sysIdCommands.getForward());
+    new POVButton(m_driverController, 180).whileTrue(sysIdCommands.getReverse());
   }
 }
