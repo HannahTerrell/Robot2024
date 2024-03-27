@@ -23,7 +23,7 @@ public class Arm extends SubsystemBase {
     private SlewRateLimiter m_rateLimiter = new SlewRateLimiter(6);
 
     private final double MAX_SETPOINT = 45;
-    private final double AIM_ADJUSTMENT = 0.10;
+    private final double AIM_ADJUSTMENT = 0.05;
 
 
     public Arm() {
