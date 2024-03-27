@@ -65,7 +65,9 @@ public class RobotContainer {
   private final JoystickButton m_feedOnlyButton = new JoystickButton(m_operatorController, XboxController.Button.kB.value);
   private final JoystickButton m_shootOnlyButton = new JoystickButton(m_operatorController, XboxController.Button.kA.value);
   private final JoystickButton m_backfeedButton = new JoystickButton(m_operatorController, 8);
-  private final POVButton m_shooterPrepButton  = new POVButton(m_operatorController, 0);
+  private final POVButton m_shooterPrepButton  = new POVButton(m_operatorController, 90);
+  private final POVButton m_armAutoAimAdjustUpButton = new POVButton(m_operatorController, 0);
+  private final POVButton m_armAutoAimAdjustDownButton = new POVButton(m_operatorController, 180);
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 7);
   private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
@@ -208,6 +210,14 @@ public class RobotContainer {
     }));
 
     m_aimButton.whileTrue(aimArmContinuous);
+
+    m_armAutoAimAdjustUpButton.onTrue(new InstantCommand(() -> {
+      m_arm.autoAimAdjustUp();
+    }));
+
+    m_armAutoAimAdjustDownButton.onTrue(new InstantCommand(() -> {
+      m_arm.autoAimAdjustDown();
+    }));
   }
 
   public void autonomousPeriodic() {

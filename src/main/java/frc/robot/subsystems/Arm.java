@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.Hashtable;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -8,13 +7,15 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
     private CANSparkMax m_armMotor = new CANSparkMax(16, MotorType.kBrushless);
     private RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
+    private ArmAimHelper m_armAimHelper = new ArmAimHelper();
+    private NetworkTableEntry m_armSetpointAdjustmentEntry;
     private PIDController m_positionController = new PIDController(0.1, 0.03, 0);
     private boolean m_stopped;
 
@@ -22,6 +23,8 @@ public class Arm extends SubsystemBase {
     private SlewRateLimiter m_rateLimiter = new SlewRateLimiter(6);
 
     private final double MAX_SETPOINT = 45;
+    private final double AIM_ADJUSTMENT = 0.10;
+
 
     public Arm() {
         super();
@@ -29,8 +32,22 @@ public class Arm extends SubsystemBase {
         m_armMotor.getEncoder().setPosition(0);
         setPositionDown();
 
-        SendableRegistry.setName(m_positionController, "Arm/Position Controller");
-        SmartDashboard.putData(m_positionController);
+        SmartDashboard.putData("Arm/Position Controller", m_positionController);
+        SmartDashboard.putNumber("Arm/Position Adjustment", 0);
+
+        m_armSetpointAdjustmentEntry = SmartDashboard.getEntry("Arm/Position Adjustment");
+        m_armSetpointAdjustmentEntry.setDefaultDouble(0);
+        m_armSetpointAdjustmentEntry.setPersistent();
+    }
+
+    public void autoAimAdjustDown() {
+        // name appears reversed, but to aim lower, we need to bump our setpoint up
+        m_armSetpointAdjustmentEntry.setDouble(m_armSetpointAdjustmentEntry.getDouble(0) + AIM_ADJUSTMENT);
+    }
+
+    public void autoAimAdjustUp() {
+        // name appears reversed, but to aim lower, we need to bump our setpoint up
+        m_armSetpointAdjustmentEntry.setDouble(m_armSetpointAdjustmentEntry.getDouble(0) - AIM_ADJUSTMENT);
     }
 
     public void setPositionDown() {
@@ -49,22 +66,7 @@ public class Arm extends SubsystemBase {
     }
 
     public void setAimpointSpeaker(double distance) {
-        // distance/setpoint
-        var actuals = new Hashtable<Double, Double>();
-
-        // Collected 2024-03-08 Scott
-        actuals.put(0.0, 0.0);
-        actuals.put(2.0, 13.3);
-
-        // I want to have a table here of distances/setpoints that we have seen work
-        // and then have the arm pick the closest two for that distance, and use
-        // the combinations of the two setpoints, proportional to how close it is to
-        // each.
-        // but I haven't gotten there yet.
-
-        // this is a linear formula, and doesn't account for a ballistic arc.
-        // it would be good to have a couple distances with encoder measurements here.
-        var setpoint = (distance / 4) * 15.0;
+        var setpoint = m_armAimHelper.getArmSetpoint(distance) * (1 + m_armSetpointAdjustmentEntry.getDouble(0));
         setpoint = MathUtil.clamp(setpoint, 0, MAX_SETPOINT);
 
         m_positionController.setSetpoint(setpoint);
