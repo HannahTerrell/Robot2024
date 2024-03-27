@@ -37,7 +37,6 @@ public class Arm extends SubsystemBase {
 
         m_armSetpointAdjustmentEntry = SmartDashboard.getEntry("Arm/Position Adjustment");
         m_armSetpointAdjustmentEntry.setDefaultDouble(0);
-        m_armSetpointAdjustmentEntry.setPersistent();
     }
 
     public void autoAimAdjustDown() {
