@@ -24,7 +24,7 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     super();
     m_shootMotor.setNeutralMode(NeutralModeValue.Brake);
-    m_shootFollower.setControl(new Follower(m_shootMotor.getDeviceID(), true));
+    m_shootFollower.setControl(new Follower(m_shootMotor.getDeviceID(), false));
     m_shootFollower.setNeutralMode(NeutralModeValue.Brake);
     m_feedMotor.setIdleMode(IdleMode.kBrake);
   }

@@ -5,7 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.subsystems.Limelight;
 
 public class RotationAimController {
-    private PIDController m_rotationAimController = new PIDController(0.015, 0.00001, 0.0040);
+    private PIDController m_rotationAimController = new PIDController(0.013, 0.00001, 0.0040);
     private Limelight limelight;
 
     public RotationAimController(Limelight limelight) {
