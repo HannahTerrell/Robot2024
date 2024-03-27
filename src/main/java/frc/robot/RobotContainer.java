@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.subsystems.*;
 import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.DigitalOutput;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
@@ -36,12 +37,13 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter();
   private final Climber m_climber = new Climber();
   private final Arm m_arm = new Arm();
-  private final Limelight m_limelight = new Limelight();
+  private final TagLimelight m_tagLimelight = new TagLimelight();
+  // private final NoteLimelight m_noteLimelight = new NoteLimelight();
   private final LEDs m_leds = new LEDs();
 
   //Commands
-  private final AimArm aimArmContinuous = new AimArm(m_arm, m_limelight, true);
-  private final AimArm aimArm = new AimArm(m_arm, m_limelight, false);
+  private final AimArm aimArmContinuous = new AimArm(m_arm, m_tagLimelight, true);
+  private final AimArm aimArm = new AimArm(m_arm, m_tagLimelight, false);
   private final ArmDown armDown = new ArmDown(m_arm);
   private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
@@ -51,6 +53,9 @@ public class RobotContainer {
 
   //Auton chooser initiation
   SendableChooser<Command> m_autonChooser;
+
+  //LED relays
+  private DigitalOutput m_greenRelay = new DigitalOutput(2);
 
   //Controllers
   private final XboxController m_driverController = new XboxController(0);
@@ -71,7 +76,7 @@ public class RobotContainer {
   private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
 
   private boolean m_wasAimPressedBefore = false;
-  private RotationAimController m_rotationAimController = new RotationAimController(m_limelight);
+  private RotationAimController m_rotationAimController = new RotationAimController(m_tagLimelight);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -211,27 +216,11 @@ public class RobotContainer {
   }
 
   public void autonomousPeriodic() {
-    var alliance = DriverStation.getAlliance();
-        
-    if (m_intake.hasNote()) {
-      m_leds.setGreen();
-    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      m_leds.setRed();
-    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
-      m_leds.setBlue();
-    }
+
   }
 
   public void teleopPeriodic() {
-    var alliance = DriverStation.getAlliance();
-        
-    if (m_intake.hasNote()) {
-      m_leds.setGreen();
-    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-      m_leds.setRed();
-    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
-      m_leds.setBlue();
-    }
+
   }
 
   private void driveWithJoystick(boolean fieldRelative) {
@@ -241,7 +230,7 @@ public class RobotContainer {
     double rotWODeadband = -m_driverController.getRightX();
     double rot = Math.pow(MathUtil.applyDeadband(rotWODeadband, 0.02), 3);
 
-    double limelight_tx = m_limelight.getTargetX();
+    double limelight_tx = m_tagLimelight.getTargetX();
 
     if (m_precisionButton.getAsBoolean()) {
       var multiplier = 0.75;
@@ -276,9 +265,23 @@ public class RobotContainer {
 
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    m_limelight.periodic();
-    SmartDashboard.putBoolean("Have Note?", !m_intake.hasNote());
-
+    m_tagLimelight.periodic();
+    SmartDashboard.putBoolean("Have Note?", m_intake.hasNote());
     SmartDashboard.putData(CommandScheduler.getInstance());
+
+    var alliance = DriverStation.getAlliance();
+    if (m_intake.hasNote()) {
+      m_leds.setGreen();
+    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+      m_leds.setRed();
+    } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Blue) {
+      m_leds.setBlue();
+    }
+
+    if (m_intake.hasNote()) {
+      m_greenRelay.set(true);
+    } else {
+      m_greenRelay.set(false);
+    }
   }
 }

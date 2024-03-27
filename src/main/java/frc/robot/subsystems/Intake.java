@@ -39,7 +39,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean hasNote() {
-    return m_sensor.get();
+    return !m_sensor.get();
   }
 
   public void stop() {

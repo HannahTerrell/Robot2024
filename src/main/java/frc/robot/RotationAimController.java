@@ -2,13 +2,13 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.TagLimelight;
 
 public class RotationAimController {
-    private PIDController m_rotationAimController = new PIDController(0.013, 0.00001, 0.0040);
-    private Limelight limelight;
+    private PIDController m_rotationAimController = new PIDController(0.009, 0.00001, 0.0040);
+    private TagLimelight limelight;
 
-    public RotationAimController(Limelight limelight) {
+    public RotationAimController(TagLimelight limelight) {
         super();
         this.limelight = limelight;
     }

@@ -2,14 +2,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.TagLimelight;
 
 public class AimArm extends Command {
-    private Limelight limelight;
+    private TagLimelight limelight;
     private Arm arm;
     private boolean continuous;
 
-    public AimArm(Arm arm, Limelight limelight, boolean continuous) {
+    public AimArm(Arm arm, TagLimelight limelight, boolean continuous) {
         super();
         this.arm = arm;
         this.limelight = limelight;

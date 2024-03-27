@@ -3,13 +3,12 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.TargetType;
-
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class Limelight extends SubsystemBase{
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+public class TagLimelight extends SubsystemBase{
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-tags");
     NetworkTableEntry tid = table.getEntry("tid");
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
@@ -93,12 +92,12 @@ public class Limelight extends SubsystemBase{
         double area = ta.getDouble(0.0);
 
         //post to smart dashboard
-        SmartDashboard.putNumber("LimelightX", x);
-        SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightDist", getTargetDist());
-        SmartDashboard.putNumber("getTargetDistBlended", getTargetDistBlended());
-        SmartDashboard.putNumber("LimelightTag", getAprilTag());
-        SmartDashboard.putNumber("LimelightArea", area);
-        SmartDashboard.putString("LimelightLastTargetType", getLastTargetType().toString());
+        SmartDashboard.putNumber("Tag Limelight X", x);
+        SmartDashboard.putNumber("Tag Limelight Y", y);
+        SmartDashboard.putNumber("Tag Limelight Dist", getTargetDist());
+        SmartDashboard.putNumber("Tag DistBlended", getTargetDistBlended());
+        SmartDashboard.putNumber("Tag Limelight ID", getAprilTag());
+        SmartDashboard.putNumber("Tag Limelight Area", area);
+        SmartDashboard.putString("Tag Limelight LastTargetType", getLastTargetType().toString());
     }
 }
