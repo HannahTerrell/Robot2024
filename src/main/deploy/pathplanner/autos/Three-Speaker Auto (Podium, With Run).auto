@@ -152,7 +152,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.5
+                  "waitTime": 3.3
                 }
               },
               {
@@ -168,6 +168,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopModules"
           }
         }
       ]

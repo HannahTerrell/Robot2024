@@ -217,6 +217,7 @@ public class RobotContainer {
     }));
 
     m_aimButton.whileTrue(aimArmContinuous);
+    
   }
 
   public void autonomousPeriodic() {

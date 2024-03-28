@@ -26,6 +26,12 @@
         {
           "type": "named",
           "data": {
+            "name": "armDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "stopSystems"
           }
         },
@@ -75,13 +81,38 @@
         {
           "type": "named",
           "data": {
+            "name": "armDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "stopSystems"
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Away From Speaker (Non-Amp)"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.5
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Away From Speaker (Non-Amp)"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAndFeed"
+                }
+              }
+            ]
           }
         }
       ]
