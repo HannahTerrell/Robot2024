@@ -22,6 +22,12 @@
           "data": {
             "commands": [
               {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.5
+                }
+              },
+              {
                 "type": "path",
                 "data": {
                   "pathName": "Speaker To 3 (Center)"

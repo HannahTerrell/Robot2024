@@ -14,7 +14,19 @@
         {
           "type": "named",
           "data": {
+            "name": "aimArm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "shootSpeaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "armDown"
           }
         },
         {
@@ -30,7 +42,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.8
+                  "waitTime": 2.0
                 }
               },
               {
@@ -52,12 +64,6 @@
           "type": "named",
           "data": {
             "name": "stopSystems"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 To Speaker"
           }
         },
         {
@@ -91,7 +97,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 2.0
+                  "waitTime": 2.5
                 }
               },
               {

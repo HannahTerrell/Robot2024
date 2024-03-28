@@ -38,13 +38,14 @@ public class RobotContainer {
   private final Climber m_climber = new Climber();
   private final Arm m_arm = new Arm();
   private final TagLimelight m_tagLimelight = new TagLimelight();
-  // private final NoteLimelight m_noteLimelight = new NoteLimelight();
+  private final NoteLimelight m_noteLimelight = new NoteLimelight();
   private final LEDs m_leds = new LEDs();
 
   //Commands
   private final AimArm aimArmContinuous = new AimArm(m_arm, m_tagLimelight, true);
   private final AimArm aimArm = new AimArm(m_arm, m_tagLimelight, false);
   private final ArmDown armDown = new ArmDown(m_arm);
+  private final AimRotation aimRotate = new AimRotation(m_swerve, m_tagLimelight);
   private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
   private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
@@ -74,9 +75,11 @@ public class RobotContainer {
   private final JoystickButton m_aimButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
   private final JoystickButton m_resetFieldRelativeButton = new JoystickButton(m_driverController, 7);
   private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+  private final JoystickButton m_noteAimButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
 
   private boolean m_wasAimPressedBefore = false;
   private RotationAimController m_rotationAimController = new RotationAimController(m_tagLimelight);
+  private NoteAimController m_noteRotationController = new NoteAimController(m_noteLimelight);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -89,6 +92,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("shootSpeaker", shootSpeaker);
     NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
     NamedCommands.registerCommand("aimArm", aimArm);
+    NamedCommands.registerCommand("aimRotate", aimRotate);
     NamedCommands.registerCommand("armDown", armDown);
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
@@ -230,7 +234,8 @@ public class RobotContainer {
     double rotWODeadband = -m_driverController.getRightX();
     double rot = Math.pow(MathUtil.applyDeadband(rotWODeadband, 0.02), 3);
 
-    double limelight_tx = m_tagLimelight.getTargetX();
+    double tagLimelight_tx = m_tagLimelight.getTargetX();
+    double noteLimelight_tx = m_noteLimelight.getTargetX();
 
     if (m_precisionButton.getAsBoolean()) {
       var multiplier = 0.75;
@@ -239,12 +244,16 @@ public class RobotContainer {
       rot *= multiplier;
     }
 
-    if (m_aimButton.getAsBoolean() && limelight_tx != 0) {
+    if (m_aimButton.getAsBoolean() && tagLimelight_tx != 0) {
       if (!m_wasAimPressedBefore) {
         m_rotationAimController.reset();
       }
 
       rot = m_rotationAimController.calculate();
+    }
+
+    if (m_noteAimButton.getAsBoolean() && noteLimelight_tx != 0) {
+      rot = m_noteRotationController.calculate();
     }
 
     m_wasAimPressedBefore = m_aimButton.getAsBoolean();
