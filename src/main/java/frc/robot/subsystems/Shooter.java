@@ -97,7 +97,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    m_shootMotor.set(m_shooterRateLimiter.calculate(m_shooterSpeed));
+    m_shootMotor.setVoltage(m_shooterRateLimiter.calculate(m_shooterSpeed) * 12);
     m_feedMotor.set(m_feedSpeed);
     SmartDashboard.putNumber("Shooter/Speed", m_shootMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Shooter/Feed", m_feedMotor.getEncoder().getVelocity());
