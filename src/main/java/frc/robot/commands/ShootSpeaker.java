@@ -13,7 +13,7 @@ public class ShootSpeaker extends SequentialCommandGroup {
                 shooter::shoot,
                 shooter::stop,
                 shooter
-            ).withTimeout(1)
+            ).withTimeout(0.25)
         );
     }
 

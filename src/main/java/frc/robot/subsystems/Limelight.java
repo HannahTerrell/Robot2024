@@ -9,7 +9,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight extends SubsystemBase{
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-tags");
     NetworkTableEntry tid = table.getEntry("tid");
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
@@ -24,11 +24,13 @@ public class Limelight extends SubsystemBase{
         return ty.getDouble(0);
     }
 
-    public double getTargetDistBlended() {
+    // private. Not dependable yet.
+    private double getTargetDistBlended() {
         return (getTargetY() + getTargetA()) / 2;
     }
 
-    public double getTargetDist() {
+    // private. Not dependable yet.
+    private double getTargetDist() {
         var y = getTargetY();
         if (y == -1) return 0;
 

@@ -16,8 +16,12 @@ public class XCaliper extends TimedRobot {
   public void robotInit() {
     m_robotContainer = new RobotContainer();
 
-    for (int port = 5800; port <= 5807; port++) {
-      PortForwarder.add(port, "limelight.local", port);
+    for (int port = 5800; port <= 5801; port++) {
+      PortForwarder.add(port, "limelight-tags.local", port);
+    }
+
+    for (int port = 5802; port <= 5804; port++) {
+      PortForwarder.add(port, "limelight-notes.local", port);
     }
 
     // var camera = CameraServer.startAutomaticCapture();

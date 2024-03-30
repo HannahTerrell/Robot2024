@@ -74,6 +74,7 @@ public class RobotContainer {
 
   private boolean m_wasAimPressedBefore = false;
   private RotationAimController m_rotationAimController = new RotationAimController(m_limelight);
+  private ArmAimHelper m_armAimHelper = new ArmAimHelper();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -290,5 +291,7 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Have Note?", !m_intake.hasNote());
 
     SmartDashboard.putData(CommandScheduler.getInstance());
+
+    SmartDashboard.putNumber("Arm/Auto Aim Setpoint", m_armAimHelper.getArmSetpoint(m_limelight).getFirst());
   }
 }

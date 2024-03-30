@@ -64,8 +64,9 @@ public class Arm extends SubsystemBase {
                 MathUtil.clamp(m_positionController.getSetpoint() + rate, 0, MAX_SETPOINT));
     }
 
-    public void setAimpointSpeaker(double distance) {
-        var setpoint = m_armAimHelper.getArmSetpoint(distance) * (1 + m_armSetpointAdjustmentEntry.getDouble(0));
+    public void setAimpointSpeaker(Limelight limelight) {
+        var setpointAndSpeed = m_armAimHelper.getArmSetpoint(limelight);
+        var setpoint = setpointAndSpeed.getFirst() * (1 + m_armSetpointAdjustmentEntry.getDouble(0));
         setpoint = MathUtil.clamp(setpoint, 0, MAX_SETPOINT);
 
         m_positionController.setSetpoint(setpoint);
