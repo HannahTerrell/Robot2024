@@ -1,40 +1,53 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RotationAimController;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.TagLimelight;
+import frc.robot.subsystems.Limelight;
 
+// this command is continuous. Use the Limelight.getAimedAtTargetTrigger to end the command
 public class AimRotation extends Command {
-    private RotationAimController controller;
+    private final static PIDController controller = new PIDController(0.007, 0.00001, 0.0040);
     private Drivetrain drivetrain;
-    private TagLimelight limelight; 
+    private Limelight limelight;
 
-    public AimRotation(Drivetrain drivetrain, TagLimelight limelight) {
+    public AimRotation(Drivetrain drivetrain, Limelight limelight) {
         super();
         this.drivetrain = drivetrain;
         this.limelight = limelight;
-        addRequirements(drivetrain);
-        controller = new RotationAimController(limelight);
     }
 
     @Override
     public void initialize() {
         controller.reset();
+        drivetrain.setRotationOverrideSupplier(this::getRotationOverride);
     }
 
     @Override
     public void execute() {
-        drivetrain.drive(0, 0, controller.calculate());
+        // work is applied as an override in the Drivetrain drive methods.
     }
 
     @Override
-    public boolean isFinished() {
-        return Math.abs(limelight.getTargetX()) < 3; 
+    public void end(boolean interrupted) {
+        controller.reset();
+        drivetrain.setRotationOverrideSupplier(null);
     }
 
-    // @Override
-    // public void end(boolean interrupted) {
-    //     super.end(interrupted);
-    // }
+    public static PIDController getInternalController() {
+        return controller;
+    }
+
+    private Rotation2d getRotationOverride()
+    {
+        var targetX = limelight.getTargetX();
+        if (targetX == 0) return null;
+
+        var rot = controller.calculate(limelight.getTargetX());
+        rot = MathUtil.clamp(rot, -0.5, 0.5);
+
+        return Rotation2d.fromRadians(rot * drivetrain.getMaximumAngularVelocity());
+    }
 }

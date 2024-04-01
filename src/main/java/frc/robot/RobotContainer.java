@@ -45,7 +45,7 @@ public class RobotContainer {
   private final AimArm aimArmContinuous = new AimArm(m_arm, m_tagLimelight, true);
   private final AimArm aimArm = new AimArm(m_arm, m_tagLimelight, false);
   private final ArmDown armDown = new ArmDown(m_arm);
-  private final AimRotation aimRotate = new AimRotation(m_swerve, m_tagLimelight);
+  private final AimRotation aimRotateTags = new AimRotation(m_swerve, m_tagLimelight);
   private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
   private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
@@ -79,9 +79,6 @@ public class RobotContainer {
   private final JoystickButton m_precisionButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
   private final JoystickButton m_noteAimButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
 
-  private boolean m_wasAimPressedBefore = false;
-  private RotationAimController m_rotationAimController = new RotationAimController(m_tagLimelight);
-  private NoteAimController m_noteRotationController = new NoteAimController(m_noteLimelight);
   private ArmAimHelper m_armAimHelper = new ArmAimHelper();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -90,12 +87,12 @@ public class RobotContainer {
     configureBindings();
 
     //Commands for PathPlanner
-    NamedCommands.registerCommand("stopModules", new InstantCommand(() -> {m_swerve.stopModules();}));
+    NamedCommands.registerCommand("stopModules", new InstantCommand(() -> {}));
     NamedCommands.registerCommand("stopSystems", stopSystems);
     NamedCommands.registerCommand("shootSpeaker", shootSpeaker);
     NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
     NamedCommands.registerCommand("aimArm", aimArm);
-    NamedCommands.registerCommand("aimRotate", aimRotate);
+    NamedCommands.registerCommand("aimRotate", aimRotateTags);
     NamedCommands.registerCommand("armDown", armDown);
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
@@ -136,7 +133,7 @@ public class RobotContainer {
     // m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
 
-    SmartDashboard.putData("Aim PID Controller", m_rotationAimController.getInternalController());
+    SmartDashboard.putData("Aim PID Controller", AimRotation.getInternalController());
   }
 
   public void teleopInit() {
@@ -220,6 +217,8 @@ public class RobotContainer {
     }));
 
     m_aimButton.whileTrue(aimArmContinuous);
+    m_aimButton.whileTrue(aimRotateTags);
+    m_noteAimButton.whileTrue(new ChaseNote(m_swerve, m_arm, m_shooter, m_intake, m_noteLimelight, 1));
 
     m_armAutoAimAdjustUpButton.onTrue(new InstantCommand(() -> {
       m_arm.autoAimAdjustUp();
@@ -245,31 +244,12 @@ public class RobotContainer {
     double rotWODeadband = -m_driverController.getRightX();
     double rot = Math.pow(MathUtil.applyDeadband(rotWODeadband, 0.02), 3);
 
-    double tagLimelight_tx = m_tagLimelight.getTargetX();
-    double noteLimelight_tx = m_noteLimelight.getTargetX();
-
     if (m_precisionButton.getAsBoolean()) {
       var multiplier = 0.75;
       xSpeed *= multiplier;
       ySpeed *= multiplier;
       rot *= multiplier;
     }
-
-    if (m_aimButton.getAsBoolean() && tagLimelight_tx != 0) {
-      if (!m_wasAimPressedBefore) {
-        m_rotationAimController.reset();
-      }
-
-      rot = m_rotationAimController.calculate();
-    }
-
-    if (m_noteAimButton.getAsBoolean() && noteLimelight_tx != 0) {
-      rot = m_noteRotationController.calculate();
-    }
-
-    m_wasAimPressedBefore = m_aimButton.getAsBoolean();
-
-    SmartDashboard.putNumber("Teleop rot", rot);
     
     m_swerve.drive(xSpeed, ySpeed, rot);
   }
@@ -286,11 +266,11 @@ public class RobotContainer {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     m_tagLimelight.periodic();
-    SmartDashboard.putBoolean("Have Note?", m_intake.hasNote());
+    SmartDashboard.putBoolean("Have Note?", m_shooter.hasNote());
     SmartDashboard.putData(CommandScheduler.getInstance());
 
     var alliance = DriverStation.getAlliance();
-    if (m_intake.hasNote()) {
+    if (m_shooter.hasNote()) {
       m_leds.setGreen();
     } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
       m_leds.setRed();
@@ -298,7 +278,7 @@ public class RobotContainer {
       m_leds.setBlue();
     }
 
-    if (m_intake.hasNote()) {
+    if (m_shooter.hasNote()) {
       m_greenRelay.set(true);
     } else {
       m_greenRelay.set(false);

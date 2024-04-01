@@ -1,53 +1,17 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.TargetType;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.TargetType;
 
-public class TagLimelight extends SubsystemBase{
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight-tags");
-    NetworkTableEntry tid = table.getEntry("tid");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
+public class TagLimelight extends Limelight {
     private int m_lastAprilTag = 0;
+    private NetworkTableEntry tid;
 
-    public double getTargetX() {
-        return tx.getDouble(0);
-    }
+    public TagLimelight() {
+        super("limelight-tags");
 
-    public double getTargetY() {
-        return ty.getDouble(0);
-    }
-
-    public double getTargetDistBlended() {
-        return (getTargetY() + getTargetA()) / 2;
-    }
-
-    public double getTargetDist() {
-        var y = getTargetY();
-        if (y == -1) return 0;
-
-        var ty = -y;
-
-        if (ty < 26) { // 2m
-            
-        } 
-        else if (ty < 32.75) { // 4m
-
-        }
-        else if (ty < 34.5) { // 6m
-
-        }
-
-        return (ty / 34.5) * 6;
-    }
-
-    public double getTargetA() {
-        return ta.getDouble(0);
+        tid = table.getEntry("tid");
     }
 
     public int getAprilTag() {
@@ -89,15 +53,11 @@ public class TagLimelight extends SubsystemBase{
 
         double x = tx.getDouble(0.0);
         double y = ty.getDouble(0.0);
-        double area = ta.getDouble(0.0);
 
         //post to smart dashboard
         SmartDashboard.putNumber("Tag Limelight X", x);
         SmartDashboard.putNumber("Tag Limelight Y", y);
-        SmartDashboard.putNumber("Tag Limelight Dist", getTargetDist());
-        SmartDashboard.putNumber("Tag DistBlended", getTargetDistBlended());
         SmartDashboard.putNumber("Tag Limelight ID", getAprilTag());
-        SmartDashboard.putNumber("Tag Limelight Area", area);
         SmartDashboard.putString("Tag Limelight LastTargetType", getLastTargetType().toString());
     }
 }
