@@ -237,6 +237,11 @@ public class RobotContainer {
 
   }
 
+  public void autonomousInit() {
+    m_swerve.straightenModules();
+    m_shooter.setHasNotBackfed();
+  }
+
   public void teleopPeriodic() {
 
   }

@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutonConstants;
 import swervelib.SwerveDrive;
+import swervelib.SwerveModule;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
@@ -121,6 +122,13 @@ public class Drivetrain extends SubsystemBase {
 
   public void stopModules() {
     
+  }
+
+  public void straightenModules() {
+    SwerveModule[] modules = swerveDrive.getModules();
+    for (int i=0; i<modules.length; i++) {
+      modules[i].setAngle(0);
+    }
   }
 
   public void resetFieldRelative() {

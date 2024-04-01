@@ -60,6 +60,10 @@ public class Shooter extends SubsystemBase {
     hasBackfed = true;
   }
 
+  public void setHasNotBackfed() {
+    hasBackfed = false;
+  }
+
   public boolean getHasBackfed() {
     return hasBackfed;
   }
