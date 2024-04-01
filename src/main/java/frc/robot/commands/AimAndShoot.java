@@ -6,7 +6,7 @@ import frc.robot.subsystems.*;
 
 public class AimAndShoot extends SequentialCommandGroup {
     public AimAndShoot(Shooter shooter, Arm arm, TagLimelight limelight) {
-        addRequirements(shooter, arm, limelight);
+        addRequirements(shooter, arm);
 
         addCommands(
             new ParallelDeadlineGroup(
