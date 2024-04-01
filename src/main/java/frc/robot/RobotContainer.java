@@ -218,6 +218,7 @@ public class RobotContainer {
 
     m_aimButton.whileTrue(aimArmContinuous);
     m_aimButton.whileTrue(aimRotateTags);
+    m_noteAimButton.whileTrue(new ChaseNote(m_swerve, m_arm, m_shooter, m_intake, m_noteLimelight, 1));
 
     m_armAutoAimAdjustUpButton.onTrue(new InstantCommand(() -> {
       m_arm.autoAimAdjustUp();
@@ -265,11 +266,11 @@ public class RobotContainer {
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
     m_tagLimelight.periodic();
-    SmartDashboard.putBoolean("Have Note?", m_intake.hasNote());
+    SmartDashboard.putBoolean("Have Note?", m_shooter.hasNote());
     SmartDashboard.putData(CommandScheduler.getInstance());
 
     var alliance = DriverStation.getAlliance();
-    if (m_intake.hasNote()) {
+    if (m_shooter.hasNote()) {
       m_leds.setGreen();
     } else if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
       m_leds.setRed();
@@ -277,7 +278,7 @@ public class RobotContainer {
       m_leds.setBlue();
     }
 
-    if (m_intake.hasNote()) {
+    if (m_shooter.hasNote()) {
       m_greenRelay.set(true);
     } else {
       m_greenRelay.set(false);
