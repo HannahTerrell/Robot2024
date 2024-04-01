@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootSpeaker"
+            "name": "aimAndShoot"
           }
         },
         {
@@ -57,7 +57,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootSpeaker"
+            "name": "aimAndShoot"
           }
         },
         {
@@ -79,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To 8"
+                  "pathName": "Score To 8"
                 }
               },
               {
@@ -94,13 +94,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "8 To Speaker"
+            "pathName": "8 To Score"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootSpeaker"
+            "name": "aimAndShoot"
           }
         },
         {

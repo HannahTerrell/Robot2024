@@ -16,7 +16,7 @@ public class Arm extends SubsystemBase {
     private RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
     private ArmAimHelper m_armAimHelper = new ArmAimHelper();
     private NetworkTableEntry m_armSetpointAdjustmentEntry;
-    private PIDController m_positionController = new PIDController(0.145, 0.05, 0);
+    private PIDController m_positionController = new PIDController(0.15, 0.3, 0.001);
     private boolean m_stopped;
 
     // be careful setting this to low (slow) because it also prevents slowing down.
@@ -30,6 +30,7 @@ public class Arm extends SubsystemBase {
         super();
         m_armMotor.setIdleMode(IdleMode.kCoast);
         m_armMotor.getEncoder().setPosition(0);
+        m_positionController.setIZone(2);
         setPositionDown();
 
         SmartDashboard.putData("Arm/Position Controller", m_positionController);
@@ -79,7 +80,7 @@ public class Arm extends SubsystemBase {
     }
 
     public boolean getIsAtSetpoint() {
-        return Math.abs(m_positionController.getPositionError()) < 0.2;
+        return Math.abs(m_positionController.getPositionError()) < 0.15;
     }
 
     public void stop() {
@@ -99,7 +100,7 @@ public class Arm extends SubsystemBase {
                 speed = MathUtil.clamp(speed, -.10, 0.25);
             }
 
-            m_armMotor.set(speed);
+            m_armMotor.setVoltage(speed * 12);
         }
 
         SmartDashboard.putNumber("Arm Position", m_armEncoder.getPosition());

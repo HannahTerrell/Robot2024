@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
+            "name": "aimAndShoot"
           }
         },
         {
@@ -63,19 +57,7 @@
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "armDown"
+            "name": "aimAndShoot"
           }
         },
         {
@@ -118,25 +100,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3 To Speaker (Center)"
+            "pathName": "3 To Score"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "armDown"
+            "name": "aimAndShoot"
           }
         },
         {

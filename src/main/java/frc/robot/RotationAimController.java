@@ -5,12 +5,13 @@ import edu.wpi.first.math.controller.PIDController;
 import frc.robot.subsystems.TagLimelight;
 
 public class RotationAimController {
-    private PIDController m_rotationAimController = new PIDController(0.007, 0.00001, 0.0040);
+    private PIDController m_rotationAimController = new PIDController(0.016, 0.0009, 0.0040);
     private TagLimelight limelight;
 
     public RotationAimController(TagLimelight limelight) {
         super();
         this.limelight = limelight;
+        m_rotationAimController.setIZone(8);
     }
 
     public void reset() {
@@ -19,7 +20,7 @@ public class RotationAimController {
 
     public double calculate() {
         var rot = m_rotationAimController.calculate(limelight.getTargetX());
-        rot = MathUtil.clamp(rot, -0.5, 0.5);
+        rot = MathUtil.clamp(rot, -.5, .5);
 
         return rot;
     }

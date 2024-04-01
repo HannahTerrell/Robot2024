@@ -14,13 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
+            "name": "aimAndShoot"
           }
         },
         {
@@ -63,13 +57,7 @@
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
+            "name": "aimAndShoot"
           }
         },
         {

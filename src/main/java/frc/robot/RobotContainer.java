@@ -44,6 +44,7 @@ public class RobotContainer {
   //Commands
   private final AimArm aimArmContinuous = new AimArm(m_arm, m_tagLimelight, true);
   private final AimArm aimArm = new AimArm(m_arm, m_tagLimelight, false);
+  private final AimAndShoot aimAndShoot = new AimAndShoot(m_shooter, m_arm, m_tagLimelight);
   private final ArmDown armDown = new ArmDown(m_arm);
   private final AimRotation aimRotate = new AimRotation(m_swerve, m_tagLimelight);
   private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
@@ -95,6 +96,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("shootSpeaker", shootSpeaker);
     NamedCommands.registerCommand("shootAmp", new RunCommand(() -> {m_shooter.shootAmp();}).withTimeout(1.0));
     NamedCommands.registerCommand("aimArm", aimArm);
+    NamedCommands.registerCommand("aimAndShoot", aimAndShoot);
     NamedCommands.registerCommand("aimRotate", aimRotate);
     NamedCommands.registerCommand("armDown", armDown);
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
@@ -136,7 +138,9 @@ public class RobotContainer {
     // m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
 
-    SmartDashboard.putData("Aim PID Controller", m_rotationAimController.getInternalController());
+    SmartDashboard.putData("Rotation Aim Controller", m_rotationAimController.getInternalController());
+
+    m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}, m_swerve));
   }
 
   public void teleopInit() {
@@ -148,7 +152,6 @@ public class RobotContainer {
       },
       m_intake));
 
-    m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}, m_swerve));
 
     m_arm.setDefaultCommand(
         new RunCommand(() -> {

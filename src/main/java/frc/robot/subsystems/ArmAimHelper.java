@@ -10,11 +10,13 @@ public class ArmAimHelper {
     // this lets us collect different distances, so we aren't stuck with a straight line
     private final ArrayList<ArmSetpoint> m_armSetpoints = new ArrayList<ArmSetpoint>() {
         {
-            add(new ArmSetpoint(0, 0, 1));
+            add(new ArmSetpoint(0, 4.0, 1)); // 0 m
             add(new ArmSetpoint(-16.7, 12.78, 1)); // 1m
+            add(new ArmSetpoint(-25, 18.0, 1)); // Podium
             add(new ArmSetpoint(-26, 18.66, 1)); // 2m
             add(new ArmSetpoint(-30.18, 20.35, 1)); // 3m
-            add(new ArmSetpoint(-33.14, 21, 1)); // 4m
+            add(new ArmSetpoint(-31.64, 21.0, 1)); // 3.5m
+            add(new ArmSetpoint(-33.14, 21.0, 1)); // 4m
         }
     };
 

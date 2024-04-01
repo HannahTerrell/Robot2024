@@ -120,6 +120,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void stopModules() {
+    
   }
 
   public void resetFieldRelative() {

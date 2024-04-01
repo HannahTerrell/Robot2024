@@ -38,6 +38,7 @@
       "/SmartDashboard/Auton Chooser": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/PIDController[3]": "PIDController",
+      "/SmartDashboard/Rotation Aim Controller": "PIDController",
       "/SmartDashboard/Scheduler": "Scheduler",
       "/SmartDashboard/navX-Sensor[1]": "Gyro"
     },

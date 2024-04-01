@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootSpeaker"
+            "name": "aimAndShoot"
           }
         },
         {
@@ -55,27 +55,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "2 To Speaker"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "armDown"
+            "name": "aimAndShoot"
           }
         },
         {
@@ -124,19 +106,7 @@
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "armDown"
+            "name": "aimAndShoot"
           }
         },
         {

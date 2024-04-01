@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.77430354290908,
-      "y": 4.35
+      "x": 0.72,
+      "y": 4.42
     },
     "rotation": -60.0
   },
@@ -14,19 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
+            "name": "aimAndShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "armDown"
+            "name": "stopSystems"
           }
         },
         {
@@ -63,7 +57,7 @@
         {
           "type": "named",
           "data": {
-            "name": "shootSpeaker"
+            "name": "aimAndShoot"
           }
         },
         {
@@ -100,19 +94,7 @@
         {
           "type": "named",
           "data": {
-            "name": "aimArm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shootSpeaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "armDown"
+            "name": "aimAndShoot"
           }
         },
         {
