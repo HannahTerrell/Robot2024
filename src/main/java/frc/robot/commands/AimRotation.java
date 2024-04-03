@@ -9,12 +9,13 @@ import frc.robot.subsystems.Limelight;
 
 // this command is continuous. Use the Limelight.getAimedAtTargetTrigger to end the command
 public class AimRotation extends Command {
-    private final static PIDController controller = new PIDController(0.007, 0.00001, 0.0040);
+    private PIDController controller;
     private Drivetrain drivetrain;
     private Limelight limelight;
 
-    public AimRotation(Drivetrain drivetrain, Limelight limelight) {
+    public AimRotation(Drivetrain drivetrain, Limelight limelight, PIDController rotationPidController) {
         super();
+        this.controller = rotationPidController;
         this.drivetrain = drivetrain;
         this.limelight = limelight;
     }
@@ -34,10 +35,6 @@ public class AimRotation extends Command {
     public void end(boolean interrupted) {
         controller.reset();
         drivetrain.setRotationOverrideSupplier(null);
-    }
-
-    public static PIDController getInternalController() {
-        return controller;
     }
 
     private Rotation2d getRotationOverride()

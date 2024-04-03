@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.PoseEstimate;
 import frc.robot.TargetType;
 
 public class TagLimelight extends Limelight {
@@ -43,6 +45,10 @@ public class TagLimelight extends Limelight {
             default:
                 return TargetType.NONE;
         }
+    }
+
+    public PoseEstimate getBotPoseBlue() {
+        return LimelightHelpers.getBotPoseEstimate_wpiBlue(name);
     }
 
     public void periodic() {

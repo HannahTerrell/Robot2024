@@ -4,11 +4,14 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import java.io.File;
 import java.util.function.Supplier;
@@ -150,6 +153,10 @@ public class Drivetrain extends SubsystemBase {
     return swerveDrive.getMaximumAngularVelocity();
   }
 
+  public void addVisionMeasurementToOdometry(Pose2d robotPose, double timestamp, Matrix<N3, N1> visionMeasurementStdDevs) {
+    swerveDrive.addVisionMeasurement(robotPose, timestamp, visionMeasurementStdDevs);
+  }
+
   public void setRotationOverrideSupplier(Supplier<Rotation2d> rotationOverrideSupplier) {
     this.rotationOverrideSupplier = rotationOverrideSupplier;
   }
@@ -168,7 +175,9 @@ public class Drivetrain extends SubsystemBase {
     if (rotationOverride == null) return chassisSpeeds;
 
     var rotated =
-        new Translation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond).rotateBy(rotationOverride);
+        new Translation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+    // var rotated =
+    //     new Translation2d(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond).rotateBy(rotationOverride);
 
     return new ChassisSpeeds(rotated.getX(), rotated.getY(), rotationOverride.getRadians());
   }

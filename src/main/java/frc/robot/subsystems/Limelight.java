@@ -8,9 +8,11 @@ public abstract class Limelight {
     protected NetworkTable table;
     protected NetworkTableEntry tx;
     protected NetworkTableEntry ty;
+    protected String name;
 
     public Limelight(String name) {
         super();
+        this.name = name;
 
         table = NetworkTableInstance.getDefault().getTable(name);
         tx = table.getEntry("tx");

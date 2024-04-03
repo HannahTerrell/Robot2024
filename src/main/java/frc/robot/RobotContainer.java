@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,6 +33,9 @@ import edu.wpi.first.wpilibj.DriverStation;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  private final PIDController m_noteRotationAimcontroller = new PIDController(0.003, 0.00001, 0.0040);
+  private final PIDController m_tagRotationAimcontroller = new PIDController(0.007, 0.00001, 0.0040);
+
   //Subsystems
   private final Drivetrain m_swerve = new Drivetrain();
   private final Intake m_intake = new Intake();
@@ -41,14 +45,13 @@ public class RobotContainer {
   private final TagLimelight m_tagLimelight = new TagLimelight();
   private final NoteLimelight m_noteLimelight = new NoteLimelight();
   private final LEDs m_leds = new LEDs();
-  // private PoseEstimator m_poseEstimator;
 
   //Commands
   private final AimArm aimArmContinuous = new AimArm(m_arm, m_tagLimelight, true);
   private final AimArm aimArm = new AimArm(m_arm, m_tagLimelight, false);
   private final AimAndShoot aimAndShoot = new AimAndShoot(m_shooter, m_arm, m_tagLimelight);
   private final ArmDown armDown = new ArmDown(m_arm);
-  private final AimRotation aimRotateTags = new AimRotation(m_swerve, m_tagLimelight);
+  private final AimRotation aimRotateTags = new AimRotation(m_swerve, m_tagLimelight, m_tagRotationAimcontroller);
   private final ShootSpeaker shootSpeaker = new ShootSpeaker(m_shooter);
   private final FeedAndShoot feedAndShoot = new FeedAndShoot(m_shooter, m_intake);
   private final IntakeAndFeed intakeAndFeed = new IntakeAndFeed(m_shooter, m_intake);
@@ -137,12 +140,11 @@ public class RobotContainer {
     // m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
 
-    SmartDashboard.putData("Aim PID Controller", AimRotation.getInternalController());
-    
-    m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}, m_swerve));
-  }
+    SmartDashboard.putData("Aim PID Controller", m_tagRotationAimcontroller);
+    SmartDashboard.putData("Aim Note PID Controller", m_noteRotationAimcontroller);
 
-  public void teleopInit() {
+    m_swerve.setDefaultCommand(new RunCommand(() -> {this.driveWithJoystick(true);}, m_swerve));
+
     m_intake.setDefaultCommand(
       new RunCommand(() -> {
         var intakeSpeed = (m_operatorController.getRawAxis(XboxController.Axis.kRightTrigger.value)
@@ -151,7 +153,6 @@ public class RobotContainer {
       },
       m_intake));
 
-
     m_arm.setDefaultCommand(
         new RunCommand(() -> {
           m_arm.adjustAim(-m_operatorController.getRawAxis(m_armAxis) * 1.5);
@@ -159,6 +160,9 @@ public class RobotContainer {
       m_arm));
 
     m_shooter.setDefaultCommand(new RunCommand(() -> {}, m_shooter));
+  }
+
+  public void teleopInit() {
   }
 
   /**
@@ -223,7 +227,7 @@ public class RobotContainer {
 
     m_aimButton.whileTrue(aimArmContinuous);
     m_aimButton.whileTrue(aimRotateTags);
-    m_noteAimButton.whileTrue(new ChaseNote(m_swerve, m_arm, m_shooter, m_intake, m_noteLimelight, 1));
+    m_noteAimButton.whileTrue(new ChaseNote(m_swerve, m_arm, m_shooter, m_intake, m_noteLimelight, 0, m_noteRotationAimcontroller));
 
     m_armAutoAimAdjustUpButton.onTrue(new InstantCommand(() -> {
       m_arm.autoAimAdjustUp();
@@ -295,5 +299,14 @@ public class RobotContainer {
     }
 
     SmartDashboard.putNumber("Arm/Auto Aim Setpoint", m_armAimHelper.getArmSetpoint(m_tagLimelight).getFirst());
+
+    var botPoseEstimate = m_tagLimelight.getBotPoseBlue();
+    if (botPoseEstimate.tagCount >= 2) {
+      m_swerve.addVisionMeasurementToOdometry(
+        botPoseEstimate.pose,
+        botPoseEstimate.timestampSeconds,
+        VecBuilder.fill(.7,.7,999999)
+      );
+    }
   }
 }
