@@ -16,7 +16,7 @@ public class Arm extends SubsystemBase {
     private RelativeEncoder m_armEncoder = m_armMotor.getEncoder();
     private ArmAimHelper m_armAimHelper = new ArmAimHelper();
     private NetworkTableEntry m_armSetpointAdjustmentEntry;
-    private PIDController m_positionController = new PIDController(0.15, 0.3, 0.001);
+    private PIDController m_positionController = new PIDController(0.15, 0.65, 0.001);
     private boolean m_stopped;
 
     // be careful setting this to low (slow) because it also prevents slowing down.

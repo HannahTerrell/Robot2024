@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.estimator.PoseEstimator;
+// import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -103,21 +103,24 @@ public class RobotContainer {
     NamedCommands.registerCommand("armDown", armDown);
     NamedCommands.registerCommand("intakeAndFeed", intakeAndFeed);
     NamedCommands.registerCommand("feedAndShoot", feedAndShoot);
+    NamedCommands.registerCommand("prepShooter", shooterPrep);
 
     //Auton things
-    // final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("Three-Speaker Auto (Non-Amp)");
+    final PathPlannerAuto m_pathplanner1 = new PathPlannerAuto("Three-Speaker Auto (Non-Amp)");
     final PathPlannerAuto m_pathplanner2 = new PathPlannerAuto("Three-Speaker Auto (Podium)");
     final PathPlannerAuto m_pathplanner3 = new PathPlannerAuto("Two-Speaker Auto");
     final PathPlannerAuto m_pathplanner4 = new PathPlannerAuto("Three-Speaker Auto (Amp Note)");
     // final PathPlannerAuto m_pathplanner5 = new PathPlannerAuto("Three-Speaker Auto (Center)");
-    // final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Three-Speaker Auto (Amp Side)");
-    // final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
+    final PathPlannerAuto m_pathplanner6 = new PathPlannerAuto("Three-Speaker Auto (Amp Side)");
+    final PathPlannerAuto m_pathplanner7 = new PathPlannerAuto("Disruption Auto");
     // final PathPlannerAuto m_pathplanner8 = new PathPlannerAuto("Two-Speaker Auto (Podium)");
-    // final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Three-Speaker Auto (Under Stage)");
-    final PathPlannerAuto m_pathplanner10 = new PathPlannerAuto("Two-Speaker Auto (Non-Amp)");
+    final PathPlannerAuto m_pathplanner9 = new PathPlannerAuto("Three-Speaker Auto (Under Stage)");
+    // final PathPlannerAuto m_pathplanner10 = new PathPlannerAuto("Two-Speaker Auto (Non-Amp)");
     // final PathPlannerAuto m_pathplanner13 = new PathPlannerAuto("Two-Speaker Toss Auto");
-    final PathPlannerAuto m_pathplanner11 = new PathPlannerAuto("Two-Speaker Auto (Amp Side)");
+    // final PathPlannerAuto m_pathplanner11 = new PathPlannerAuto("Two-Speaker Auto (Amp Side)");
     final PathPlannerAuto m_pathplanner12 = new PathPlannerAuto("Three-Speaker Auto (Podium, With Run)");
+    final PathPlannerAuto m_pathplanner13 = new PathPlannerAuto("Four-Speaker Auto");
+
 
 
 
@@ -127,17 +130,18 @@ public class RobotContainer {
     //Adding auton routines to chooser
     m_autonChooser.addOption("Two-Speaker Auto (Center)", m_pathplanner3);
     // m_autonChooser.addOption("Two-Speaker Auto (Center, Podium)", m_pathplanner8);
-    // m_autonChooser.addOption("Three-Speaker Auto (Non-Amp, Center)", m_pathplanner1);
-    m_autonChooser.addOption("Two-Speaker Auto (Non-Amp, Podium)", m_pathplanner10);
+    m_autonChooser.addOption("Three-Speaker Auto (Non-Amp, Center)", m_pathplanner1);
+    // m_autonChooser.addOption("Two-Speaker Auto (Non-Amp, Podium)", m_pathplanner10);
     // m_autonChooser.addOption("Two-Speaker Auto With Toss (Non-Amp, Center)", m_pathplanner13);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Podium)", m_pathplanner2);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Podium, With Run)", m_pathplanner12);
     m_autonChooser.addOption("Three-Speaker Auto (Center, Amp Note)", m_pathplanner4);
     // m_autonChooser.addOption("Three-Speaker Auto (Center, Center)", m_pathplanner5);
-    // m_autonChooser.addOption("Three-Speaker Auto (Center, Center, Under Stage)", m_pathplanner9);
-    m_autonChooser.addOption("Two-Speaker Auto (Amp Side, Amp Note)", m_pathplanner11);
-    // m_autonChooser.addOption("Three-Speaker Auto (Amp Side, Center)", m_pathplanner6);
-    // m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
+    m_autonChooser.addOption("Three-Speaker Auto (Center, Center, Under Stage)", m_pathplanner9);
+    m_autonChooser.addOption("Four-Speaker Auto (Center, Both)", m_pathplanner13);
+    // m_autonChooser.addOption("Two-Speaker Auto (Amp Side, Amp Note)", m_pathplanner11);
+    m_autonChooser.addOption("Three-Speaker Auto (Amp Side, Center)", m_pathplanner6);
+    m_autonChooser.addOption("Disruption Auto", m_pathplanner7);
     SmartDashboard.putData("Auton Chooser", m_autonChooser);
 
     SmartDashboard.putData("Rotation Aim Controller", m_rotationAimController.getInternalController());

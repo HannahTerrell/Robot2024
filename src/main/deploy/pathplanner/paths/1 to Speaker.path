@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.86,
-        "y": 0.56
+        "x": 2.97,
+        "y": 7.05
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.133030030675444,
-        "y": 0.515037575431277
+        "x": 1.7764475894193954,
+        "y": 7.07338830888488
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.001890169022504,
-        "y": 1.92953548300259
+        "x": 1.6,
+        "y": 7.01
       },
       "prevControl": {
-        "x": 6.200391204201211,
-        "y": 0.4794603321400393
-      },
-      "nextControl": {
-        "x": 1.9452417482358624,
-        "y": 3.286048271181012
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.5695060449949958,
-        "y": 4.2332839081632585
-      },
-      "prevControl": {
-        "x": 2.0606605315774735,
-        "y": 4.0110949737569
+        "x": 2.037272222692593,
+        "y": 6.9831043565790845
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "Stop Modules",
-      "waypointRelativePos": 2.0,
+      "waypointRelativePos": 1.0,
       "command": {
         "type": "sequential",
         "data": {
@@ -73,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.0,
+    "rotation": 35.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

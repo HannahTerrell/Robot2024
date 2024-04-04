@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.88,
-        "y": 6.993104356579084
+        "x": 2.97,
+        "y": 7.05
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.037272222692593,
-        "y": 6.595503105536126
+        "x": 2.9692513425482696,
+        "y": 6.211125236723407
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.36,
-        "y": 6.31
+        "x": 2.9,
+        "y": 5.55472336015897
       },
       "prevControl": {
-        "x": 1.8511544865824774,
-        "y": 6.567271397733679
+        "x": 2.8875571881058293,
+        "y": 6.186207700050727
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,17 +47,34 @@
           ]
         }
       }
+    },
+    {
+      "name": "Prep Shooter",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "prepShooter"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.0,
+    "maxVelocity": 4.5,
     "maxAcceleration": 2.5,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,

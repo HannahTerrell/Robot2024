@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.73,
-      "y": 6.64
+      "x": 0.69,
+      "y": 6.68
     },
     "rotation": 60.0
   },
@@ -18,25 +18,19 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "stopSystems"
-          }
-        },
-        {
           "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 3.0
+                  "waitTime": 2.3
                 }
               },
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Speaker To 4 (Amp Side)"
+                  "pathName": "To 1 (Amp Side)"
                 }
               },
               {
@@ -46,6 +40,49 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 to Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "aimAndShoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.8
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Speaker To 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAndFeed"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopSystems"
           }
         },
         {
@@ -58,55 +95,6 @@
           "type": "named",
           "data": {
             "name": "aimAndShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopSystems"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "wait",
-                "data": {
-                  "waitTime": 1.5
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Score To 1"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeAndFeed"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1 to Score"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "aimAndShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopSystems"
           }
         }
       ]

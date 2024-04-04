@@ -116,9 +116,28 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "Speaker To 4"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 3.8
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score To 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeAndFeed"
+                }
+              }
+            ]
           }
         }
       ]
